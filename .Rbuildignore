@@ -1,0 +1,16 @@
+^GPTstudio\.Rproj$
+^\.Rproj\.user$
+media/
+^LICENSE\.md$
+^README\.Rmd$
+^\.github$
+^codecov\.yml$
+_\.new\.png$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^cran-comments\.md$
+^CRAN-SUBMISSION$
+diagram.svg
+^revdep$
+dev/
