@@ -1,4 +1,4 @@
-new_gpstudio_request_skeleton <- function(url, api_key, model, prompt, history,
+new_mergenstudio_request_skeleton <- function(url, api_key, model, prompt, history,
                                           stream, ..., class = character()) {
   validate_skeleton(url, api_key, model, prompt, history, stream)
   structure(
@@ -56,7 +56,7 @@ new_mergenstudio_request_skeleton_openai <- function(
     stream = TRUE,
     n = 1
 ) {
-  new_gpstudio_request_skeleton(url,
+  new_mergenstudio_request_skeleton(url,
                                 api_key,
                                 model,
                                 prompt,
@@ -65,76 +65,9 @@ new_mergenstudio_request_skeleton_openai <- function(
                                 class = "mergenstudio_request_openai")
 }
 
-
-new_mergenstudio_request_skeleton_huggingface <- function(
-    url = "https://api-inference.huggingface.co/models",
-    api_key = Sys.getenv("HF_API_KEY"),
-    model = "gpt2",
-    prompt = "What is a ggplot?",
-    history = list(
-      list(
-        role = "system",
-        content = "You are an R chat assistant"
-      )
-    ),
-    stream = FALSE
-) {
-  new_gpstudio_request_skeleton(url,
-                                api_key,
-                                model,
-                                prompt,
-                                history,
-                                stream,
-                                class = "mergenstudio_request_huggingface")
-}
-
-new_mergenstudio_request_skeleton_anthropic <- function(
-    url = "https://api.anthropic.com/v1/complete",
-    api_key = Sys.getenv("ANTHROPIC_API_KEY"),
-    model = "claude-1",
-    prompt = "What is a ggplot?",
-    history = list(
-      list(
-        role = "system",
-        content = "You are an R chat assistant"
-      )
-    ),
-    stream = FALSE
-) {
-  new_gpstudio_request_skeleton(url,
-                                api_key,
-                                model,
-                                prompt,
-                                history,
-                                stream,
-                                class = "mergenstudio_request_anthropic")
-}
-
-new_mergenstudio_request_skeleton_palm <- function(
-    url = "https://generativelanguage.googleapis.com/v1beta2/models/",
-    api_key = Sys.getenv("PALM_API_KEY"),
-    model = ":generateText?key=",
-    prompt = "What is a ggplot?",
-    history = list(
-      list(
-        role = "system",
-        content = "You are an R chat assistant"
-      )
-    ),
-    stream = FALSE
-) {
-  new_gpstudio_request_skeleton(url,
-                                api_key,
-                                model,
-                                prompt,
-                                history,
-                                stream,
-                                class = "mergenstudio_request_palm")
-}
-
-new_mergenstudio_request_skeleton_azure_openai <- function(
-    url = "user provided with environmental variables",
-    api_key = Sys.getenv("AZURE_OPENAI_KEY"),
+new_mergenstudio_request_skeleton_replicate <- function(
+    url = glue("{getOption(\"mergenstudio.openai_url\")}/chat/completions"),
+    api_key = Sys.getenv("OPENAI_API_KEY"),
     model = "gpt-3.5-turbo",
     prompt = "What is a ggplot?",
     history = list(
@@ -143,17 +76,84 @@ new_mergenstudio_request_skeleton_azure_openai <- function(
         content = "You are an R chat assistant"
       )
     ),
-    stream = FALSE,
+    stream = TRUE,
     n = 1
 ) {
-  new_gpstudio_request_skeleton(url,
-                                api_key,
-                                model,
-                                prompt,
-                                history,
-                                stream,
-                                class = "mergenstudio_request_azure_openai")
+  new_mergenstudio_request_skeleton(url,
+                                    api_key,
+                                    model,
+                                    prompt,
+                                    history,
+                                    stream,
+                                    class = "mergenstudio_request_replicate")
 }
+
+# new_mergenstudio_request_skeleton_anthropic <- function(
+#     url = "https://api.anthropic.com/v1/complete",
+#     api_key = Sys.getenv("ANTHROPIC_API_KEY"),
+#     model = "claude-1",
+#     prompt = "What is a ggplot?",
+#     history = list(
+#       list(
+#         role = "system",
+#         content = "You are an R chat assistant"
+#       )
+#     ),
+#     stream = FALSE
+# ) {
+#   new_mergenstudio_request_skeleton(url,
+#                                 api_key,
+#                                 model,
+#                                 prompt,
+#                                 history,
+#                                 stream,
+#                                 class = "mergenstudio_request_anthropic")
+# }
+#
+# new_mergenstudio_request_skeleton_palm <- function(
+#     url = "https://generativelanguage.googleapis.com/v1beta2/models/",
+#     api_key = Sys.getenv("PALM_API_KEY"),
+#     model = ":generateText?key=",
+#     prompt = "What is a ggplot?",
+#     history = list(
+#       list(
+#         role = "system",
+#         content = "You are an R chat assistant"
+#       )
+#     ),
+#     stream = FALSE
+# ) {
+#   new_mergenstudio_request_skeleton(url,
+#                                 api_key,
+#                                 model,
+#                                 prompt,
+#                                 history,
+#                                 stream,
+#                                 class = "mergenstudio_request_palm")
+# }
+#
+# new_mergenstudio_request_skeleton_azure_openai <- function(
+#     url = "user provided with environmental variables",
+#     api_key = Sys.getenv("AZURE_OPENAI_KEY"),
+#     model = "gpt-3.5-turbo",
+#     prompt = "What is a ggplot?",
+#     history = list(
+#       list(
+#         role = "system",
+#         content = "You are an R chat assistant"
+#       )
+#     ),
+#     stream = FALSE,
+#     n = 1
+# ) {
+#   new_mergenstudio_request_skeleton(url,
+#                                 api_key,
+#                                 model,
+#                                 prompt,
+#                                 history,
+#                                 stream,
+#                                 class = "mergenstudio_request_azure_openai")
+# }
 
 
 mergenstudio_create_skeleton <- function(service = "openai",
@@ -172,29 +172,24 @@ mergenstudio_create_skeleton <- function(service = "openai",
            model = model,
            prompt = prompt,
            history = history,
-           stream = stream),
-         "huggingface" = new_mergenstudio_request_skeleton_huggingface(
-           model = model,
-           prompt = prompt,
-           history = history,
-           # forcing false until streaming implemented for hf
-           stream = FALSE),
-         "anthropic" = new_mergenstudio_request_skeleton_anthropic(
-           model = model,
-           prompt = prompt,
-           # forcing false until streaming implemented for anthropic
-           stream = FALSE),
-         "palm" = new_mergenstudio_request_skeleton_palm(
-           model = model,
-           prompt = prompt,
-           history = history,
-           # forcing false until streaming implemented for palm
-           stream = FALSE),
-         "azure_openai" = new_mergenstudio_request_skeleton_azure_openai(
-           model = model,
-           prompt = prompt,
-           history = history,
-           # forcing false until streaming implemented for palm
-           stream = FALSE))
+           stream = stream)
+         # "anthropic" = new_mergenstudio_request_skeleton_anthropic(
+         #   model = model,
+         #   prompt = prompt,
+         #   # forcing false until streaming implemented for anthropic
+         #   stream = FALSE),
+         # "palm" = new_mergenstudio_request_skeleton_palm(
+         #   model = model,
+         #   prompt = prompt,
+         #   history = history,
+         #   # forcing false until streaming implemented for palm
+         #   stream = FALSE),
+         # "azure_openai" = new_mergenstudio_request_skeleton_azure_openai(
+         #   model = model,
+         #   prompt = prompt,
+         #   history = history,
+         #   # forcing false until streaming implemented for palm
+         #   stream = FALSE)
+         )
 }
 

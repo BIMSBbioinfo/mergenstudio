@@ -44,67 +44,7 @@ mergenstudio_skeleton_build.mergenstudio_request_openai <-
   }
 
 #' @export
-mergenstudio_skeleton_build.mergenstudio_request_huggingface <-
-  function(skeleton = mergenstudio_create_skeleton("huggingface"),
-           skill    = getOption("mergenstudio.skill") ,
-           style    = getOption("mergenstudio.code_style"),
-           task     = "coding",
-           custom_prompt = NULL,
-           ...) {
-    prompt         <- skeleton$prompt
-    history        <- skeleton$history
-    model          <- skeleton$model
-    stream         <- skeleton$stream
-    new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
-
-    new_mergenstudio_request_skeleton_huggingface(model   = model,
-                                               prompt  = prompt,
-                                               history = new_history,
-                                               stream  = stream)
-  }
-
-#' @export
-mergenstudio_skeleton_build.mergenstudio_request_anthropic <-
-  function(skeleton = mergenstudio_create_skeleton("anthropic"),
-           skill    = getOption("mergenstudio.skill") ,
-           style    = getOption("mergenstudio.code_style"),
-           task     = "coding",
-           custom_prompt = NULL,
-           ...) {
-    prompt         <- skeleton$prompt
-    history        <- skeleton$history
-    model          <- skeleton$model
-    stream         <- skeleton$stream
-    new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
-
-    new_mergenstudio_request_skeleton_anthropic(model   = model,
-                                             prompt  = prompt,
-                                             history = new_history,
-                                             stream  = stream)
-  }
-
-#' @export
-mergenstudio_skeleton_build.mergenstudio_request_palm <-
-  function(skeleton = mergenstudio_create_skeleton("palm"),
-           skill    = getOption("mergenstudio.skill") ,
-           style    = getOption("mergenstudio.code_style"),
-           task     = "coding",
-           custom_prompt = NULL,
-           ...) {
-    prompt         <- skeleton$prompt
-    history        <- skeleton$history
-    model          <- skeleton$model
-    stream         <- skeleton$stream
-    new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
-
-    new_mergenstudio_request_skeleton_palm(model   = model,
-                                        prompt  = prompt,
-                                        history = new_history,
-                                        stream  = stream)
-  }
-
-#' @export
-mergenstudio_skeleton_build.mergenstudio_request_azure_openai <-
+mergenstudio_skeleton_build.mergenstudio_request_replicate <-
   function(skeleton = mergenstudio_create_skeleton(),
            skill    = getOption("mergenstudio.skill") ,
            style    = getOption("mergenstudio.code_style"),
@@ -117,8 +57,68 @@ mergenstudio_skeleton_build.mergenstudio_request_azure_openai <-
     stream      <- skeleton$stream
     new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
 
-    new_mergenstudio_request_skeleton_azure_openai(model   = model,
-                                                prompt  = prompt,
-                                                history = new_history,
-                                                stream  = stream)
+    new_mergenstudio_request_skeleton_replicate(model   = model,
+                                             prompt  = prompt,
+                                             history = new_history,
+                                             stream  = stream)
   }
+
+#' #' @export
+#' mergenstudio_skeleton_build.mergenstudio_request_anthropic <-
+#'   function(skeleton = mergenstudio_create_skeleton("anthropic"),
+#'            skill    = getOption("mergenstudio.skill") ,
+#'            style    = getOption("mergenstudio.code_style"),
+#'            task     = "coding",
+#'            custom_prompt = NULL,
+#'            ...) {
+#'     prompt         <- skeleton$prompt
+#'     history        <- skeleton$history
+#'     model          <- skeleton$model
+#'     stream         <- skeleton$stream
+#'     new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
+#'
+#'     new_mergenstudio_request_skeleton_anthropic(model   = model,
+#'                                              prompt  = prompt,
+#'                                              history = new_history,
+#'                                              stream  = stream)
+#'   }
+#'
+#' #' @export
+#' mergenstudio_skeleton_build.mergenstudio_request_palm <-
+#'   function(skeleton = mergenstudio_create_skeleton("palm"),
+#'            skill    = getOption("mergenstudio.skill") ,
+#'            style    = getOption("mergenstudio.code_style"),
+#'            task     = "coding",
+#'            custom_prompt = NULL,
+#'            ...) {
+#'     prompt         <- skeleton$prompt
+#'     history        <- skeleton$history
+#'     model          <- skeleton$model
+#'     stream         <- skeleton$stream
+#'     new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
+#'
+#'     new_mergenstudio_request_skeleton_palm(model   = model,
+#'                                         prompt  = prompt,
+#'                                         history = new_history,
+#'                                         stream  = stream)
+#'   }
+#'
+#' #' @export
+#' mergenstudio_skeleton_build.mergenstudio_request_azure_openai <-
+#'   function(skeleton = mergenstudio_create_skeleton(),
+#'            skill    = getOption("mergenstudio.skill") ,
+#'            style    = getOption("mergenstudio.code_style"),
+#'            task     = "coding",
+#'            custom_prompt = NULL,
+#'            ...) {
+#'     prompt      <- skeleton$prompt
+#'     history     <- skeleton$history
+#'     model       <- skeleton$model
+#'     stream      <- skeleton$stream
+#'     new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
+#'
+#'     new_mergenstudio_request_skeleton_azure_openai(model   = model,
+#'                                                 prompt  = prompt,
+#'                                                 history = new_history,
+#'                                                 stream  = stream)
+#'   }

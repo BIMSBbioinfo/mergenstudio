@@ -16,7 +16,7 @@ A \code{mergenstudio_response_skeleton} object
 }
 \description{
 This function provides a generic interface for calling different APIs
-(e.g., OpenAI, HuggingFace, PALM (MakerSuite)). It dispatches the actual API
+(e.g., OpenAI, PALM (MakerSuite)). It dispatches the actual API
 calls to the relevant method based on the \code{class} of the \code{skeleton} argument.
 }
 \examples{

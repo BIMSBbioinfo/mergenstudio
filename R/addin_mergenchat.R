@@ -1,5 +1,6 @@
-#' Run Chat GPT
-#' Run the Chat GPT Shiny App as a background job and show it in the viewer pane
+#' Run Mergen Chat
+#'
+#' Run the Mergen Chat Shiny App as a background job and show it in the viewer pane
 #'
 #' @export
 #'
@@ -9,9 +10,9 @@
 #' @examples
 #' # Call the function as an RStudio addin
 #' \dontrun{
-#' addin_chatgpt()
+#' addin_mergenchat()
 #' }
-addin_chatgpt <- function(host = getOption("shiny.host", "127.0.0.1")) {
+addin_mergenchat <- function(host = getOption("shiny.host", "127.0.0.1")) {
   rstudioapi::verifyAvailable()
   stopifnot(rstudioapi::hasFun("viewer"))
 

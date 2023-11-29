@@ -132,8 +132,8 @@ get_available_models <- function(service) {
     idx <- which(models == "gpt-3.5-turbo")
     models <- c(models[idx], models[-idx])
     return(models)
-  } else if (service == "huggingface") {
-    c("gpt2", "tiiuae/falcon-7b-instruct", "bigcode/starcoderplus")
+  } else if (service == "replicate"){
+    models <- c("llama-2-70b-chat")
   } else if (service == "anthropic") {
     c("claude-2", "claude-instant-1")
   }
