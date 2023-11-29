@@ -4,7 +4,7 @@
 \alias{mergenstudio_request_perform}
 \title{Perform API Request}
 \usage{
-mergenstudio_request_perform(skeleton, ...)
+mergenstudio_request_perform(skeleton, self.correct = FALSE, ...)
 }
 \arguments{
 \item{skeleton}{A \code{mergenstudio_request_skeleton} object}

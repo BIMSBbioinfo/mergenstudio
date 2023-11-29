@@ -14,7 +14,7 @@
 #' mergenstudio_request_perform(mergenstudio_skeleton)
 #' }
 #' @export
-mergenstudio_request_perform <- function(skeleton, ...) {
+mergenstudio_request_perform <- function(skeleton, self.correct = FALSE, ...) {
   if (!inherits(skeleton, "mergenstudio_request_skeleton")) {
     cli::cli_abort("Skeleton must be a 'mergenstudio_request_skeleton' or a child class")
   }
@@ -22,7 +22,7 @@ mergenstudio_request_perform <- function(skeleton, ...) {
 }
 
 #' @export
-mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, shinySession = NULL, ...) {
+mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, self.correct = FALSE, shinySession = NULL, ...) {
 
   url        <- skeleton$url
   api_key    <- skeleton$api_key
@@ -49,41 +49,52 @@ mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, s
     "n"          = n
   )
 
-  # Perform request
-  response <- NULL
+  # # Perform request
+  # response <- NULL
+  #
+  # if (isTRUE(skeleton$stream)) {
+  #   if (is.null(shinySession)) stop("Stream requires a shiny session object")
+  #
+  #   stream_handler <- StreamHandler$new(
+  #     session = shinySession,
+  #     user_prompt = skeleton$prompt
+  #   )
+  #
+  #   # stream_chat_completion(
+  #   #   prompt = skeleton$prompt,
+  #   #   history = skeleton$history,
+  #   #   element_callback = stream_handler$handle_streamed_element
+  #   # )
+  #   # print(response)
+  #
+  #   # response <- stream_handler$current_value
+  #   # if(response == ""){
+  #   #   response <- stream_handler$chunks[[1]]$error$message
+  #   # }
+  #
+  #   # merge query
+  #   # agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = Sys.getenv("OPENAI_API_KEY"))
+  #   agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = api_key)
+  #   response <- mergen::sendPrompt(agent, prompt = skeleton$prompt, return.type = "text")
+  #
+  # } else {
+  #   response <- httr2::request(url) %>%
+  #     httr2::req_auth_bearer_token(api_key) %>%
+  #     httr2::req_body_json(body) %>%
+  #     httr2::req_perform() %>%
+  #     httr2::resp_body_json()
+  # }
 
-  if (isTRUE(skeleton$stream)) {
-    if (is.null(shinySession)) stop("Stream requires a shiny session object")
-
-    stream_handler <- StreamHandler$new(
-      session = shinySession,
-      user_prompt = skeleton$prompt
-    )
-
-    # stream_chat_completion(
-    #   prompt = skeleton$prompt,
-    #   history = skeleton$history,
-    #   element_callback = stream_handler$handle_streamed_element
-    # )
-    # print(response)
-
-    # response <- stream_handler$current_value
-    # if(response == ""){
-    #   response <- stream_handler$chunks[[1]]$error$message
-    # }
-
-    # merge query
-    # agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = Sys.getenv("OPENAI_API_KEY"))
-    agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = api_key)
-    response <- mergen::sendPrompt(agent, prompt = skeleton$prompt, return.type = "text")
-
+  # merge query
+  # agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = Sys.getenv("OPENAI_API_KEY"))
+  myAgent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = api_key)
+  if(self.correct){
+    print("self correct is invoked!")
+    response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
   } else {
-    response <- httr2::request(url) %>%
-      httr2::req_auth_bearer_token(api_key) %>%
-      httr2::req_body_json(body) %>%
-      httr2::req_perform() %>%
-      httr2::resp_body_json()
+    response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
   }
+
   # return value
   structure(
     list(
@@ -95,7 +106,7 @@ mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, s
 }
 
 #' @export
-mergenstudio_request_perform.mergenstudio_request_replicate <- function(skeleton, shinySession = NULL, ...) {
+mergenstudio_request_perform.mergenstudio_request_replicate <- function(skeleton, self.correct = FALSE, shinySession = NULL, ...) {
 
   url        <- skeleton$url
   api_key    <- skeleton$api_key

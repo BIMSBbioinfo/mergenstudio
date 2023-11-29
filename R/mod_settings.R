@@ -66,6 +66,14 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         choiceValues = c(TRUE, FALSE),
         inline = TRUE,
         width = "200px",
+      ),
+      radioButtons(
+        inputId = ns("selfcorrect"),
+        label = "Activate Self Correct",
+        choiceNames = c("Yes", "No"),
+        choiceValues = c(TRUE, FALSE),
+        inline = TRUE,
+        width = "200px",
       )
     ),
 
@@ -192,7 +200,8 @@ mod_settings_server <- function(id) {
         service = input$service,
         model = input$model,
         custom_prompt = input$custom_prompt,
-        stream = input$stream
+        stream = input$stream,
+        selfcorrect = input$selfcorrect
       )
 
       rv$modify_session_settings <- rv$modify_session_settings + 1L
@@ -233,6 +242,7 @@ mod_settings_server <- function(id) {
       rv$service <- input$service %||% getOption("mergenstudio.service")
       rv$stream <- as.logical(input$stream %||% getOption("mergenstudio.stream"))
       rv$custom_prompt <- input$custom_prompt %||% getOption("mergenstudio.custom_prompt")
+      rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
 
       rv$create_new_chat <- rv$create_new_chat + 1L
     }) %>%

@@ -130,6 +130,7 @@ mod_chat_server <- function(id,
 
       response <- mergenstudio_request_perform(
         skeleton = skeleton,
+        self.correct = settings$selfcorrect,
         shinySession = session
       ) %>%
         mergenstudio_response_process()
