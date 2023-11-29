@@ -34,7 +34,6 @@ mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, s
   n          <- skeleton$extra$n
 
   # Translate request
-
   messages <- c(
     skeleton$history,
     list(
@@ -61,16 +60,23 @@ mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, s
       user_prompt = skeleton$prompt
     )
 
-    stream_chat_completion(
-      prompt = skeleton$prompt,
-      history = skeleton$history,
-      element_callback = stream_handler$handle_streamed_element
-    )
+    # stream_chat_completion(
+    #   prompt = skeleton$prompt,
+    #   history = skeleton$history,
+    #   element_callback = stream_handler$handle_streamed_element
+    # )
+    # print(response)
 
-    response <- stream_handler$current_value
-    if(response == ""){
-      response <- stream_handler$chunks[[1]]$error$message
-    }
+    # response <- stream_handler$current_value
+    # if(response == ""){
+    #   response <- stream_handler$chunks[[1]]$error$message
+    # }
+
+    # merge query
+    # agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = Sys.getenv("OPENAI_API_KEY"))
+    agent <- mergen::setupAgent(name="openai", type="chat", model = "gpt-4", ai_api_key = api_key)
+    response <- mergen::sendPrompt(agent, prompt = skeleton$prompt, return.type = "text")
+
   } else {
     response <- httr2::request(url) %>%
       httr2::req_auth_bearer_token(api_key) %>%

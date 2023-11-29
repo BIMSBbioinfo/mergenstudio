@@ -1,7 +1,7 @@
 #' App UI
 #'
 #' @param id id of the module
-#' @inheritParams run_chatgpt_app
+#' @inheritParams run_chat_app
 #'
 #' @import htmltools
 #' @import shiny
@@ -43,7 +43,7 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
 #' App Server
 #'
 #' @inheritParams mod_app_ui
-#' @inheritParams run_chatgpt_app
+#' @inheritParams run_chat_app
 #'
 mod_app_server <- function(id, ide_colors = get_ide_theme_info()) {
   moduleServer(id, function(input, output, session) {
@@ -80,7 +80,7 @@ rgb_str_to_hex <- function(rgb_string) {
 #'
 #' Create a bslib theme that matches the user's RStudio IDE theme.
 #'
-#' @inheritParams run_chatgpt_app
+#' @inheritParams run_chat_app
 #'
 #' @return A bslib theme
 create_chat_app_theme <- function(ide_colors = get_ide_theme_info()) {

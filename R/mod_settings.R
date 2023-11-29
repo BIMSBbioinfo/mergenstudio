@@ -133,7 +133,7 @@ mod_settings_server <- function(id) {
 
     observe({
       msg <- glue::glue("Fetching models for {input$service} service...")
-      showNotification(ui = msg, type = "message",duration = 3, session = session)
+      showNotification(ui = msg, type = "message", duration = 3, session = session)
 
       models <- get_available_models(input$service)
 

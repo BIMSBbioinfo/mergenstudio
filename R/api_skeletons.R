@@ -1,5 +1,6 @@
 new_mergenstudio_request_skeleton <- function(url, api_key, model, prompt, history,
                                           stream, ..., class = character()) {
+
   validate_skeleton(url, api_key, model, prompt, history, stream)
   structure(
     list(

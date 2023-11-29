@@ -62,7 +62,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
 #' @param id id of the module
 #' @param translator Translator from `shiny.i18n::Translator`
 #' @param settings,history Reactive values from the settings and history module
-#' @inheritParams run_chatgpt_app
+#' @inheritParams run_chat_app
 #'
 mod_chat_server <- function(id,
                             ide_colors = get_ide_theme_info(),
@@ -112,6 +112,8 @@ mod_chat_server <- function(id,
 
     observe({
 
+      print("# parameters")
+      print(settings$service)
       skeleton <- mergenstudio_create_skeleton(
         service = settings$service,
         model = settings$model,
@@ -131,6 +133,8 @@ mod_chat_server <- function(id,
         shinySession = session
       ) %>%
         mergenstudio_response_process()
+
+
 
       history$chat_history <- response$history
 

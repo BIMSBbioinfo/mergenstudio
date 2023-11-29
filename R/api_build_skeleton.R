@@ -37,6 +37,12 @@ mergenstudio_skeleton_build.mergenstudio_request_openai <-
     stream      <- skeleton$stream
     new_history <- prepare_chat_history(history, style, skill, task, custom_prompt)
 
+    print(model)
+    print(stream)
+    print(skill)
+    print(style)
+    print(task)
+
     new_mergenstudio_request_skeleton_openai(model   = model,
                                           prompt  = prompt,
                                           history = new_history,
