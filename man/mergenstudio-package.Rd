@@ -4,9 +4,9 @@
 \name{mergenstudio-package}
 \alias{mergenstudio}
 \alias{mergenstudio-package}
-\title{mergenstudio: Mergen Studio: An Rstudio Add-in wrapper for the mergen package}
+\title{mergenstudio: mergen Studio: An RStudio Addin wrapper for the mergen package}
 \description{
-An Rstudio Add-in wrapper for the mergen package
+An RStudio Addin wrapper for the mergen package
 }
 \author{
 \strong{Maintainer}: Artür Manukyan \email{artur-man@hotmail.com}

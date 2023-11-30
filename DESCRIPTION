@@ -1,6 +1,6 @@
 Type: Package
 Package: mergenstudio
-Title: Mergen Studio: An Rstudio Add-in wrapper for the mergen package
+Title: mergen Studio: An RStudio Addin wrapper for the mergen package
 Version: 1.0
 Authors@R: c(
     person("Artür", "Manukyan", , "artur-man@hotmail.com", role = c("aut", "cre")),
@@ -8,7 +8,7 @@ Authors@R: c(
     person("Altuna", "Akalin", , "altuna.akalin@mdc-berlin.de", role = c("aut"))
   )
 Maintainer: Artur Manukyan <artur-man@hotmail.com>
-Description: An Rstudio Add-in wrapper for the mergen package
+Description: An RStudio Addin wrapper for the mergen package
 License: MIT + file LICENSE
 Depends:
     R (>= 4.0)
