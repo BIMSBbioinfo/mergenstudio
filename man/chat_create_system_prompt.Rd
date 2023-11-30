@@ -13,12 +13,6 @@ chat_create_system_prompt(
 )
 }
 \arguments{
-\item{style}{A character string indicating the preferred coding style, the
-default is "tidyverse".}
-
-\item{skill}{The self-described skill level of the programmer,
-default is "beginner"}
-
 \item{task}{The task to be performed: "coding", "general", or "advanced developer".}
 
 \item{custom_prompt}{An optional custom prompt to be displayed.}
