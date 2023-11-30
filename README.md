@@ -1,6 +1,6 @@
 # mergen Studio
 
-Mergen Studio is an RStudio wrapper for the [mergen](https://github.com/BIMSBbioinfo/mergen) package
+mergen Studio is an Add-in RStudio wrapper for the [mergen](https://github.com/BIMSBbioinfo/mergen) package
 
 ## Installation
 
