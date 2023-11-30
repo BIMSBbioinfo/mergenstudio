@@ -72,6 +72,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         label = "Activate Self Correct",
         choiceNames = c("Yes", "No"),
         choiceValues = c(TRUE, FALSE),
+        selected = FALSE,
         inline = TRUE,
         width = "200px",
       )

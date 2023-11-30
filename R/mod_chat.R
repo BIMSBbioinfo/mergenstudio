@@ -43,12 +43,22 @@ mod_chat_ui <- function(id, translator = create_translator()) {
             ),
             div(
               class = "position-absolute top-50 end-0 translate-middle",
+
+              # send prompt button
               actionButton(
                 inputId = ns("chat"),
                 label = icon("fas fa-paper-plane"),
-                class = "w-100 btn-primary p-1 chat-send-btn"
+                class = "w-45 btn-primary p-1 chat-send-btn"
               ) %>%
-                bslib::tooltip("Send (click or Enter)")
+                bslib::tooltip("Send (click or Enter)"),
+
+              # execute code button
+              actionButton(
+                inputId = ns("execute"),
+                label = icon("fas fa-play"),
+                class = "w-45 btn-primary p-1 chat-send-btn"
+              ) %>%
+                bslib::tooltip("Execute Code")
             )
           )
         )
@@ -73,12 +83,13 @@ mod_chat_server <- function(id,
   moduleServer(id, function(input, output, session) {
 
     # Session data ----
-
     ns <- session$ns
 
+    # reactive values
     rv <- reactiveValues()
     rv$reset_welcome_message <- 0L
     rv$reset_streaming_message <- 0L
+    rv$code_of_last_response <- NULL
 
     # UI outputs ----
 
@@ -110,6 +121,7 @@ mod_chat_server <- function(id,
       bindEvent(history$create_new_chat)
 
 
+    # chat event
     observe({
 
       print("# parameters")
@@ -135,9 +147,8 @@ mod_chat_server <- function(id,
       ) %>%
         mergenstudio_response_process()
 
-
-
       history$chat_history <- response$history
+      rv$code_of_last_response <- response$response
 
       if (settings$stream) {
         rv$reset_streaming_message <- rv$reset_streaming_message + 1L
@@ -147,6 +158,26 @@ mod_chat_server <- function(id,
 
     }) %>%
       bindEvent(input$chat)
+
+    # execute code event
+    observe({
+
+      # cleaning and parsing the code from response
+      code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
+      final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+      code_result <- mergen::executeCode(final_code$code)
+
+      # update history
+      history$chat_history <- c(history$chat_history,
+                                list(list(role = "assistant",
+                                     content = paste0("Here are the results once the code is executed:\n\n```r\n", code_result, "\n```\n\n"))
+                                ))
+
+
+      updateTextAreaInput(session, "chat_input", value = "")
+
+    }) %>%
+      bindEvent(input$execute)
 
   })
 }

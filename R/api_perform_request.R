@@ -91,6 +91,7 @@ mergenstudio_request_perform.mergenstudio_request_openai <- function(skeleton, s
   if(self.correct){
     print("self correct is invoked!")
     response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
+    response <- response$final.response
   } else {
     response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
   }

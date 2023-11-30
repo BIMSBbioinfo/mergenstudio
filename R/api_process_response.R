@@ -40,6 +40,7 @@ mergenstudio_response_process.mergenstudio_response_openai <-
 
     skeleton$history <- new_history
     skeleton$prompt <- NULL # remove the last prompt
+    skeleton$response <- response
     class(skeleton) <- c("mergenstudio_request_skeleton",
                          "mergenstudio_request_openai")
     skeleton
