@@ -21,6 +21,7 @@ This function processes the chat history, filters out system messages, and
 formats the remaining messages with appropriate styling.
 }
 \examples{
+
 chat_history_example <- list(
   list(role = "user", content = "Hello, World!"),
   list(role = "system", content = "System message"),

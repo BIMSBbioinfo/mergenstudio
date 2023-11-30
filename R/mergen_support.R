@@ -19,7 +19,6 @@ mergenstudio_skeleton <- function(service = "openai",
       prompt = prompt,
       history = history,
       model = model,
-      # stream = stream,
       selfcorrect = selfcorrect
     )
   )
@@ -49,6 +48,7 @@ validate_skeleton <- function(model, prompt, history, selfcorrect) {
   )
 }
 
+#' @importFrom mergen setupAgent selfcorrect sendPrompt
 mergenstudio_request <- function(skeleton = NULL){
 
   # merge query

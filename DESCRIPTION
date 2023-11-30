@@ -9,11 +9,11 @@ Authors@R: c(
   )
 Maintainer: Artur Manukyan <artur-man@hotmail.com>
 Description: An Rstudio Add-in wrapper for the mergen package
-    <https://platform.openai.com/docs/introduction>.
 License: MIT + file LICENSE
 Depends:
     R (>= 4.0)
 Imports: 
+    mergen,
     assertthat,
     bslib (>= 0.4.2),
     cli,
@@ -37,6 +37,7 @@ Imports:
     utils,
     waiter,
     yaml
+Remotes: BIMSBbioinfo/mergen
 Suggests: 
     mockr,
     shinytest2,

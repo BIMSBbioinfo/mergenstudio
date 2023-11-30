@@ -6,7 +6,7 @@
 \alias{mergenstudio-package}
 \title{mergenstudio: Mergen Studio: An Rstudio Add-in wrapper for the mergen package}
 \description{
-An Rstudio Add-in wrapper for the mergen package \url{https://platform.openai.com/docs/introduction}.
+An Rstudio Add-in wrapper for the mergen package
 }
 \author{
 \strong{Maintainer}: Artür Manukyan \email{artur-man@hotmail.com}

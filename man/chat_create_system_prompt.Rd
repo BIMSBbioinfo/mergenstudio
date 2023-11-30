@@ -19,9 +19,6 @@ chat_create_system_prompt(
 
 \item{in_source}{Whether to add instructions to act as in a source script.}
 }
-\value{
-A string
-}
 \description{
 This creates a system prompt based on the user defined parameters.
 }

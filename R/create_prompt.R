@@ -2,12 +2,13 @@
 #'
 #' This creates a system prompt based on the user defined parameters.
 #'
-# #' @inheritParams gpt_chat
 #' @param task The task to be performed: "coding", "general", or "advanced developer".
 #' @param custom_prompt An optional custom prompt to be displayed.
 #' @param in_source Whether to add instructions to act as in a source script.
 #'
-#' @return A string
+#' @importFrom glue glue
+#' @importFrom assertthat assert_that
+#' @importFrom rlang arg_match
 #'
 chat_create_system_prompt <-
   function(style = c("tidyverse", "base", "no preference", NULL),
@@ -15,10 +16,10 @@ chat_create_system_prompt <-
            task = c("coding", "general", "advanced developer", "custom"),
            custom_prompt = NULL,
            in_source) {
-    arg_match(style)
-    arg_match(skill)
-    arg_match(task)
-    assert_that(is.logical(in_source),
+    rlang::arg_match(style)
+    rlang::arg_match(skill)
+    rlang::arg_match(task)
+    assertthat::assert_that(is.logical(in_source),
                 msg = "chat system prompt creation needs logical `in_source`")
 
     if (!is.null(custom_prompt) && task == "custom") {
@@ -36,7 +37,7 @@ chat_create_system_prompt <-
     # nolint start
 
     intro <- "As a chat bot assisting an R programmer working in the RStudio IDE, it is important to tailor responses to their skill level and preferred coding style."
-    about_skill <- glue(
+    about_skill <- glue::glue(
       "They consider themselves to be a {skill} R programmer. Provide answers with their skill level in mind."
     )
 
@@ -55,7 +56,7 @@ chat_create_system_prompt <-
 
     # nolint end
 
-    glue("{intro} {about_skill} {about_style} {in_source_instructions}")
+    glue::glue("{intro} {about_skill} {about_style} {in_source_instructions}")
   }
 
 
@@ -82,9 +83,10 @@ chat_create_system_prompt <-
 #'   its responses. Default is NULL. It will be the only content provided to the
 #'   system prompt.
 #'
+#' @importFrom purrr discard
+#'
 #' @return A list where the first entry is an initial system message followed by any
 #'   non-system entries from the chat history.
-#'
 prepare_chat_history <- function(history = NULL,
                                  style = getOption("mergenstudio.code_style"),
                                  skill = getOption("mergenstudio.skill"),
@@ -105,11 +107,13 @@ prepare_chat_history <- function(history = NULL,
   c(instructions, history)
 }
 
+#' @importFrom rstudioapi verifyAvailable selectionGet
 get_selection <- function() {
   rstudioapi::verifyAvailable()
   rstudioapi::selectionGet()
 }
 
+#' @importFrom rstudioapi verifyAvailable insertText
 insert_text <- function(improved_text) {
   rstudioapi::verifyAvailable()
   rstudioapi::insertText(improved_text)

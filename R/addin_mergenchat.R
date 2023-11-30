@@ -2,11 +2,14 @@
 #'
 #' Run the Mergen Chat Shiny App as a background job and show it in the viewer pane
 #'
+#' @importFrom rstudioapi verifyAvailable hasFun
+#'
 #' @export
 #'
 #' @return This function has no return value.
 #'
 #' @inheritParams shiny::runApp
+#'
 #' @examples
 #' # Call the function as an RStudio addin
 #' \dontrun{
@@ -46,7 +49,12 @@ random_port <- function() {
 #' directory, name, host, and port.
 #'
 #' @param job_name The name of the background job to be created
+#'
+#' @importFrom rstudioapi jobRunScript hasFun
+#' @importFrom cli cli_alert_success
+#'
 #' @inheritParams shiny::runApp
+#'
 #' @return This function returns nothing because is meant to run an app as a
 #'   side effect.
 run_app_as_bg_job <- function(appDir = ".", job_name, host, port) {
@@ -56,7 +64,7 @@ run_app_as_bg_job <- function(appDir = ".", job_name, host, port) {
     host = host
   )
   rstudioapi::jobRunScript(job_script, name = job_name)
-  cli_alert_success(
+  cli::cli_alert_success(
     glue("{job_name} initialized as background job in RStudio")
   )
 }
@@ -66,7 +74,11 @@ run_app_as_bg_job <- function(appDir = ".", job_name, host, port) {
 #'
 #' This function creates a temporary R script file that runs the Shiny
 #' application from the specified directory with the specified port and host.
+#'
+#' @importFrom glue glue
+#'
 #' @inheritParams shiny::runApp
+#'
 #' @return A string containing the path of a temporary job script
 create_tmp_job_script <- function(appDir, port, host) {
   script_file <- tempfile(fileext = ".R")
@@ -94,6 +106,8 @@ create_tmp_app_dir <- function() {
   return(dir)
 }
 
+#' @importFrom glue glue
+#' @importFrom utils capture.output
 create_tmp_app_file <- function() {
   script_file <- tempfile(fileext = ".R")
   ide_theme <- get_ide_theme_info() %>%
@@ -137,6 +151,10 @@ create_tmp_app_file <- function() {
 #'   the server where the Shiny app is hosted.
 #' @param port An integer representing the port number on which the Shiny app is
 #'   hosted.
+#'
+#' @importFrom glue glue
+#' @importFrom cli cli_inform
+#' @importFrom rstudioapi viewer
 #'
 #' @return None (opens the Shiny app in the viewer pane or browser window)
 open_bg_shinyapp <- function(host, port) {

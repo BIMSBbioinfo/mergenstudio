@@ -5,11 +5,16 @@
 #'
 #' @param history A list of chat messages with elements containing 'role' and
 #' 'content'.
+#'
+#' @importFrom purrr discard map
+#'
 #' @inheritParams run_chat_app
 #'
 #' @return A list of formatted chat messages with styling applied, excluding
 #' system messages.
+#'
 #' @examples
+#'
 #' chat_history_example <- list(
 #'   list(role = "user", content = "Hello, World!"),
 #'   list(role = "system", content = "System message"),
@@ -30,7 +35,13 @@ style_chat_history <- function(history, ide_colors = get_ide_theme_info()) {
 #' Style a message based on the role of its author.
 #'
 #' @param message A chat message.
+#'
+#' @importFrom htmltools div css tag tagList
+#' @importFrom shiny markdown icon
+#' @importFrom glue glue
+#'
 #' @inheritParams run_chat_app
+#'
 #' @return An HTML element.
 style_chat_message <- function(message,
                                ide_colors = get_ide_theme_info()) {
@@ -47,16 +58,16 @@ style_chat_message <- function(message,
   )
 
   htmltools::div(
-    class = glue("row m-0 p-0 {position_class}"),
+    class = glue::glue("row m-0 p-0 {position_class}"),
     htmltools::tags$div(
-      class = glue("p-2 mb-2 rounded d-inline-block w-auto mw-100"),
+      class = glue::glue("p-2 mb-2 rounded d-inline-block w-auto mw-100"),
       style = htmltools::css(
         `color` = colors$fg_color,
         `background-color` = colors$bg_color
       ),
       shiny::icon(icon_name, lib = "font-awesome"),
       htmltools::tags$div(
-        class = glue("{message$role}-message-wrapper"),
+        class = glue::glue("{message$role}-message-wrapper"),
         htmltools::tagList(
           shiny::markdown(message$content)
         )
@@ -70,11 +81,16 @@ style_chat_message <- function(message,
 #' This returns a list of color properties for a chat message
 #'
 #' @param role The role of the message author
+#'
+#' @importFrom colorspace lighten
+#' @importFrom assertthat assert_that
+#'
 #' @inheritParams run_chat_app
+#'
 #' @return list
 create_ide_matching_colors <- function(role,
                                        ide_colors = get_ide_theme_info()) {
-  assert_that(role %in% c("user", "assistant"))
+  assertthat::assert_that(role %in% c("user", "assistant"))
 
   bg_colors <- if (ide_colors$is_dark) {
     list(
@@ -101,6 +117,9 @@ create_ide_matching_colors <- function(role,
 #'
 #' @inheritParams shiny::textAreaInput
 #' @param textarea_class Class to be applied to the textarea element
+#'
+#' @importFrom htmltools tagQuery
+#' @importFrom shiny textAreaInput
 #'
 #' @return A modified textAreaInput
 text_area_input_wrapper <-

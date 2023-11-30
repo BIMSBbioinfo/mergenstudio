@@ -162,8 +162,10 @@ mod_chat_server <- function(id,
       # cleaning and parsing the code from response
       code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
       final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+      # final_code <- final_code$code
+      final_code <- gsub("\n\\[.*\\].*\n","",final_code$code)
       print(final_code)
-      code_result <- mergen::executeCode(final_code$code)
+      code_result <- mergen::executeCode(final_code)
 
       # update history
       history$chat_history <- c(history$chat_history,
