@@ -1,16 +1,14 @@
 Type: Package
 Package: mergenstudio
-Title: Mergen Studio: An Add-in wrapper package for the Mergen package
+Title: Mergen Studio: An Rstudio Add-in wrapper for the mergen package
 Version: 1.0
 Authors@R: c(
-    person("Artur", "Manukyan", , "m.g.nivard@vu.nl", role = c("aut", "cph")),
-    person("James", "Wade", , "github@jameshwade.com", role = c("aut", "cre", "cph"),
-           comment = c(ORCID = "0000-0002-9740-1905")),
-    person("Samuel", "Calderon", , "samuel.calderon@uarm.pe", role = "aut",
-           comment = c(ORCID = "0000-0001-6847-1210"))
+    person("Artür", "Manukyan", , "artur-man@hotmail.com", role = c("aut", "cre")),
+    person("Jacqueline", "Jansen", , "jacqueline.jansen@uni-potsdam.de", role = c("aut")),
+    person("Altuna", "Akalin", , "altuna.akalin@mdc-berlin.de", role = c("aut"))
   )
-Maintainer: Artur Manukyan <artuer.manukyan@mdc-berlin.de>
-Description: An Add-in wrapper package for the mergen package
+Maintainer: Artur Manukyan <artur-man@hotmail.com>
+Description: An Rstudio Add-in wrapper for the mergen package
     <https://platform.openai.com/docs/introduction>.
 License: MIT + file LICENSE
 Depends:
@@ -31,7 +29,6 @@ Imports:
     jsonlite,
     magrittr,
     purrr,
-    R6,
     rlang,
     rstudioapi (>= 0.12),
     shiny,
