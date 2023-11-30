@@ -124,36 +124,33 @@ mod_chat_server <- function(id,
     # chat event
     observe({
 
-      print("# parameters")
-      print(settings$service)
-      skeleton <- mergenstudio_create_skeleton(
-        service = settings$service,
-        model = settings$model,
-        prompt = input$chat_input,
-        history = history$chat_history,
-        stream = settings$stream
-      ) %>%
-        mergenstudio_skeleton_build(
-          skill = settings$skill,
-          style = settings$style,
-          task = settings$task,
-          custom_prompt = settings$custom_prompt
+      # update chat history with prompt
+      new_history <- c(
+        history$chat_history,
+        list(
+          list(role = "user", content = input$chat_input)
         )
+      )
+      history$chat_history <- new_history
+      updateTextAreaInput(session, "chat_input", value = "")
 
-      response <- mergenstudio_request_perform(
-        skeleton = skeleton,
-        self.correct = settings$selfcorrect,
-        shinySession = session
-      ) %>%
-        mergenstudio_response_process()
+      # get response
+      skeleton <- mergenstudio_skeleton(
+          service = settings$service,
+          model = settings$model,
+          prompt = input$chat_input,
+          history = history$chat_history,
+          stream = settings$stream,
+          selfcorrect = settings$selfcorrect
+      )
+      response <- mergenstudio_request(skeleton = skeleton)
 
+      # update history with response
       history$chat_history <- response$history
       rv$code_of_last_response <- response$response
-
-      if (settings$stream) {
-        rv$reset_streaming_message <- rv$reset_streaming_message + 1L
-      }
-
+      # if (settings$stream) {
+      #   rv$reset_streaming_message <- rv$reset_streaming_message + 1L
+      # }
       updateTextAreaInput(session, "chat_input", value = "")
 
     }) %>%
@@ -165,6 +162,7 @@ mod_chat_server <- function(id,
       # cleaning and parsing the code from response
       code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
       final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+      print(final_code)
       code_result <- mergen::executeCode(final_code$code)
 
       # update history

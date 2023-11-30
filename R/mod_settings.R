@@ -1,9 +1,10 @@
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
-  api_services <- utils::methods("mergenstudio_request_perform") %>%
-    stringr::str_remove(pattern = "mergenstudio_request_perform.mergenstudio_request_") %>%
-    purrr::discard(~ .x == "mergenstudio_request_perform.default")
+  # api_services <- utils::methods("mergenstudio_request_perform") %>%
+  #   stringr::str_remove(pattern = "mergenstudio_request_perform.mergenstudio_request_") %>%
+  #   purrr::discard(~ .x == "mergenstudio_request_perform.default")
+  api_services <- c("openai", "replicate")
 
   preferences <- bslib::accordion(
     open = FALSE,
@@ -59,14 +60,14 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         width = "200px",
         selected = getOption("mergenstudio.model")
       ),
-      radioButtons(
-        inputId = ns("stream"),
-        label = "Stream Response",
-        choiceNames = c("Yes", "No"),
-        choiceValues = c(TRUE, FALSE),
-        inline = TRUE,
-        width = "200px",
-      ),
+      # radioButtons(
+      #   inputId = ns("stream"),
+      #   label = "Stream Response",
+      #   choiceNames = c("Yes", "No"),
+      #   choiceValues = c(TRUE, FALSE),
+      #   inline = TRUE,
+      #   width = "200px",
+      # ),
       radioButtons(
         inputId = ns("selfcorrect"),
         label = "Activate Self Correct",
@@ -136,9 +137,10 @@ mod_settings_server <- function(id) {
     rv$modify_session_settings <- 0L
     rv$create_new_chat <- 0L
 
-    api_services <- utils::methods("mergenstudio_request_perform") %>%
-      stringr::str_remove(pattern = "mergenstudio_request_perform.mergenstudio_request_") %>%
-      purrr::discard(~ .x == "mergenstudio_request_perform.default")
+    # api_services <- utils::methods("mergenstudio_request_perform") %>%
+    #   stringr::str_remove(pattern = "mergenstudio_request_perform.mergenstudio_request_") %>%
+    #   purrr::discard(~ .x == "mergenstudio_request_perform.default")
+    api_services <- c("openai", "replicate")
 
     observe({
       msg <- glue::glue("Fetching models for {input$service} service...")
@@ -201,7 +203,7 @@ mod_settings_server <- function(id) {
         service = input$service,
         model = input$model,
         custom_prompt = input$custom_prompt,
-        stream = input$stream,
+        # stream = input$stream,
         selfcorrect = input$selfcorrect
       )
 
@@ -241,7 +243,7 @@ mod_settings_server <- function(id) {
       rv$style <- input$style %||% getOption("mergenstudio.code_style")
       rv$model <- input$model %||% getOption("mergenstudio.model")
       rv$service <- input$service %||% getOption("mergenstudio.service")
-      rv$stream <- as.logical(input$stream %||% getOption("mergenstudio.stream"))
+      # rv$stream <- as.logical(input$stream %||% getOption("mergenstudio.stream"))
       rv$custom_prompt <- input$custom_prompt %||% getOption("mergenstudio.custom_prompt")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
 

@@ -4,17 +4,17 @@
 \name{mergenstudio-package}
 \alias{mergenstudio}
 \alias{mergenstudio-package}
-\title{mergenstudio: Mergen Studio: An Add-in wrapper package for the Mergen package}
+\title{mergenstudio: Mergen Studio: An Rstudio Add-in wrapper for the mergen package}
 \description{
-An Add-in wrapper package for the mergen package \url{https://platform.openai.com/docs/introduction}.
+An Rstudio Add-in wrapper for the mergen package \url{https://platform.openai.com/docs/introduction}.
 }
 \author{
-\strong{Maintainer}: James Wade \email{github@jameshwade.com} (\href{https://orcid.org/0000-0002-9740-1905}{ORCID}) [copyright holder]
+\strong{Maintainer}: Artür Manukyan \email{artur-man@hotmail.com}
 
 Authors:
 \itemize{
-  \item Artur Manukyan \email{m.g.nivard@vu.nl} [copyright holder]
-  \item Samuel Calderon \email{samuel.calderon@uarm.pe} (\href{https://orcid.org/0000-0001-6847-1210}{ORCID})
+  \item Jacqueline Jansen \email{jacqueline.jansen@uni-potsdam.de}
+  \item Altuna Akalin \email{altuna.akalin@mdc-berlin.de}
 }
 
 }

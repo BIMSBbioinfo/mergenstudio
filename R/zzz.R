@@ -23,7 +23,7 @@
     mergenstudio.service       = config$service,
     mergenstudio.model         = config$model,
     mergenstudio.custom_prompt = config$custom_prompt,
-    mergenstudio.stream        = config$stream,
+    # mergenstudio.stream        = config$stream,
     mergenstudio.selfcorrect   = config$selfcorrect
   )
 

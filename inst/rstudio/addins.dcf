@@ -1,4 +1,4 @@
 Name: Chat
-Description: Start a chat session
-Binding: addin_chat
+Description: Start a mergen chat session
+Binding: addin_mergenchat
 Interactive: true
