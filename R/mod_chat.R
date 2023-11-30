@@ -140,7 +140,7 @@ mod_chat_server <- function(id,
           model = settings$model,
           prompt = input$chat_input,
           history = history$chat_history,
-          stream = settings$stream,
+          # stream = settings$stream,
           selfcorrect = settings$selfcorrect
       )
       response <- mergenstudio_request(skeleton = skeleton)
@@ -164,7 +164,6 @@ mod_chat_server <- function(id,
       final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
       # final_code <- final_code$code
       final_code <- gsub("\n\\[.*\\].*\n","",final_code$code)
-      print(final_code)
       code_result <- mergen::executeCode(final_code)
 
       # update history
