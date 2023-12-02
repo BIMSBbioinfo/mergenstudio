@@ -47,7 +47,7 @@ mergenchat_insource <- function() {
 #' Generate text completions using OpenAI's API for Chat
 #'
 #' @param prompt The prompt for generating completions
-#' @param openai_api_key The API key for accessing OpenAI's API. By default, the
+#' @param ai_api_key The API key for accessing OpenAI's API. By default, the
 #'   function will try to use the `OPENAI_API_KEY` environment variable.
 #'
 #' @return A list with the generated completions and other information returned
@@ -55,9 +55,9 @@ mergenchat_insource <- function() {
 #'
 mergen_chat_completion <-
   function(prompt,
-           openai_api_key = Sys.getenv("OPENAI_API_KEY")) {
+           ai_api_key = Sys.getenv("OPENAI_API_KEY")) {
 
-    myAgent <- mergen::setupAgent(name="openai", type="completion", ai_api_key = openai_api_key)
+    myAgent <- mergen::setupAgent(name="openai", type="completion", ai_api_key = ai_api_key)
     response <- mergen::sendPrompt(myAgent, prompt = prompt, return.type = "text")
     response
   }
