@@ -136,6 +136,7 @@ mod_chat_server <- function(id,
 
       # get response
       skeleton <- mergenstudio_skeleton(
+          api_key = settings$api_key,
           service = settings$service,
           model = settings$model,
           prompt = input$chat_input,
@@ -160,21 +161,27 @@ mod_chat_server <- function(id,
     observe({
 
       # cleaning and parsing the code from response
-      code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
-      final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
-      # final_code <- final_code$code
-      final_code <- gsub("\n\\[.*\\].*\n","",final_code$code)
-      code_result <- mergen::executeCode(final_code)
+      if(is.null(rv$code_of_last_response)) {
+        showNotification(ui = "You have to get a response with code first!", duration = 3, type = "message", session = session)
+      } else {
 
-      # update history
-      history$chat_history <- c(history$chat_history,
-                                list(list(role = "assistant",
-                                     content = paste0("Here are the results once the code is executed:\n\n```\n", code_result, "\n```\n\n"))
-                                ))
+        # check history
+        if(grepl("^Here are the results once the code is executed", tail(history$chat_history,1)[[1]]$content)){
+          showNotification(ui = "You have to get another response to execute code again!", duration = 3, type = "message", session = session)
+        } else {
+          code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
+          final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+          final_code <- final_code$code
+          code_result <- mergen::executeCode(final_code)
 
-
-      updateTextAreaInput(session, "chat_input", value = "")
-
+          # update history
+          history$chat_history <- c(history$chat_history,
+                                    list(list(role = "assistant",
+                                              content = paste0("Here are the results once the code is executed:\n\n```\n", code_result, "\n```\n\n"))
+                                    ))
+          updateTextAreaInput(session, "chat_input", value = "")
+        }
+      }
     }) %>%
       bindEvent(input$execute)
 

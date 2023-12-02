@@ -1,4 +1,5 @@
-mergenstudio_skeleton <- function(service = "openai",
+mergenstudio_skeleton <- function(service = "openai-chat",
+                                  api_key = Sys.getenv("OPENAI_API_KEY"),
                                   prompt = "Name the top 5 packages in R.",
                                   history = list(
                                     list(
@@ -10,10 +11,10 @@ mergenstudio_skeleton <- function(service = "openai",
                                   # stream = TRUE,
                                   selfcorrect = FALSE) {
 
-  # api key
-  api_key <- switch(service,
-                    "openai" = "OPENAI_API_KEY",
-                    "replicate" = "my_replicate_key")
+  if(api_key == ""){
+    if(grepl("^openai", service))
+      api_key <- Sys.getenv("OPENAI_API_KEY")
+  }
 
   # validate skeleton
   validate_skeleton(api_key, model, prompt, history, selfcorrect)
@@ -61,34 +62,38 @@ validate_skeleton <- function(api_key, model, prompt, history, selfcorrect) {
 #' @importFrom mergen setupAgent selfcorrect sendPrompt
 mergenstudio_request <- function(skeleton = NULL){
 
-  # set agent
-  tryCatch({
-    # myAgent <-
-    #   switch(skeleton$service,
-    #          "openai" = mergen::setupAgent(name=skeleton$service, type="chat", model = skeleton$model, ai_api_key = Sys.getenv(skeleton$api_key)),
-    #          "replicate" = mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = Sys.getenv(skeleton$api_key)))
-    if(skeleton$service == "openai"){
-      myAgent <- mergen::setupAgent(name=skeleton$service, type="chat", model = skeleton$model, ai_api_key = Sys.getenv(skeleton$api_key))
-    } else if(skeleton$service == "replicate") {
-      myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = Sys.getenv(skeleton$api_key))
-    }
-  },
+  # check prompt
+  if(skeleton$prompt == ""){
+    response = "You have to make a request and send a non-empty prompt"
+  } else {
+
+    # set agent
+    tryCatch({
+      if(skeleton$service == "openai-chat"){
+        myAgent <- mergen::setupAgent(name="openai", type="chat", model = skeleton$model, ai_api_key = skeleton$api_key)
+      } else if(skeleton$service == "openai-completion") {
+        myAgent <- mergen::setupAgent(name="openai", type="completion", model = skeleton$model, ai_api_key = skeleton$api_key)
+      } else if(skeleton$service == "replicate") {
+        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
+      }
+    },
     error = function(x){
       response = "Request Failed: check your API configurations"
-  })
+    })
 
 
-  # get response, if setup is failed, says that it failed
-  if(exists("myAgent")){
-    if(skeleton$selfcorrect){
-      response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
-      response <- response$final.response
+    # get response, if setup is failed, says that it failed
+    if(exists("myAgent")){
+      if(skeleton$selfcorrect){
+        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
+        response <- response$final.response
+      } else {
+        try
+        response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
+      }
     } else {
-      try
-      response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
+      response <- "Request Failed: check your API configurations"
     }
-  } else {
-    response <- "Request Failed: check your API configurations"
   }
 
 

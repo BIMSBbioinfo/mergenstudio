@@ -13,7 +13,6 @@
 
   op_mergenstudio <- list(
     mergenstudio.valid_api     = FALSE,
-    mergenstudio.openai_key    = NULL,
     mergenstudio.max_tokens    = 500,
     mergenstudio.openai_url    = "https://api.openai.com/v1",
     mergenstudio.code_style    = config$code_style,

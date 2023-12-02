@@ -30,7 +30,7 @@ request_base <- function(task, token = Sys.getenv("OPENAI_API_KEY")) {
 #' @examples
 #' get_available_endpoints()
 get_available_models <- function(service) {
-  if (service == "openai") {
+  if (grepl("^openai", service)) {
     check_api()
     models <-
       request_base("models") %>%
@@ -38,15 +38,18 @@ get_available_models <- function(service) {
       httr2::resp_body_json() %>%
       purrr::pluck("data") %>%
       purrr::map_chr("id")
+    if(service == "openai-chat"){
+      models <- models %>%
+        stringr::str_subset("^gpt") %>%
+        stringr::str_subset("instruct", negate = TRUE) %>%
+        stringr::str_subset("vision", negate = TRUE) %>%
+        sort()
 
-    models <- models %>%
-      stringr::str_subset("^gpt") %>%
-      stringr::str_subset("instruct", negate = TRUE) %>%
-      stringr::str_subset("vision", negate = TRUE) %>%
-      sort()
-
-    idx <- which(models == "gpt-3.5-turbo")
-    models <- c(models[idx], models[-idx])
+      idx <- which(models == "gpt-3.5-turbo")
+      models <- c(models[idx], models[-idx])
+    } else if(service == "openai-completion"){
+      models <- c("text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001")
+    }
     return(models)
   } else if (service == "replicate"){
     models <- c("llama-2-70b-chat")
