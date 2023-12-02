@@ -59,15 +59,10 @@ renderWelcomeMessage <- function(expr, env = parent.frame(), quoted = FALSE) {
   htmlwidgets::shinyRenderWidget(expr, welcomeMessageOutput, env, quoted = TRUE)
 }
 
-
-
-
-
 #' Default chat message
 #' @inheritParams mod_chat_ui
 #' @return A default chat message for welcoming users.
 chat_message_default <- function(translator = create_translator()) {
-  # nolint start
 
   welcome_title <- "Welcome to mergen!" %>%
     purrr::map_chr(~ translator$t(.x))
@@ -75,7 +70,7 @@ chat_message_default <- function(translator = create_translator()) {
   welcome_messages <- c(
     "I'm here to guide you through every step, offering unique code execution and insightful prompt chains tailored to your coding needs, regardless of your experience level.",
     "Whether you're starting fresh or already a pro, my advanced prompt chains and code execution capabilities are designed to elevate your R programming journey.",
-    "As your specialized R coding assistant, I bring the power of direct code execution and advanced prompt chains to your fingertips. Feel free to ask me anything – I'm here to streamline and enrich your R coding experience.",
+    "As your specialized R coding assistant, I bring the power of direct code execution and advanced prompt chains to your fingertips. Feel free to ask me anything. I'm here to streamline and enrich your R coding experience.",
     "As an advanced R virtual assistant, I'm equipped with unique features like code execution and interactive prompt chains to help you achieve your coding objectives, no matter how big or small.",
     "As your virtual assistant, I offer more than just guidance – I bring the capabilities of executing R code and engaging with dynamic prompt chains to make your coding journey smoother and more enjoyable."
   ) %>%

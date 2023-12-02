@@ -88,7 +88,6 @@ mergenstudio_request <- function(skeleton = NULL){
         response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
         response <- response$final.response
       } else {
-        try
         response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
       }
     } else {

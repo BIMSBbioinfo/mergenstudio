@@ -2,3 +2,8 @@ Name: Chat
 Description: Start a mergen chat session
 Binding: addin_mergenchat
 Interactive: true
+
+Name: Chat in Source
+Description: Use a mergen chat in source instead of in a shiny app
+Binding: addin_mergenchat_in_source
+Interactive: false

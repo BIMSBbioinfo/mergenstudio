@@ -74,6 +74,8 @@ mod_chat_ui <- function(id, translator = create_translator()) {
 #' @param settings,history Reactive values from the settings and history module
 #' @inheritParams run_chat_app
 #'
+#' @importFrom utils tail
+#'
 mod_chat_server <- function(id,
                             ide_colors = get_ide_theme_info(),
                             translator = create_translator(),
@@ -166,7 +168,7 @@ mod_chat_server <- function(id,
       } else {
 
         # check history
-        if(grepl("^Here are the results once the code is executed", tail(history$chat_history,1)[[1]]$content)){
+        if(grepl("^Here are the results once the code is executed", utils::tail(history$chat_history,1)[[1]]$content)){
           showNotification(ui = "You have to get another response to execute code again!", duration = 3, type = "message", session = session)
         } else {
           code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
