@@ -6,12 +6,6 @@
 \usage{
 get_available_endpoints()
 }
-\value{
-A character vector
-}
 \description{
 Get a list of the endpoints supported by mergenstudio.
-}
-\examples{
-get_available_endpoints()
 }

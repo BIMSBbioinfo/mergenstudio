@@ -14,9 +14,6 @@ chat_history_append(history, role, content)
 \item{content}{Content of the message. If it is from the user most probably
 comes from an interactive input.}
 }
-\value{
-list of chat messages
-}
 \description{
 This appends a new response to the chat history
 }

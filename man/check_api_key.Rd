@@ -9,11 +9,6 @@ check_api_key(api_key)
 \arguments{
 \item{api_key}{An API key.}
 }
-\value{
-Nothing is returned. If the API key is in the correct format, a
-success message is printed. If the API key is not in the correct format,
-an error message is printed and the function aborts.
-}
 \description{
 This function checks whether the API key provided as an argument is in the
 correct format.

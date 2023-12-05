@@ -31,29 +31,30 @@ mergenstudio_skeleton <- function(service = "openai-chat",
   )
 }
 
-# validate_skeleton <- function(model, prompt, history, stream, selfcorrect) {
+#' @importFrom assertthat assert_that
+#' @importFrom rlang is_scalar_character is_list is_bool
 validate_skeleton <- function(api_key, model, prompt, history, selfcorrect) {
-  # assert_that(
+  # assertthat::assert_that(
   #   Sys.getenv(api_key) != "",
   #   msg = paste0(api_key, " is not found in R environment")
   # )
-  assert_that(
+  assertthat::assert_that(
     rlang::is_scalar_character(model),
     msg = "Model name is not a valid character scalar"
   )
-  assert_that(
+  assertthat::assert_that(
     rlang::is_scalar_character(prompt),
     msg = "Prompt is not a valid list"
   )
-  assert_that(
+  assertthat::assert_that(
     rlang::is_list(history),
     msg = "History is not a valid list"
   )
-  # assert_that(
+  # assertthat::assert_that(
   #   rlang::is_bool(stream),
   #   msg = "Stream is not a valid boolean"
   # )
-  assert_that(
+  assertthat::assert_that(
     rlang::is_bool(selfcorrect),
     msg = "Selfcorrect is not a valid boolean"
   )
@@ -85,6 +86,7 @@ mergenstudio_request <- function(skeleton = NULL){
     # get response, if setup is failed, says that it failed
     if(exists("myAgent")){
       if(skeleton$selfcorrect){
+        print("self correct")
         response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
         response <- response$final.response
       } else {
@@ -99,7 +101,6 @@ mergenstudio_request <- function(skeleton = NULL){
   new_history <- c(
     skeleton$history,
     list(
-      # list(role = "user", content = skeleton$prompt),
       list(role = "assistant", content = response)
     )
   )

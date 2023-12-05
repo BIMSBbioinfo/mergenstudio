@@ -1,3 +1,5 @@
+#' @importFrom tools R_user_dir
+#' @importFrom yaml write_yaml
 save_user_config <- function(code_style,
                              skill,
                              task,
@@ -10,9 +12,6 @@ save_user_config <- function(code_style,
   if (is.null(custom_prompt)) custom_prompt <- ""
   config <-
     data.frame(
-      # code_style,
-      # skill,
-      # task,
       language,
       service,
       model,
@@ -33,9 +32,6 @@ set_user_options <- function(config) {
   op <- options()
 
   op_mergenstudio <- list(
-    # mergenstudio.code_style    = config$code_style,
-    # mergenstudio.skill         = config$skill,
-    # mergenstudio.task          = config$task,
     mergenstudio.language      = config$language,
     mergenstudio.service       = config$service,
     mergenstudio.model         = config$model,

@@ -6,9 +6,6 @@
 \usage{
 random_port()
 }
-\value{
-A single integer representing the randomly selected safe port number.
-}
 \description{
 This function generates a random port allowed by shiny::runApp.
 }

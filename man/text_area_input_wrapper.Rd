@@ -50,9 +50,6 @@ will use the client browser's default setting for resizing textareas.}
 
 \item{textarea_class}{Class to be applied to the textarea element}
 }
-\value{
-A modified textAreaInput
-}
 \description{
 Modified version of \code{textAreaInput()} that removes the label container.
 It's used in \code{mod_prompt_ui()}

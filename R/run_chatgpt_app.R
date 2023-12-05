@@ -4,9 +4,11 @@
 #' script.
 #'
 #' @param ide_colors List containing the colors of the IDE theme.
+#'
 #' @inheritParams shiny::runApp
 #'
 #' @return Nothing.
+#'
 #' @export
 run_chat_app <- function(ide_colors = get_ide_theme_info(),
                             host = getOption("shiny.host", "127.0.0.1"),

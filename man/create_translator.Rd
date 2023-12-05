@@ -9,9 +9,6 @@ create_translator(language = getOption("mergenstudio.language"))
 \arguments{
 \item{language}{The language to be found in the translation JSON file.}
 }
-\value{
-A Translator from \code{shiny.i18n::Translator}
-}
 \description{
 The language can be set via \code{options("mergenstudio.language" = "<language>")}
 (defaults to "en").

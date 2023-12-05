@@ -12,10 +12,6 @@ mergen_chat_completion(prompt, ai_api_key = Sys.getenv("OPENAI_API_KEY"))
 \item{ai_api_key}{The API key for accessing OpenAI's API. By default, the
 function will try to use the \code{OPENAI_API_KEY} environment variable.}
 }
-\value{
-A list with the generated completions and other information returned
-by the API.
-}
 \description{
 Generate text completions using OpenAI's API for Chat
 }

@@ -11,9 +11,6 @@ style_chat_message(message, ide_colors = get_ide_theme_info())
 
 \item{ide_colors}{List containing the colors of the IDE theme.}
 }
-\value{
-An HTML element.
-}
 \description{
 Style a message based on the role of its author.
 }

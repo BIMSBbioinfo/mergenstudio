@@ -5,6 +5,7 @@
 #'
 #' @import htmltools
 #' @import shiny
+#' @import bslib
 #'
 mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
   ns <- NS(id)
@@ -97,12 +98,13 @@ create_chat_app_theme <- function(ide_colors = get_ide_theme_info()) {
 #'
 #' This function returns a list with the current IDE theme's information.
 #'
+#' @importFrom rstudioapi isAvailable getThemeInfo
+#' @import cli
+#'
 #' @return A list with three components:
 #' \item{is_dark}{A boolean indicating whether the current IDE theme is dark.}
 #' \item{bg}{The current IDE theme's background color.}
 #' \item{fg}{The current IDE theme's foreground color.}
-#'
-#' @export
 #'
 get_ide_theme_info <- function() {
   if (rstudioapi::isAvailable()) {
@@ -126,6 +128,7 @@ get_ide_theme_info <- function() {
   }
 }
 
+#' @importFrom htmltools htmlDependency
 html_dependencies <- function() {
   htmltools::htmlDependency(
     name = "mergenstudio-assets", version = "0.4.0",
@@ -141,9 +144,10 @@ html_dependencies <- function() {
 #' The language can be set via `options("mergenstudio.language" = "<language>")`
 #' (defaults to "en").
 #'
+#' @import cli
+#' @importFrom shiny.i18n Translator
 #' @param language The language to be found in the translation JSON file.
 #'
-#' @return A Translator from `shiny.i18n::Translator`
 create_translator <- function(language = getOption("mergenstudio.language")) {
   translator  <- shiny.i18n::Translator$new(translation_json_path = system.file("translations/translation.json", package = "mergenstudio"))
   supported_languages <- translator$get_languages()

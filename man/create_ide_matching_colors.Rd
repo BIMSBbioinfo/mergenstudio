@@ -11,9 +11,6 @@ create_ide_matching_colors(role, ide_colors = get_ide_theme_info())
 
 \item{ide_colors}{List containing the colors of the IDE theme.}
 }
-\value{
-list
-}
 \description{
 This returns a list of color properties for a chat message
 }

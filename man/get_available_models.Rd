@@ -9,12 +9,6 @@ get_available_models(service)
 \arguments{
 \item{service}{The API service}
 }
-\value{
-A character vector
-}
 \description{
 Get a list of the models supported by the OpenAI API.
-}
-\examples{
-get_available_endpoints()
 }

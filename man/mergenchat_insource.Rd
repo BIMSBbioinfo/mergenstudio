@@ -6,9 +6,6 @@
 \usage{
 mergenchat_insource()
 }
-\value{
-No return value. Replaces the selected text with new text provided by the request.
-}
 \description{
 Giving more useful output in a source (i.e., *.R) file.
 }

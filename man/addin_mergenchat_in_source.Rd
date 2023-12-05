@@ -13,3 +13,8 @@ This function has no return value.
 Call this function as a Rstudio addin to ask mergen to improve spelling and
 grammar of selected text.
 }
+\examples{
+\dontrun{
+addin_mergenchat_in_source()
+}
+}

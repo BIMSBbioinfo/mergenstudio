@@ -15,9 +15,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
         div(
           class = "p-2 mh-100 overflow-auto",
           welcomeMessageOutput(ns("welcome")),
-          uiOutput(ns("history")),
-          streamingMessageOutput(ns("streaming")),
-          # uiOutput(ns("streaming"))
+          uiOutput(ns("history"))
         ),
         div(
           class = "mt-auto",
@@ -75,6 +73,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
 #' @inheritParams run_chat_app
 #'
 #' @importFrom utils tail
+#' @importFrom mergen clean_code_blocks executeCode extractCode
 #'
 mod_chat_server <- function(id,
                             ide_colors = get_ide_theme_info(),
@@ -105,15 +104,6 @@ mod_chat_server <- function(id,
       history$chat_history %>%
         style_chat_history(ide_colors = ide_colors)
     })
-
-
-    output$streaming <- renderStreamingMessage({
-      # This has display: none by default. It is only shown when receiving a stream
-      # After the stream is completed, it will reset.
-      streamingMessage(ide_colors)
-    }) %>%
-      bindEvent(rv$reset_streaming_message)
-
 
     # Observers ----
 

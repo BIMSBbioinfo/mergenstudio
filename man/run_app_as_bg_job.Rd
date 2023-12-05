@@ -32,10 +32,6 @@ by Google Chrome for being considered unsafe: 3659, 4045, 5060,
 5061, 6000, 6566, 6665:6669 and 6697. Up to twenty random
 ports will be tried.}
 }
-\value{
-This function returns nothing because is meant to run an app as a
-side effect.
-}
 \description{
 This function runs an R Shiny app as a background job using the specified
 directory, name, host, and port.

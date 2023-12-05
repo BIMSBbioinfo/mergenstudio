@@ -10,20 +10,6 @@
 #'
 #' @inheritParams run_chat_app
 #'
-#' @return A list of formatted chat messages with styling applied, excluding
-#' system messages.
-#'
-#' @examples
-#'
-#' chat_history_example <- list(
-#'   list(role = "user", content = "Hello, World!"),
-#'   list(role = "system", content = "System message"),
-#'   list(role = "assistant", content = "Hi, how can I help?")
-#' )
-#'
-#' \dontrun{
-#' style_chat_history(chat_history_example)
-#' }
 style_chat_history <- function(history, ide_colors = get_ide_theme_info()) {
   history %>%
     purrr::discard(~ .x$role == "system") %>%
@@ -42,7 +28,6 @@ style_chat_history <- function(history, ide_colors = get_ide_theme_info()) {
 #'
 #' @inheritParams run_chat_app
 #'
-#' @return An HTML element.
 style_chat_message <- function(message,
                                ide_colors = get_ide_theme_info()) {
   colors <- create_ide_matching_colors(message$role, ide_colors)
@@ -87,7 +72,6 @@ style_chat_message <- function(message,
 #'
 #' @inheritParams run_chat_app
 #'
-#' @return list
 create_ide_matching_colors <- function(role,
                                        ide_colors = get_ide_theme_info()) {
   assertthat::assert_that(role %in% c("user", "assistant"))
@@ -121,7 +105,6 @@ create_ide_matching_colors <- function(role,
 #' @importFrom htmltools tagQuery
 #' @importFrom shiny textAreaInput
 #'
-#' @return A modified textAreaInput
 text_area_input_wrapper <-
   function(inputId,
            label,
@@ -166,8 +149,6 @@ text_area_input_wrapper <-
 #' @param role Author of the message. One of `c("user", "assistant")`
 #' @param content Content of the message. If it is from the user most probably
 #' comes from an interactive input.
-#'
-#' @return list of chat messages
 #'
 chat_history_append <- function(history, role, content) {
   c(history, list(

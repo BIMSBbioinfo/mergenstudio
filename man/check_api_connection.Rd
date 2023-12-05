@@ -11,11 +11,6 @@ check_api_connection(api_key, verbose = FALSE)
 
 \item{verbose}{Whether to provide information about the API connection}
 }
-\value{
-Nothing is returned. If the API key is valid, a success message is
-printed. If the API key is invalid, an error message is printed and the
-function is aborted.
-}
 \description{
 This function checks whether the API key provided in the \code{OPENAI_API_KEY}
 environment variable is valid.

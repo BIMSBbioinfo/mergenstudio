@@ -7,6 +7,10 @@
 #'
 #' @return This function has no return value.
 #'
+#' @examples
+#' \dontrun{
+#' addin_mergenchat_in_source()
+#' }
 addin_mergenchat_in_source <- function() {
   cli_process_start("Sending query to ChatGPT")
   mergenchat_insource()
@@ -17,8 +21,7 @@ addin_mergenchat_in_source <- function() {
 #'
 #' Giving more useful output in a source (i.e., *.R) file.
 #'
-#' @return No return value. Replaces the selected text with new text provided by the request.
-#'
+#' @import cli
 mergenchat_insource <- function() {
 
   gptstudio_chat_in_source_file_ext <- character(1L)
@@ -50,9 +53,7 @@ mergenchat_insource <- function() {
 #' @param ai_api_key The API key for accessing OpenAI's API. By default, the
 #'   function will try to use the `OPENAI_API_KEY` environment variable.
 #'
-#' @return A list with the generated completions and other information returned
-#'   by the API.
-#'
+#' @importFrom mergen setupAgent sendPrompt
 mergen_chat_completion <-
   function(prompt,
            ai_api_key = Sys.getenv("OPENAI_API_KEY")) {

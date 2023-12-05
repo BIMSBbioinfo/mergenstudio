@@ -6,9 +6,8 @@
 #' @param api_key An API key.
 #' @param verbose Whether to provide information about the API connection
 #'
-#' @return Nothing is returned. If the API key is valid, a success message is
-#' printed. If the API key is invalid, an error message is printed and the
-#' function is aborted.
+#' @import cli
+#'
 check_api_connection <- function(api_key, verbose = FALSE) {
   if (!check_api_key(api_key)) {
     invisible()
@@ -16,23 +15,23 @@ check_api_connection <- function(api_key, verbose = FALSE) {
     status_code <- simple_api_check(api_key)
     if (status_code == 200) {
       if (verbose) {
-        cli_alert_success("API key is valid and a simple API call worked.")
-        cli_alert_info("The API is validated once per session.")
-        cli_text("The default value for number of tokens per query is 500.
+        cli::cli_alert_success("API key is valid and a simple API call worked.")
+        cli::cli_alert_info("The API is validated once per session.")
+        cli::cli_text("The default value for number of tokens per query is 500.
                     This equates to approximately $0.01 USD per query. You can
                     increase or decrease the number of tokens with the
                     `mergenstudio.max_tokens` option. Here is an example to lower
                     the max tokens to 100 tokens per query:")
-        cli_code("options(\"mergenstudio.max_tokens\" = 100)")
+        cli::cli_code("options(\"mergenstudio.max_tokens\" = 100)")
         options("mergenstudio.valid_api" = TRUE)
         options("mergenstudio.openai_key" = api_key)
       }
       invisible(TRUE)
     } else {
-      cli_alert_danger("API key found but call was unsuccessful.")
-      cli_alert_info("Attempted to use API key: {obscure_key(api_key)}")
+      cli::cli_alert_danger("API key found but call was unsuccessful.")
+      cli::cli_alert_info("Attempted to use API key: {obscure_key(api_key)}")
       if (interactive()) {
-        cli_inform("Satus code: {status_code}")
+        cli::cli_inform("Satus code: {status_code}")
       } else {
         invisible(FALSE)
       }
@@ -47,9 +46,9 @@ check_api_connection <- function(api_key, verbose = FALSE) {
 #'
 #' @param api_key An API key.
 #'
-#' @return Nothing is returned. If the API key is in the correct format, a
-#' success message is printed. If the API key is not in the correct format,
-#' an error message is printed and the function aborts.
+#' @import cli
+#' @importFrom stringr str_detect
+#'
 check_api_key <- function(api_key) {
   key_instructions <-
     c(
@@ -77,16 +76,7 @@ check_api_key <- function(api_key) {
 #' environment variable is valid. This function will not re-check an API if it
 #' has already been validated in the current session.
 #'
-#' @return Nothing is returned. If the API key is valid, a success message is
-#' printed. If the API key is invalid, an error message is printed and the
-#' function aborts.
-#' @export
-#'
-#' @examples
-#' # Call the function to check the API key
-#' \dontrun{
-#' check_api()
-#' }
+#' @import cli
 check_api <- function() {
   api_key <- Sys.getenv("OPENAI_API_KEY")
   valid_api <- getOption("mergenstudio.valid_api")
@@ -96,11 +86,12 @@ check_api <- function() {
   } else if (saved_key == Sys.getenv("OPENAI_API_KEY")) {
     invisible(TRUE)
   } else {
-    cli_alert_warning("API key has changed. Re-checking API connection.")
+    cli::cli_alert_warning("API key has changed. Re-checking API connection.")
     check_api_connection(api_key)
   }
 }
 
+#' @importFrom httr2 req_error req_perform resp_status
 simple_api_check <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
   request_base(task = "models", token = api_key) %>%
     httr2::req_error(is_error = function(resp) FALSE) %>%

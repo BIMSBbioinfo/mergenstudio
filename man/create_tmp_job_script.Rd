@@ -30,9 +30,6 @@ ports will be tried.}
 to the \code{shiny.host} option, if set, or \code{"127.0.0.1"} if not. See
 Details.}
 }
-\value{
-A string containing the path of a temporary job script
-}
 \description{
 This function creates a temporary R script file that runs the Shiny
 application from the specified directory with the specified port and host.
