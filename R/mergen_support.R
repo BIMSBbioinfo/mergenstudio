@@ -89,21 +89,26 @@ mergenstudio_request <- function(skeleton = NULL){
         print("self correct")
         response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
         response <- response$final.response
+        new_history <- c(
+          skeleton$history,
+          list(
+            list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors..."),
+            list(role = "assistant", content = response)
+          )
+        )
       } else {
         response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
+        new_history <- c(
+          skeleton$history,
+          list(
+            list(role = "assistant", content = response)
+          )
+        )
       }
     } else {
       response <- "Request Failed: check your API configurations"
     }
   }
-
-
-  new_history <- c(
-    skeleton$history,
-    list(
-      list(role = "assistant", content = response)
-    )
-  )
 
   skeleton$history <- new_history
   skeleton$prompt <- NULL # remove the last prompt
