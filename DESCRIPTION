@@ -5,6 +5,7 @@ Version: 1.0
 Authors@R: c(
     person("Artür", "Manukyan", , "artur-man@hotmail.com", role = c("aut", "cre")),
     person("Jacqueline", "Jansen", , "jacqueline.jansen@uni-potsdam.de", role = c("aut")),
+    person("Nour", "Alkhoury", , "nour.alkhoury@mdc-berlin.de", role = c("aut")),
     person("Altuna", "Akalin", , "altuna.akalin@mdc-berlin.de", role = c("aut"))
   )
 Maintainer: Artur Manukyan <artur-man@hotmail.com>
@@ -38,9 +39,6 @@ Imports:
     yaml
 Remotes: BIMSBbioinfo/mergen
 Suggests: 
-    mockr,
-    shinytest2,
-    spelling,
     testthat (>= 3.0.0),
     uuid,
     withr
