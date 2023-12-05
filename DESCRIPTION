@@ -38,10 +38,6 @@ Imports:
     waiter,
     yaml
 Remotes: BIMSBbioinfo/mergen
-Suggests: 
-    testthat (>= 3.0.0),
-    uuid,
-    withr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
