@@ -179,7 +179,7 @@ mod_chat_server <- function(id,
           # update history
           history$chat_history <- c(history$chat_history,
                                     list(list(role = "assistant",
-                                              content = paste0("Here are the results once the code is executed:\n\n```\n", code_result, "\n```\n\n"))
+                                              content = paste0("Here are the results once the code is executed:\n\n```\n", paste(code_result, collapse = "\n"), "\n```\n\n"))
                                     ))
           updateTextAreaInput(session, "chat_input", value = "")
         }

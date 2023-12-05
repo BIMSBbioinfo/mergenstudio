@@ -83,7 +83,6 @@ chat_message_default <- function(translator = create_translator()) {
     glue::glue_collapse() %>%
     glue::glue()
 
-  print(content)
   list(
     role = "assistant",
     content = content
