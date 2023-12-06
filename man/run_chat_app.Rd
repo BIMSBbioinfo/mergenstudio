@@ -33,6 +33,6 @@ This functions starts the mergen chat as a regular shiny application. The same a
 }
 \examples{
 \dontrun{
-  run_chat_app()
+run_chat_app()
 }
 }
