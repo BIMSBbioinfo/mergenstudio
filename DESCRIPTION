@@ -33,7 +33,6 @@ Imports:
     rstudioapi (>= 0.12),
     shiny,
     shiny.i18n,
-    shinyFiles,
     stringr (>= 1.5.0),
     utils,
     waiter,
