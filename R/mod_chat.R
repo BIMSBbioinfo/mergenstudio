@@ -74,6 +74,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
 #'
 #' @importFrom utils tail
 #' @importFrom mergen clean_code_blocks executeCode extractCode
+#' @importFrom waiter waiter_show waiter_hide spin_ring
 #'
 mod_chat_server <- function(id,
                             ide_colors = get_ide_theme_info(),
@@ -137,7 +138,6 @@ mod_chat_server <- function(id,
           selfcorrect = settings$selfcorrect
       )
 
-      waiter::transparent(alpha = 0.5)
       waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.5, ")"))
       response <- mergenstudio_request(skeleton = skeleton)
       waiter::waiter_hide() # hide the waiter

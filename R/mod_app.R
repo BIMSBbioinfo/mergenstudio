@@ -6,6 +6,7 @@
 #' @import htmltools
 #' @import shiny
 #' @import bslib
+#' @importFrom waiter use_waiter
 #'
 mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
   ns <- NS(id)
