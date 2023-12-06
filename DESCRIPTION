@@ -1,6 +1,6 @@
 Type: Package
 Package: mergenstudio
-Title: mergen Studio: An RStudio Addin wrapper for the mergen package
+Title: Mergen Studio: An RStudio Addin wrapper for the mergen package
 Version: 1.0
 Authors@R: c(
     person("Artür", "Manukyan", , "artur-man@hotmail.com", role = c("aut", "cre")),
@@ -15,7 +15,6 @@ Depends:
     R (>= 4.0)
 Imports: 
     mergen,
-    shinyDirectoryInput,
     assertthat,
     bslib (>= 0.4.2),
     cli,
@@ -39,7 +38,7 @@ Imports:
     utils,
     waiter,
     yaml
-Remotes: BIMSBbioinfo/mergen, wleepang/shiny-directory-input
+Remotes: BIMSBbioinfo/mergen
 Encoding: UTF-8
 Language: en-US
 LazyData: true

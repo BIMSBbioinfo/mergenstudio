@@ -4,7 +4,7 @@
 \name{mergenstudio-package}
 \alias{mergenstudio}
 \alias{mergenstudio-package}
-\title{mergenstudio: mergen Studio: An RStudio Addin wrapper for the mergen package}
+\title{mergenstudio: Mergen Studio: An RStudio Addin wrapper for the mergen package}
 \description{
 An RStudio Addin wrapper for the mergen package.
 }

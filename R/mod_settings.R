@@ -1,6 +1,5 @@
 #' @importFrom bslib accordion accordion_panel tooltip
 #' @importFrom fontawesome fa
-#' @importFrom shinyDirectoryInput directoryInput
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
@@ -59,7 +58,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
       title = "Execute Options",
       icon = fontawesome::fa("sliders"),
 
-      shinyDirectoryInput::directoryInput(ns('directory'), label = 'Select Directory', value = getwd()),
+      directoryInput(ns('directory'), label = 'Select Directory', value = getwd()),
     ),
 
     bslib::accordion_panel(
@@ -109,7 +108,6 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 }
 
 #' @importFrom glue glue
-#' @importFrom shinyDirectoryInput readDirectoryInput updateDirectoryInput choose.dir
 mod_settings_server <- function(id) {
   moduleServer(id, function(input, output, session) {
 
@@ -130,17 +128,19 @@ mod_settings_server <- function(id) {
       },
       handlerExpr = {
         if (input$directory > 0) {
-          path = shinyDirectoryInput::choose.dir(default = readDirectoryInput(session, ns('directory')),
+          path = choose.dir(default = readDirectoryInput(session, ns('directory')),
                             caption="Choose a directory...")
-          shinyDirectoryInput::updateDirectoryInput(session, ns('directory'), value = path)
+          updateDirectoryInput(session, ns('directory'), value = path)
         } else {
           path <- getwd()
         }
+        print(path)
         rv$directory <- path
+        print(rv$directory)
       }
     )
     output$directory = renderText({
-      shinyDirectoryInput::readDirectoryInput(session, ns('directory'))
+      readDirectoryInput(session, ns('directory'))
     })
 
     # main observe
