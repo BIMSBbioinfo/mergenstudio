@@ -134,9 +134,7 @@ mod_settings_server <- function(id) {
         } else {
           path <- getwd()
         }
-        print(path)
         rv$directory <- path
-        print(rv$directory)
       }
     )
     output$directory = renderText({
