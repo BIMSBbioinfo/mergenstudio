@@ -2,7 +2,8 @@
 #'
 #' @param id id of the module
 #' @param translator A Translator from `shiny.i18n::Translator`
-#'
+#' @param bslib tooltip
+#' @noRd
 mod_chat_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
@@ -75,7 +76,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
 #' @importFrom utils tail
 #' @importFrom mergen clean_code_blocks executeCode extractCode
 #' @importFrom waiter waiter_show waiter_hide spin_ring
-#'
+#' @noRd
 mod_chat_server <- function(id,
                             ide_colors = get_ide_theme_info(),
                             translator = create_translator(),

@@ -1,5 +1,6 @@
 #' @importFrom bslib accordion accordion_panel tooltip
 #' @importFrom fontawesome fa
+#' @noRd
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
@@ -108,6 +109,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 }
 
 #' @importFrom glue glue
+#' @noRd
 mod_settings_server <- function(id) {
   moduleServer(id, function(input, output, session) {
 

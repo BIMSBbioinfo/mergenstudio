@@ -15,6 +15,6 @@ grammar of selected text.
 }
 \examples{
 \dontrun{
-  addin_mergenchat_in_source()
+addin_mergenchat_in_source()
 }
 }

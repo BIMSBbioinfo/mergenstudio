@@ -7,7 +7,7 @@
 #' 'content'.
 #'
 #' @importFrom purrr discard map
-#'
+#' @noRd
 #' @inheritParams run_chat_app
 #'
 style_chat_history <- function(history, ide_colors = get_ide_theme_info()) {
@@ -25,6 +25,7 @@ style_chat_history <- function(history, ide_colors = get_ide_theme_info()) {
 #' @importFrom htmltools div css tag tagList
 #' @importFrom shiny markdown icon
 #' @importFrom glue glue
+#' @noRd
 #'
 #' @inheritParams run_chat_app
 #'
@@ -69,6 +70,7 @@ style_chat_message <- function(message,
 #'
 #' @importFrom colorspace lighten
 #' @importFrom assertthat assert_that
+#' @noRd
 #'
 #' @inheritParams run_chat_app
 #'
@@ -104,6 +106,7 @@ create_ide_matching_colors <- function(role,
 #'
 #' @importFrom htmltools tagQuery
 #' @importFrom shiny textAreaInput
+#' @noRd
 #'
 text_area_input_wrapper <-
   function(inputId,
@@ -149,6 +152,8 @@ text_area_input_wrapper <-
 #' @param role Author of the message. One of `c("user", "assistant")`
 #' @param content Content of the message. If it is from the user most probably
 #' comes from an interactive input.
+#'
+#' @noRd
 #'
 chat_history_append <- function(history, role, content) {
   c(history, list(

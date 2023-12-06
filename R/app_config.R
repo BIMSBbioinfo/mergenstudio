@@ -1,5 +1,6 @@
 #' @importFrom tools R_user_dir
 #' @importFrom yaml write_yaml
+#' @noRd
 save_user_config <- function(code_style,
                              skill,
                              task,

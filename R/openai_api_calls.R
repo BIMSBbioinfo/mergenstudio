@@ -7,6 +7,7 @@
 #'
 #' @import cli
 #' @importFrom httr2 request req_url_path_append req_auth_bearer_token
+#' @noRd
 request_base <- function(task, token = Sys.getenv("OPENAI_API_KEY")) {
   if (!task %in% get_available_endpoints()) {
     cli::cli_abort(message = c(
@@ -30,7 +31,7 @@ request_base <- function(task, token = Sys.getenv("OPENAI_API_KEY")) {
 #' @importFrom httr2 req_perform resp_body_json
 #' @importFrom purrr pluck map_chr
 #' @importFrom stringr str_subset
-#'
+#' @noRd
 get_available_models <- function(service) {
   if (grepl("^openai", service)) {
     check_api()
@@ -63,6 +64,7 @@ get_available_models <- function(service) {
 #'
 #' Get a list of the endpoints supported by mergenstudio.
 #'
+#' @noRd
 get_available_endpoints <- function() {
   c("completions", "chat/completions", "edits", "embeddings", "models")
 }

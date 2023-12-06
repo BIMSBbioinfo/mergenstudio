@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' \dontrun{
-#'   addin_mergenchat_in_source()
+#' addin_mergenchat_in_source()
 #' }
 addin_mergenchat_in_source <- function() {
   cli::cli_process_start("Sending query to ChatGPT")
@@ -24,6 +24,7 @@ addin_mergenchat_in_source <- function() {
 #' Giving more useful output in a source (i.e., *.R) file.
 #'
 #' @import cli
+#' @noRd
 mergenchat_insource <- function() {
 
   gptstudio_chat_in_source_file_ext <- character(1L)
@@ -56,6 +57,7 @@ mergenchat_insource <- function() {
 #'   function will try to use the `OPENAI_API_KEY` environment variable.
 #'
 #' @importFrom mergen setupAgent sendPrompt
+#' @noRd
 mergen_chat_completion <-
   function(prompt,
            ai_api_key = Sys.getenv("OPENAI_API_KEY")) {

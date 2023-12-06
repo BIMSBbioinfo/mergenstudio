@@ -33,7 +33,7 @@ addin_mergenchat <- function(host = getOption("shiny.host", "127.0.0.1")) {
 #' Generate a random safe port number
 #'
 #' This function generates a random port allowed by shiny::runApp.
-#'
+#' @noRd
 random_port <- function() {
   all_ports <- 3000:8000
   unsafe_ports <- c(3659, 4045, 5060, 5061, 6000, 6566, 6665:6669, 6697)
@@ -51,7 +51,7 @@ random_port <- function() {
 #'
 #' @importFrom rstudioapi jobRunScript hasFun
 #' @importFrom cli cli_alert_success
-#'
+#' @noRd
 #' @inheritParams shiny::runApp
 #'
 run_app_as_bg_job <- function(appDir = ".", job_name, host, port) {
@@ -73,7 +73,7 @@ run_app_as_bg_job <- function(appDir = ".", job_name, host, port) {
 #' application from the specified directory with the specified port and host.
 #'
 #' @importFrom glue glue
-#'
+#' @noRd
 #' @inheritParams shiny::runApp
 #'
 create_tmp_job_script <- function(appDir, port, host) {
@@ -104,6 +104,7 @@ create_tmp_app_dir <- function() {
 
 #' @importFrom glue glue
 #' @importFrom utils capture.output
+#' @noRd
 create_tmp_app_file <- function() {
   script_file <- tempfile(fileext = ".R")
 
@@ -159,7 +160,7 @@ create_tmp_app_file <- function() {
 #' @importFrom glue glue
 #' @importFrom cli cli_inform
 #' @importFrom rstudioapi viewer
-#'
+#' @noRd
 open_bg_shinyapp <- function(host, port) {
   url <- glue::glue("http://{host}:{port}")
   translated_url <- rstudioapi::translateLocalUrl(url, absolute = TRUE)

@@ -1,4 +1,5 @@
 #' @importFrom bslib navset_hidden nav_panel_hidden
+#' @noRd
 mod_sidebar_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
   tagList(
@@ -22,6 +23,7 @@ mod_sidebar_ui <- function(id, translator = create_translator()) {
 }
 
 #' @importFrom bslib nav_select
+#' @noRd
 mod_sidebar_server <- function(id) {
   moduleServer(
     id,

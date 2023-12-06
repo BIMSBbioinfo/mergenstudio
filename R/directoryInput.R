@@ -6,6 +6,7 @@
 #' @param default which folder to show initially
 #' @param caption the caption on the selection dialog
 #' @param useNew boolean, selects the type of dialog shown in windows
+#' @noRd
 #'
 #' @details
 #' Uses an Apple Script, Zenity or Windows Batch script to display an OS-native
@@ -39,6 +40,7 @@ choose.dir = function(default = NA, caption = NA, useNew=TRUE) {
 #' @title The apple version of the choose folder
 #'
 #' @inheritParams choose.dir
+#' @noRd
 #'
 #' @seealso \code{\link{choose.dir}}
 #'
@@ -80,6 +82,7 @@ choose.dir.darwin <- function(default = NA, caption = NA) {
 #' @title The linux version of the choose folder
 #'
 #' @inheritParams choose.dir
+#' @noRd
 #'
 #' @seealso \code{\link{choose.dir}}
 #'
@@ -118,6 +121,7 @@ choose.dir.linux <- function(default = NA, caption = NA) {
 #' @title The windows version of the choose folder
 #'
 #' @inheritParams choose.dir
+#' @noRd
 #'
 #' @seealso \code{\link{choose.dir}}
 #'
@@ -161,6 +165,7 @@ choose.dir.windows <- function(default = NA, caption = NA, useNew = TRUE) {
 #' @param value Initial value.  Paths are expanded via \code{\link{path.expand}}.
 #'
 #' @importFrom utils packageVersion
+#' @noRd
 #'
 #' @details
 #' This widget relies on \code{\link{choose.dir}} to present an interactive
@@ -227,6 +232,7 @@ directoryInput = function(inputId, label, value = NULL) {
 #' @param value A directory path to set
 #' @param ... Additional arguments passed to \code{\link{choose.dir}}.  Only used
 #'    if \code{value} is \code{NULL}.
+#' @noRd
 #'
 #' @details
 #' Sends a message to the client, telling it to change the value of the input
@@ -247,6 +253,7 @@ updateDirectoryInput = function(session, inputId, value = NULL, ...) {
 #'
 #' @param session The \code{session} object passed to function given to \code{shinyServer}.
 #' @param inputId The id of the input object
+#' @noRd
 #'
 #' @details
 #' Reads the value of the text field associated with a \code{directoryInput}

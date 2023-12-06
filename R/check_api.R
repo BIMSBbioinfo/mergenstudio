@@ -7,7 +7,7 @@
 #' @param verbose Whether to provide information about the API connection
 #'
 #' @import cli
-#'
+#' @noRd
 check_api_connection <- function(api_key, verbose = FALSE) {
   if (!check_api_key(api_key)) {
     invisible()
@@ -48,7 +48,7 @@ check_api_connection <- function(api_key, verbose = FALSE) {
 #'
 #' @import cli
 #' @importFrom stringr str_detect
-#'
+#' @noRd
 check_api_key <- function(api_key) {
   key_instructions <-
     c(
@@ -77,6 +77,7 @@ check_api_key <- function(api_key) {
 #' has already been validated in the current session.
 #'
 #' @import cli
+#' @noRd
 check_api <- function() {
   api_key <- Sys.getenv("OPENAI_API_KEY")
   valid_api <- getOption("mergenstudio.valid_api")
@@ -92,6 +93,7 @@ check_api <- function() {
 }
 
 #' @importFrom httr2 req_error req_perform resp_status
+#' @noRd
 simple_api_check <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
   request_base(task = "models", token = api_key) %>%
     httr2::req_error(is_error = function(resp) FALSE) %>%

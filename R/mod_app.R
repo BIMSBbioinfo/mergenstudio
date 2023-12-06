@@ -7,7 +7,7 @@
 #' @import shiny
 #' @import bslib
 #' @importFrom waiter use_waiter
-#'
+#' @noRd
 mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
   ns <- NS(id)
   translator <- create_translator(language = getOption("mergenstudio.language"))
@@ -44,9 +44,9 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
 
 #' App Server
 #'
-#' @inheritParams mod_app_ui
+#' @param id id of the module
 #' @inheritParams run_chat_app
-#'
+#' @noRd
 mod_app_server <- function(id, ide_colors = get_ide_theme_info()) {
   moduleServer(id, function(input, output, session) {
     sidebar <- mod_sidebar_server("sidebar")
@@ -64,6 +64,7 @@ mod_app_server <- function(id, ide_colors = get_ide_theme_info()) {
 #' RGB str to hex
 #'
 #' @param rgb_string The RGB string as returned by `rstudioapi::getThemeInfo()`
+#' @noRd
 #'
 #' @return hex color
 rgb_str_to_hex <- function(rgb_string) {
@@ -83,6 +84,7 @@ rgb_str_to_hex <- function(rgb_string) {
 #' Create a bslib theme that matches the user's RStudio IDE theme.
 #'
 #' @inheritParams run_chat_app
+#' @noRd
 #'
 #' @return A bslib theme
 create_chat_app_theme <- function(ide_colors = get_ide_theme_info()) {
@@ -101,6 +103,7 @@ create_chat_app_theme <- function(ide_colors = get_ide_theme_info()) {
 #'
 #' @importFrom rstudioapi isAvailable getThemeInfo
 #' @import cli
+#' @noRd
 #'
 #' @return A list with three components:
 #' \item{is_dark}{A boolean indicating whether the current IDE theme is dark.}
@@ -130,6 +133,7 @@ get_ide_theme_info <- function() {
 }
 
 #' @importFrom htmltools htmlDependency
+#' @noRd
 html_dependencies <- function() {
   htmltools::htmlDependency(
     name = "mergenstudio-assets", version = "0.4.0",
@@ -147,6 +151,8 @@ html_dependencies <- function() {
 #'
 #' @import cli
 #' @importFrom shiny.i18n Translator
+#' @noRd
+#'
 #' @param language The language to be found in the translation JSON file.
 #'
 create_translator <- function(language = getOption("mergenstudio.language")) {

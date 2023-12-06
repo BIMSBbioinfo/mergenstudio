@@ -1,4 +1,5 @@
 #' @importFrom bslib tooltip
+#' @noRd
 mod_history_ui <- function(id) {
   ns <- NS(id)
   conversation_history <- read_conversation_history()
@@ -35,6 +36,7 @@ mod_history_ui <- function(id) {
 }
 
 #' @importFrom purrr keep pluck
+#' @noRd
 mod_history_server <- function(id, settings) {
   moduleServer(id, function(input, output, session) {
       ns <- session$ns
@@ -187,6 +189,7 @@ mod_history_server <- function(id, settings) {
 }
 
 #' @importFrom tools R_user_dir
+#' @noRd
 conversation_history_path <- function() {
   dir <- tools::R_user_dir("mergenstudio", which = "data")
   file <- file.path(dir, "conversation_history.json")
@@ -196,6 +199,7 @@ conversation_history_path <- function() {
 
 #' @importFrom jsonlite write_json
 #' @importFrom purrr keep
+#' @noRd
 write_conversation_history <- function(conversation_history) {
   path <- conversation_history_path()
   if (!dir.exists(path$dir)) dir.create(path$dir, recursive = TRUE)
@@ -206,6 +210,7 @@ write_conversation_history <- function(conversation_history) {
 }
 
 #' @importFrom jsonlite read_json
+#' @noRd
 read_conversation_history <- function() {
   path <- conversation_history_path()
 
@@ -214,6 +219,7 @@ read_conversation_history <- function() {
 }
 
 #' @importFrom purrr discard
+#' @noRd
 append_to_conversation_history <- function(id = ids::random_id(),
                                            title = "Some title",
                                            messages = list()) {
@@ -236,6 +242,7 @@ ns_safe <- function(id, ns = NULL) if (is.null(ns)) id else ns(id)
 
 #' @importFrom ids random_id
 #' @importFrom fontawesome fa
+#' @noRd
 conversation <- function(
     id = ids::random_id(),
     title = "This is the title. Sometimes the title can be very  very long",
@@ -278,4 +285,5 @@ conversation <- function(
 }
 
 #' @importFrom purrr partial
+#' @noRd
 tooltip_on_hover <- purrr::partial(bslib::tooltip, options = list(trigger = "hover"))

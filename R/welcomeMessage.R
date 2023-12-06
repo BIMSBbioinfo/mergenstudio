@@ -10,6 +10,7 @@
 #' @param elementId The element's id
 #'
 #' @importFrom htmlwidgets createWidget
+#' @noRd
 welcomeMessage <- function(ide_colors = get_ide_theme_info(),
                            translator = create_translator(),
                            width = NULL,
@@ -50,12 +51,14 @@ welcomeMessage <- function(ide_colors = get_ide_theme_info(),
 #' @name welcomeMessage-shiny
 #'
 #' @importFrom htmlwidgets shinyWidgetOutput
+#' @noRd
 welcomeMessageOutput <- function(outputId, width = "100%", height = NULL) {
   htmlwidgets::shinyWidgetOutput(outputId, "welcomeMessage", width, height, package = "mergenstudio")
 }
 
 #' @rdname welcomeMessage-shiny
 #' @importFrom htmlwidgets shinyRenderWidget
+#' @noRd
 renderWelcomeMessage <- function(expr, env = parent.frame(), quoted = FALSE) {
   if (!quoted) {
     expr <- substitute(expr)
@@ -67,6 +70,7 @@ renderWelcomeMessage <- function(expr, env = parent.frame(), quoted = FALSE) {
 #' @inheritParams mod_chat_ui
 #' @importFrom purrr map_chr
 #' @importFrom glue glue glue_collapse
+#' @noRd
 chat_message_default <- function(translator = create_translator()) {
 
   welcome_title <- "Welcome to mergen!" %>%

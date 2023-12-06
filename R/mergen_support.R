@@ -33,6 +33,7 @@ mergenstudio_skeleton <- function(service = "openai-chat",
 
 #' @importFrom assertthat assert_that
 #' @importFrom rlang is_scalar_character is_list is_bool
+#' @noRd
 validate_skeleton <- function(api_key, model, prompt, history, selfcorrect) {
   # assertthat::assert_that(
   #   Sys.getenv(api_key) != "",
@@ -61,6 +62,7 @@ validate_skeleton <- function(api_key, model, prompt, history, selfcorrect) {
 }
 
 #' @importFrom mergen setupAgent selfcorrect sendPrompt
+#' @noRd
 mergenstudio_request <- function(skeleton = NULL){
 
   # check prompt
