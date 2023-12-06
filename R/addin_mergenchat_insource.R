@@ -5,16 +5,18 @@
 #'
 #' @export
 #'
+#' @import cli
+#'
 #' @return This function has no return value.
 #'
 #' @examples
 #' \dontrun{
-#' addin_mergenchat_in_source()
+#'   addin_mergenchat_in_source()
 #' }
 addin_mergenchat_in_source <- function() {
-  cli_process_start("Sending query to ChatGPT")
+  cli::cli_process_start("Sending query to ChatGPT")
   mergenchat_insource()
-  cli_process_done()
+  cli::cli_process_done()
 }
 
 #' Mergen Chat in Source

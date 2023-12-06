@@ -118,7 +118,6 @@ mod_settings_server <- function(id) {
     rv$create_new_chat <- 0L
     rv$directory <- 0L
     api_services <- c("openai-chat", "openai-completion", "replicate")
-    volumes = shinyFiles::getVolumes()()
 
     # choose directory
     observeEvent(
