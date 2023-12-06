@@ -15,6 +15,7 @@ Depends:
     R (>= 4.0)
 Imports: 
     mergen,
+    shinyDirectoryInput,
     assertthat,
     bslib (>= 0.4.2),
     cli,
@@ -33,11 +34,12 @@ Imports:
     rstudioapi (>= 0.12),
     shiny,
     shiny.i18n,
+    shinyFiles,
     stringr (>= 1.5.0),
     utils,
     waiter,
     yaml
-Remotes: BIMSBbioinfo/mergen
+Remotes: BIMSBbioinfo/mergen, wleepang/shiny-directory-input
 Encoding: UTF-8
 Language: en-US
 LazyData: true

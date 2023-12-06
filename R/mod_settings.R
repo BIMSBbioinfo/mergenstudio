@@ -1,5 +1,6 @@
 #' @importFrom bslib accordion accordion_panel tooltip
 #' @importFrom fontawesome fa
+#' @importFrom shinyDirectoryInput directoryInput
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
@@ -11,7 +12,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 
     bslib::accordion(open = TRUE,
       bslib::accordion_panel(
-        title = "API service",
+        title = "API Options",
         icon = fontawesome::fa("server"),
 
         selectInput(
@@ -54,7 +55,12 @@ mod_settings_ui <- function(id, translator = create_translator()) {
       )
     ),
 
+    bslib::accordion_panel(
+      title = "Execute Options",
+      icon = fontawesome::fa("sliders"),
 
+      shinyDirectoryInput::directoryInput(ns('directory'), label = 'Select Directory', value = getwd()),
+    ),
 
     bslib::accordion_panel(
       title = "UI options",
@@ -103,6 +109,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 }
 
 #' @importFrom glue glue
+#' @importFrom shinyDirectoryInput readDirectoryInput updateDirectoryInput choose.dir
 mod_settings_server <- function(id) {
   moduleServer(id, function(input, output, session) {
 
@@ -111,9 +118,34 @@ mod_settings_server <- function(id) {
     rv$selected_history <- 0L
     rv$modify_session_settings <- 0L
     rv$create_new_chat <- 0L
+    rv$directory <- 0L
     api_services <- c("openai-chat", "openai-completion", "replicate")
+    volumes = shinyFiles::getVolumes()()
 
+    # choose directory
+    observeEvent(
+      ignoreNULL = TRUE,
+      eventExpr = {
+        input$directory
+      },
+      handlerExpr = {
+        if (input$directory > 0) {
+          path = shinyDirectoryInput::choose.dir(default = readDirectoryInput(session, ns('directory')),
+                            caption="Choose a directory...")
+          shinyDirectoryInput::updateDirectoryInput(session, ns('directory'), value = path)
+        } else {
+          path <- getwd()
+        }
+        rv$directory <- path
+      }
+    )
+    output$directory = renderText({
+      shinyDirectoryInput::readDirectoryInput(session, ns('directory'))
+    })
+
+    # main observe
     observe({
+
       msg <- glue::glue("Fetching models for {input$service} service...")
       showNotification(ui = msg, type = "message", duration = 3, session = session)
 

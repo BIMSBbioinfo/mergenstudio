@@ -151,7 +151,6 @@ mod_chat_server <- function(id,
 
     # execute code event
     observe({
-
       # cleaning and parsing the code from response
       if(is.null(rv$code_of_last_response)) {
         showNotification(ui = "You have to get a response with code first!", duration = 3, type = "message", session = session)
@@ -161,9 +160,14 @@ mod_chat_server <- function(id,
         if(grepl("^Here are the results once the code is executed", utils::tail(history$chat_history,1)[[1]]$content)){
           showNotification(ui = "You have to get another response to execute code again!", duration = 3, type = "message", session = session)
         } else {
+
+          # get code
           code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
           final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
           final_code <- final_code$code
+
+          # execute code
+          setwd(settings$directory)
           code_result <- mergen::executeCode(final_code)
 
           # update history

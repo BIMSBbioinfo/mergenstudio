@@ -106,6 +106,14 @@ create_tmp_app_dir <- function() {
 #' @importFrom utils capture.output
 create_tmp_app_file <- function() {
   script_file <- tempfile(fileext = ".R")
+
+  directory <- getwd() %>%
+    dput() %>%
+    utils::capture.output()
+  directory_set_line <- glue::glue(
+    "setwd({directory})"
+  )
+
   ide_theme <- get_ide_theme_info() %>%
     dput() %>%
     utils::capture.output()
@@ -128,7 +136,7 @@ create_tmp_app_file <- function() {
   file_con <- file(script_file)
 
   writeLines(
-    text = c(line_theme, line_ui, line_server, line_run_app),
+    text = c(directory_set_line, line_theme, line_ui, line_server, line_run_app),
     sep = "\n\n",
     con = script_file
   )
