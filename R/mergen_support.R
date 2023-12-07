@@ -1,5 +1,5 @@
 mergenstudio_skeleton <- function(service = "openai-chat",
-                                  api_key = Sys.getenv("OPENAI_API_KEY"),
+                                  api_key = Sys.getenv("AI_API_KEY"),
                                   prompt = "Name the top 5 packages in R.",
                                   history = list(
                                     list(
@@ -13,7 +13,7 @@ mergenstudio_skeleton <- function(service = "openai-chat",
 
   if(api_key == ""){
     if(grepl("^openai", service))
-      api_key <- Sys.getenv("OPENAI_API_KEY")
+      api_key <- Sys.getenv("AI_API_KEY")
   }
 
   # validate skeleton

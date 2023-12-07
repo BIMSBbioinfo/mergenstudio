@@ -3,12 +3,12 @@
 #' This function sends a request to a specific OpenAI API \code{task} endpoint at the base URL \code{https://api.openai.com/v1}, and authenticates with an API key using a Bearer token.
 #'
 #' @param task character string specifying an OpenAI API endpoint task
-#' @param token String containing an OpenAI API key. Defaults to the OPENAI_API_KEY environmental variable if not specified.
+#' @param token String containing an OpenAI API key. Defaults to the AI_API_KEY environmental variable if not specified.
 #'
 #' @import cli
 #' @importFrom httr2 request req_url_path_append req_auth_bearer_token
 #' @noRd
-request_base <- function(task, token = Sys.getenv("OPENAI_API_KEY")) {
+request_base <- function(task, token = Sys.getenv("AI_API_KEY")) {
   if (!task %in% get_available_endpoints()) {
     cli::cli_abort(message = c(
       "{.var task} must be a supported endpoint",

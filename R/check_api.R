@@ -1,6 +1,6 @@
 #' Check connection to OpenAI's API works
 #'
-#' This function checks whether the API key provided in the `OPENAI_API_KEY`
+#' This function checks whether the API key provided in the `AI_API_KEY`
 #' environment variable is valid.
 #'
 #' @param api_key An API key.
@@ -52,7 +52,7 @@ check_api_connection <- function(api_key, verbose = FALSE) {
 check_api_key <- function(api_key) {
   key_instructions <-
     c(
-      "!" = "OPENAI_API_KEY is not valid.",
+      "!" = "AI_API_KEY is not valid.",
       "i" = "Generate a key at {.url https://platform.openai.com/account/api-keys}",
       "i" = "Set the key in your .Renviron file {.run usethis::edit_r_environ()}"
     )
@@ -72,19 +72,19 @@ check_api_key <- function(api_key) {
 
 #' Check API setup
 #'
-#' This function checks whether the API key provided in the `OPENAI_API_KEY`
+#' This function checks whether the API key provided in the `AI_API_KEY`
 #' environment variable is valid. This function will not re-check an API if it
 #' has already been validated in the current session.
 #'
 #' @import cli
 #' @noRd
 check_api <- function() {
-  api_key <- Sys.getenv("OPENAI_API_KEY")
+  api_key <- Sys.getenv("AI_API_KEY")
   valid_api <- getOption("mergenstudio.valid_api")
   saved_key <- getOption("mergenstudio.openai_key")
   if (!valid_api) {
     check_api_connection(api_key)
-  } else if (saved_key == Sys.getenv("OPENAI_API_KEY")) {
+  } else if (saved_key == Sys.getenv("AI_API_KEY")) {
     invisible(TRUE)
   } else {
     cli::cli_alert_warning("API key has changed. Re-checking API connection.")
@@ -94,7 +94,7 @@ check_api <- function() {
 
 #' @importFrom httr2 req_error req_perform resp_status
 #' @noRd
-simple_api_check <- function(api_key = Sys.getenv("OPENAI_API_KEY")) {
+simple_api_check <- function(api_key = Sys.getenv("AI_API_KEY")) {
   request_base(task = "models", token = api_key) %>%
     httr2::req_error(is_error = function(resp) FALSE) %>%
     httr2::req_perform() %>%

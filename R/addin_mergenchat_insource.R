@@ -54,13 +54,13 @@ mergenchat_insource <- function() {
 #'
 #' @param prompt The prompt for generating completions
 #' @param ai_api_key The API key for accessing OpenAI's API. By default, the
-#'   function will try to use the `OPENAI_API_KEY` environment variable.
+#'   function will try to use the `AI_API_KEY` environment variable.
 #'
 #' @importFrom mergen setupAgent sendPrompt
 #' @noRd
 mergen_chat_completion <-
   function(prompt,
-           ai_api_key = Sys.getenv("OPENAI_API_KEY")) {
+           ai_api_key = Sys.getenv("AI_API_KEY")) {
 
     myAgent <- mergen::setupAgent(name="openai", type="completion", ai_api_key = ai_api_key)
     response <- mergen::sendPrompt(myAgent, prompt = prompt, return.type = "text")
