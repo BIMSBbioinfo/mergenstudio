@@ -168,8 +168,6 @@ mod_history_server <- function(id, settings) {
           purrr::discard(~.x$id == rv$selected_conversation$id) %>%
           write_conversation_history()
 
-
-
         rv$selected_conversation <- NULL
 
         rv$reload_conversation_history <- rv$reload_conversation_history + 1L
