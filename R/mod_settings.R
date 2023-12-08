@@ -31,18 +31,10 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         selectInput(
           inputId = ns("model"),
           label = translator$t("Chat Model"),
-          choices = NULL,
+          choices = get_available_models(getOption("mergenstudio.service"))[1],
           width = "200px",
           selected = getOption("mergenstudio.model")
         ),
-        # radioButtons(
-        #   inputId = ns("stream"),
-        #   label = "Stream Response",
-        #   choiceNames = c("Yes", "No"),
-        #   choiceValues = c(TRUE, FALSE),
-        #   inline = TRUE,
-        #   width = "200px",
-        # ),
         radioButtons(
           inputId = ns("selfcorrect"),
           label = "Activate Self Correct",
@@ -77,32 +69,9 @@ mod_settings_ui <- function(id, translator = create_translator()) {
     )
   )
 
-  btn_to_history <- actionButton(
-    inputId = ns("to_history"),
-    label = fontawesome::fa("arrow-left-long"),
-    class = "mb-3"
-  ) %>%
-    bslib::tooltip("Back to history")
-
-  btn_save_as_default <- actionButton(
-    inputId = ns("save_default"),
-    label = fontawesome::fa("floppy-disk"),
-    class = "mb-3"
-  ) %>%
-    bslib::tooltip("Save as default")
-
-  btn_save_in_session <- actionButton(
-    inputId = ns("save_session"),
-    label = fontawesome::fa("bookmark"),
-    class = "mb-3"
-  ) %>%
-    bslib::tooltip("Save for this session")
-
   tagList(
-    btn_to_history,
-    btn_save_in_session,
-    btn_save_as_default,
-
+    br(),
+    br(),
     preferences
 
   )
@@ -115,7 +84,7 @@ mod_settings_server <- function(id) {
 
     ns <- session$ns
     rv <- reactiveValues()
-    rv$selected_history <- 0L
+    rv$selected_history <- 0L # originally 0L
     rv$modify_session_settings <- 0L
     rv$create_new_chat <- 0L
     rv$directory <- 0L
@@ -173,78 +142,29 @@ mod_settings_server <- function(id) {
     }) %>%
       bindEvent(input$service)
 
-
+    # self correct cannot be used with completion models
     observe({
-      rv$selected_history <- rv$selected_history + 1L
-    }) %>%
-      bindEvent(input$to_history)
-
-
-    observe({
-      showModal(modalDialog(
-        tags$p("These settings will persist for all your future chat sessions."),
-        tags$p("After changing the settings a new chat will be created."),
-
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton(ns("confirm_default"), "Ok")
+      if(input$service == "openai-completion" && input$selfcorrect == TRUE){
+        showNotification(ui = "selfcorrect cannot be used with type completion. Can only be used with type chat", duration = 3, type = "error", session = session)
+        updateRadioButtons(
+          session = session,
+          inputId = "selfcorrect",
+          choiceNames = c("Yes", "No"),
+          choiceValues = c(TRUE, FALSE),
+          selected = FALSE,
         )
-      ))
+      }
     }) %>%
-      bindEvent(input$save_default)
+      bindEvent(input$service, input$selfcorrect)
 
-
-    observe({
-      if (!isTruthy(input$confirm_default)) return()
-
-      save_user_config(
-        language = input$language,
-        service = input$service,
-        model = input$model,
-        custom_prompt = input$custom_prompt,
-        # stream = input$stream,
-        selfcorrect = input$selfcorrect
-      )
-
-      rv$modify_session_settings <- rv$modify_session_settings + 1L
-
-      removeModal(session)
-
-      showNotification("Defaults updated", duration = 3, type = "message", session = session)
-    }) %>% bindEvent(input$confirm_default)
-
-
-    observe({
-      showModal(modalDialog(
-
-        tags$p("After changing the settings a new chat will be created."),
-
-        footer = tagList(
-          modalButton("Cancel"),
-          actionButton(ns("confirm_session"), "Ok")
-        )
-      ))
-    }) %>%
-      bindEvent(input$save_session)
-
-    observe({
-      if (!isTruthy(input$confirm_session)) return()
-
-      rv$modify_session_settings <- rv$modify_session_settings + 1L
-      removeModal(session)
-    }) %>%
-      bindEvent(input$confirm_session)
 
     observe({
       rv$model <- input$model %||% getOption("mergenstudio.model")
       rv$service <- input$service %||% getOption("mergenstudio.service")
       rv$api_key <- input$api_key
-      # rv$stream <- as.logical(input$stream %||% getOption("mergenstudio.stream"))
       rv$custom_prompt <- input$custom_prompt %||% getOption("mergenstudio.custom_prompt")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
-      rv$create_new_chat <- rv$create_new_chat + 1L
-    }) %>%
-      bindEvent(rv$modify_session_settings)
+    })
 
     ## Module output ----
     rv

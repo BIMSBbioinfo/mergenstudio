@@ -37,7 +37,6 @@ Imports:
     utils,
     waiter,
     yaml
-Remotes: BIMSBbioinfo/mergen
 Encoding: UTF-8
 Language: en-US
 LazyData: true
