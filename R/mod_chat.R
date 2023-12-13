@@ -173,13 +173,13 @@ mod_chat_server <- function(id,
 
           # execute code
           setwd(settings$directory)
-          code_result <- mergen::executeCode(final_code)
-
-          # update history
+          code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"output_mergen_studio.html"))
           history$chat_history <- c(history$chat_history,
                                     list(list(role = "assistant",
-                                              content = paste0("Here are the results once the code is executed:\n\n```\n", paste(code_result, collapse = "\n"), "\n```\n\n"))
+                                              content = shiny::includeHTML(code_result))
                                     ))
+            file.remove(code_result)
+
           updateTextAreaInput(session, "chat_input", value = "")
         }
       }
