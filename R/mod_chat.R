@@ -180,12 +180,21 @@ mod_chat_server <- function(id,
           # if html file is created (code did not return any error)
           if (grepl("html",code_result[1])){
             # add result to chat history
-            history$chat_history <- c(history$chat_history,
-                                      list(list(role = "assistant",
-                                                content = shiny::includeHTML(code_result))
-                                      ))
+            if(length(rvest::read_html(code_result))>1){
+              history$chat_history <- c(history$chat_history,
+                                        list(list(role = "assistant",
+                                                  content = shiny::includeHTML(code_result))
+                                        ))
+            }else{
+              history$chat_history <- c(history$chat_history,
+                                        list(list(role = "assistant",
+                                                  content = "The code returns no output.")
+                                        ))
+            }
             # remove html file
             file.remove(code_result)
+            # append code to already generated code in chat:
+            mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
           }else{
             history$chat_history <- c(history$chat_history,
                                       list(list(role = "assistant",
