@@ -195,14 +195,16 @@ mod_chat_server <- function(id,
             file.remove(code_result)
             # append code to already generated code in chat:
             mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
-            #send to port
+
+            # send via port
             if ("port" %in% names(mergenstudio_env)){
-              con <- socketConnection(port=mergenstudio_env$port)
+              con = socketConnection(port=mergenstudio_env$port)
               if (exists("con")){
                 svSocket::evalServer(con,mergen_code,mergenstudio_env$code)
                 close(con)
               }
             }
+
           }else{
             history$chat_history <- c(history$chat_history,
                                       list(list(role = "assistant",
