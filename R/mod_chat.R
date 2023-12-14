@@ -171,14 +171,28 @@ mod_chat_server <- function(id,
           final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
           final_code <- final_code$code
 
+
+
           # execute code
           setwd(settings$directory)
           code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"output_mergen_studio.html"))
-          history$chat_history <- c(history$chat_history,
-                                    list(list(role = "assistant",
-                                              content = shiny::includeHTML(code_result))
-                                    ))
+
+          # if html file is created (code did not return any error)
+          if (grepl("html",code_result[1])){
+            # add result to chat history
+            history$chat_history <- c(history$chat_history,
+                                      list(list(role = "assistant",
+                                                content = shiny::includeHTML(code_result))
+                                      ))
+            # remove html file
             file.remove(code_result)
+          }else{
+            history$chat_history <- c(history$chat_history,
+                                      list(list(role = "assistant",
+                                                content = paste0("The code resulted in the following errors/warnings:\n```\n",
+                                                                 code_result,"\n```\n\n"))
+                                           ))
+          }
 
           updateTextAreaInput(session, "chat_input", value = "")
         }
