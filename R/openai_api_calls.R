@@ -36,9 +36,6 @@ get_available_models <- function(service) {
   models <- NULL
   if (service == "openai") {
 
-    # check API
-    check_api()
-
     # get models from GPT API if possible
     models <- tryCatch({
       request_base("models") %>%

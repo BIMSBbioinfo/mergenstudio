@@ -76,6 +76,8 @@ mod_chat_ui <- function(id, translator = create_translator()) {
 #' @importFrom utils tail
 #' @importFrom mergen clean_code_blocks executeCode extractCode
 #' @importFrom waiter waiter_show waiter_hide spin_ring
+#' @importFrom rvest read_html
+#'
 #' @noRd
 mod_chat_server <- function(id,
                             ide_colors = get_ide_theme_info(),
@@ -237,6 +239,7 @@ mod_chat_server <- function(id,
             if ("port" %in% names(mergenstudio_env)){
               con = socketConnection(port=mergenstudio_env$port)
               if (exists("con")){
+                mergen_code <- 0
                 svSocket::evalServer(con,mergen_code,mergenstudio_env$code)
                 close(con)
               }

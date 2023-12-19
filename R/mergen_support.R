@@ -95,8 +95,7 @@ mergenstudio_request <- function(skeleton = NULL){
         skeleton$history <- c(
           skeleton$history,
           list(
-            list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors..."),
-            # list(role = "assistant", content = response)
+            list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors...")
           )
         )
       } else {
