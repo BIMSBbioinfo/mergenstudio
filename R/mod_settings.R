@@ -1,11 +1,14 @@
 #' @importFrom bslib accordion accordion_panel tooltip
 #' @importFrom fontawesome fa
+#' @importFrom shinyjs useShinyjs hidden
 #' @noRd
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
+  shinyjs::useShinyjs()
+
   # api_services <- c("openai-chat", "openai-completion", "replicate")
-  api_services <- c("openai", "replicate")
+  api_services <- c("openai", "replicate", "generic")
 
   preferences <- bslib::accordion(
     open = FALSE,
@@ -29,12 +32,19 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           value = "",
           width = "200px"
         ),
-        selectInput(
+        textInput(
+          inputId = ns("api_url"),
+          label = translator$t("API URL"),
+          value = "",
+          width = "200px"
+        ),
+        selectizeInput(
           inputId = ns("model"),
           label = translator$t("Chat Model"),
           choices = get_available_models(getOption("mergenstudio.service"))[1],
           width = "200px",
-          selected = getOption("mergenstudio.model")
+          selected = getOption("mergenstudio.model"),
+          options = list(create = TRUE)
         ),
         radioButtons(
           inputId = ns("selfcorrect"),
@@ -79,6 +89,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 }
 
 #' @importFrom glue glue
+#' @importFrom shinyjs show hide
 #' @noRd
 mod_settings_server <- function(id) {
   moduleServer(id, function(input, output, session) {
@@ -90,7 +101,13 @@ mod_settings_server <- function(id) {
     rv$create_new_chat <- 0L
     rv$directory <- 0L
     # api_services <- c("openai-chat", "openai-completion", "replicate")
-    api_services <- c("openai", "replicate")
+    api_services <- c("openai", "replicate", "generic")
+
+    # # hide api_url
+    # observe({
+    #   print("observe")
+    #   shinyjs::hide(ns('api_url'))
+    # })
 
     # choose directory
     observeEvent(
@@ -116,6 +133,14 @@ mod_settings_server <- function(id) {
     # main observe
     observe({
 
+      if(isolate(input$service) == "generic"){
+        # print("generic")
+        shinyjs::show(ns('api_url'), asis = TRUE)
+      } else {
+        # print("hide")
+        shinyjs::hide(ns('api_url'), asis = TRUE)
+      }
+
       msg <- glue::glue("Fetching models for {input$service} service...")
       showNotification(ui = msg, type = "message", duration = 3, session = session)
 
@@ -124,46 +149,61 @@ mod_settings_server <- function(id) {
       if (length(models) > 0) {
         showNotification(ui = "Got models!", duration = 3, type = "message", session = session)
 
-        updateSelectInput(
+        # updateSelectInput(
+        #   session = session,
+        #   inputId = "model",
+        #   choices = models,
+        #   selected = models[1]
+        # )
+        updateSelectizeInput(
           session = session,
           inputId = "model",
           choices = models,
-          selected = models[1]
+          selected = models[1],
+          server = TRUE
         )
 
       } else {
         showNotification(ui = "No models available", duration = 3, type = "error", session = session)
 
-        updateSelectInput(
+        # updateSelectInput(
+        #   session = session,
+        #   inputId = "model",
+        #   choices = character(),
+        #   selected = NULL
+        # )
+        updateSelectizeInput(
           session = session,
           inputId = "model",
           choices = character(),
-          selected = NULL
+          selected = NULL,
+          server = TRUE
         )
       }
     }) %>%
       bindEvent(input$service)
 
-    # self correct cannot be used with completion models
-    observe({
-      if(input$service == "openai-completion" && input$selfcorrect == TRUE){
-        showNotification(ui = "selfcorrect cannot be used with type completion. Can only be used with type chat", duration = 3, type = "error", session = session)
-        updateRadioButtons(
-          session = session,
-          inputId = "selfcorrect",
-          choiceNames = c("Yes", "No"),
-          choiceValues = c(TRUE, FALSE),
-          selected = FALSE,
-        )
-      }
-    }) %>%
-      bindEvent(input$service, input$selfcorrect)
+    # # self correct cannot be used with completion models
+    # observe({
+    #   if(input$service == "openai-completion" && input$selfcorrect == TRUE){
+    #     showNotification(ui = "selfcorrect cannot be used with type completion. Can only be used with type chat", duration = 3, type = "error", session = session)
+    #     updateRadioButtons(
+    #       session = session,
+    #       inputId = "selfcorrect",
+    #       choiceNames = c("Yes", "No"),
+    #       choiceValues = c(TRUE, FALSE),
+    #       selected = FALSE,
+    #     )
+    #   }
+    # }) %>%
+    #   bindEvent(input$service, input$selfcorrect)
 
 
     observe({
       rv$model <- input$model %||% getOption("mergenstudio.model")
       rv$service <- input$service %||% getOption("mergenstudio.service")
       rv$api_key <- input$api_key
+      rv$api_url <- input$api_url
       rv$custom_prompt <- input$custom_prompt %||% getOption("mergenstudio.custom_prompt")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
     })

@@ -1,5 +1,7 @@
-mergenstudio_skeleton <- function(service = "openai-chat",
-                                  api_key = Sys.getenv("AI_API_KEY"),
+mergenstudio_skeleton <- function(api_key = Sys.getenv("AI_API_KEY"),
+                                  service = "openai-chat",
+                                  model = "gpt-3.5-turbo",
+                                  url = "",
                                   prompt = "Name the top 5 packages in R.",
                                   history = list(
                                     list(
@@ -7,7 +9,6 @@ mergenstudio_skeleton <- function(service = "openai-chat",
                                       content = "You are an R chat assistant"
                                     )
                                   ),
-                                  model = "gpt-3.5-turbo",
                                   # stream = TRUE,
                                   selfcorrect = FALSE) {
 
@@ -23,6 +24,7 @@ mergenstudio_skeleton <- function(service = "openai-chat",
     list(
       api_key = api_key,
       service = service,
+      url = url,
       prompt = prompt,
       history = history,
       model = model,
@@ -72,7 +74,12 @@ mergenstudio_request <- function(skeleton = NULL){
 
     # set agent
     tryCatch({
-      myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
+      if(skeleton$service == "generic"){
+        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
+      } else {
+        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, url = skeleton$url,
+                                      ai_api_key = skeleton$api_key)
+      }
     },
     error = function(x){
       response = "Request Failed: check your API configurations"

@@ -132,6 +132,7 @@ mod_chat_server <- function(id,
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
           service = settings$service,
+          url = settings$api_url,
           model = settings$model,
           prompt = input$chat_input,
           history = history$chat_history,

@@ -81,6 +81,8 @@ get_available_models <- function(service) {
     return(models)
   } else if (service == "replicate"){
     models <- c("llama-2-70b-chat")
+  } else if (service == "generic"){
+    models <- c("generic")
   }
   models
 }
