@@ -133,12 +133,15 @@ mod_settings_server <- function(id) {
     # main observe
     observe({
 
-      if(isolate(input$service) == "generic"){
-        # print("generic")
-        shinyjs::show(ns('api_url'), asis = TRUE)
-      } else {
-        # print("hide")
-        shinyjs::hide(ns('api_url'), asis = TRUE)
+      # if(isolate(input$service) == "generic"){
+      #   # print("generic")
+      #   shinyjs::show(ns('api_url'), asis = TRUE)
+      # } else {
+      #   # print("hide")
+      #   shinyjs::hide(ns('api_url'), asis = TRUE)
+      # }
+      if(isolate(input$service) != "generic"){
+        updateTextInput(session, "api_url", value = "")
       }
 
       msg <- glue::glue("Fetching models for {input$service} service...")
@@ -149,35 +152,21 @@ mod_settings_server <- function(id) {
       if (length(models) > 0) {
         showNotification(ui = "Got models!", duration = 3, type = "message", session = session)
 
-        # updateSelectInput(
-        #   session = session,
-        #   inputId = "model",
-        #   choices = models,
-        #   selected = models[1]
-        # )
         updateSelectizeInput(
           session = session,
           inputId = "model",
           choices = models,
-          selected = models[1],
-          server = TRUE
+          selected = models[1]
         )
 
       } else {
         showNotification(ui = "No models available", duration = 3, type = "error", session = session)
 
-        # updateSelectInput(
-        #   session = session,
-        #   inputId = "model",
-        #   choices = character(),
-        #   selected = NULL
-        # )
         updateSelectizeInput(
           session = session,
           inputId = "model",
           choices = character(),
-          selected = NULL,
-          server = TRUE
+          selected = NULL
         )
       }
     }) %>%

@@ -33,7 +33,8 @@ request_base <- function(task, token = Sys.getenv("AI_API_KEY")) {
 #' @importFrom stringr str_subset
 #' @noRd
 get_available_models <- function(service) {
-  if (grepl("^openai", service)) {
+  models <- NULL
+  if (service == "openai") {
 
     # check API
     check_api()
@@ -50,39 +51,21 @@ get_available_models <- function(service) {
       return(NULL)
     })
 
-    if(service == "openai"){
-
-      if(!is.null(models)) {
-        models <- models %>%
-          stringr::str_subset("^gpt") %>%
-          stringr::str_subset("instruct", negate = TRUE) %>%
-          stringr::str_subset("vision", negate = TRUE) %>%
-          sort()
-        idx <- which(models == "gpt-3.5-turbo")
-        models <- c(models[idx], models[-idx])
-      } else {
-        models <- c("gpt-3.5-turbo", "gpt-4", "gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314", "gpt-3.5-turbo-0301")
-      }
-
-    # } else if(service == "openai-completion"){
-    #
-    #   if(!is.null(models)) {
-    #     models <- models %>%
-    #       stringr::str_subset("^text") %>%
-    #       stringr::str_subset("davinci|curie|ada|babbage", negate = TRUE) %>%
-    #       stringr::str_subset("vision", negate = TRUE) %>%
-    #       sort()
-    #     idx <- which(models == "text-davinci-003")
-    #     models <- c(models[idx], models[-idx])
-    #   } else {
-    #     models <- c("text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001")
-    #   }
+    if(!is.null(models)) {
+      models <- models %>%
+        stringr::str_subset("^gpt") %>%
+        stringr::str_subset("instruct", negate = TRUE) %>%
+        stringr::str_subset("vision", negate = TRUE) %>%
+        sort()
+      idx <- which(models == "gpt-3.5-turbo")
+      models <- c(models[idx], models[-idx])
+    } else {
+      models <- c("gpt-3.5-turbo", "gpt-4", "gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314", "gpt-3.5-turbo-0301")
     }
-    return(models)
   } else if (service == "replicate"){
     models <- c("llama-2-70b-chat")
   } else if (service == "generic"){
-    models <- c("generic")
+    models <- c("")
   }
   models
 }

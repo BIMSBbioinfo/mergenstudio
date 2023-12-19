@@ -75,10 +75,10 @@ mergenstudio_request <- function(skeleton = NULL){
     # set agent
     tryCatch({
       if(skeleton$service == "generic"){
-        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
-      } else {
         myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, url = skeleton$url,
                                       ai_api_key = skeleton$api_key)
+      } else {
+        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
       }
     },
     error = function(x){
@@ -92,34 +92,29 @@ mergenstudio_request <- function(skeleton = NULL){
         print("selfcorrect")
         response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
         response <- response$final.response
-        new_history <- c(
+        skeleton$history <- c(
           skeleton$history,
           list(
             list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors..."),
-            list(role = "assistant", content = response)
+            # list(role = "assistant", content = response)
           )
         )
       } else {
         response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
-        new_history <- c(
-          skeleton$history,
-          list(
-            list(role = "assistant", content = response)
-          )
-        )
+
       }
     } else {
       response <- "Request Failed: check your API configurations"
-      new_history <- c(
-        skeleton$history,
-        list(
-          list(role = "assistant", content = response)
-        )
-      )
     }
   }
 
-  skeleton$history <- new_history
+  # update history
+  skeleton$history <- c(
+    skeleton$history,
+    list(
+      list(role = "assistant", content = response)
+    )
+  )
   skeleton$prompt <- NULL # remove the last prompt
   skeleton$response <- response
   skeleton
