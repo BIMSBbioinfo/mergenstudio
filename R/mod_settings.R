@@ -4,7 +4,8 @@
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
-  api_services <- c("openai-chat", "openai-completion", "replicate")
+  # api_services <- c("openai-chat", "openai-completion", "replicate")
+  api_services <- c("openai", "replicate")
 
   preferences <- bslib::accordion(
     open = FALSE,
@@ -88,7 +89,8 @@ mod_settings_server <- function(id) {
     rv$modify_session_settings <- 0L
     rv$create_new_chat <- 0L
     rv$directory <- 0L
-    api_services <- c("openai-chat", "openai-completion", "replicate")
+    # api_services <- c("openai-chat", "openai-completion", "replicate")
+    api_services <- c("openai", "replicate")
 
     # choose directory
     observeEvent(

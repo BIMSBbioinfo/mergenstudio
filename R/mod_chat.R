@@ -191,8 +191,10 @@ mod_chat_server <- function(id,
                                                   content = "The code returns no output.")
                                         ))
             }
+
             # remove html file
             file.remove(code_result)
+
             # append code to already generated code in chat:
             mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
 
@@ -205,7 +207,7 @@ mod_chat_server <- function(id,
               }
             }
 
-          }else{
+          } else{
             history$chat_history <- c(history$chat_history,
                                       list(list(role = "assistant",
                                                 content = paste0("The code resulted in the following errors/warnings:\n```\n",

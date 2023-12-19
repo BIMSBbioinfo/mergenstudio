@@ -34,24 +34,49 @@ request_base <- function(task, token = Sys.getenv("AI_API_KEY")) {
 #' @noRd
 get_available_models <- function(service) {
   if (grepl("^openai", service)) {
-    check_api()
-    models <-
-      request_base("models") %>%
-      httr2::req_perform() %>%
-      httr2::resp_body_json() %>%
-      purrr::pluck("data") %>%
-      purrr::map_chr("id")
-    if(service == "openai-chat"){
-      models <- models %>%
-        stringr::str_subset("^gpt") %>%
-        stringr::str_subset("instruct", negate = TRUE) %>%
-        stringr::str_subset("vision", negate = TRUE) %>%
-        sort()
 
-      idx <- which(models == "gpt-3.5-turbo")
-      models <- c(models[idx], models[-idx])
-    } else if(service == "openai-completion"){
-      models <- c("text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001")
+    # check API
+    check_api()
+
+    # get models from GPT API if possible
+    models <- tryCatch({
+      request_base("models") %>%
+        httr2::req_perform() %>%
+        httr2::resp_body_json() %>%
+        purrr::pluck("data") %>%
+        purrr::map_chr("id")
+    },
+    error = function(e) {
+      return(NULL)
+    })
+
+    if(service == "openai"){
+
+      if(!is.null(models)) {
+        models <- models %>%
+          stringr::str_subset("^gpt") %>%
+          stringr::str_subset("instruct", negate = TRUE) %>%
+          stringr::str_subset("vision", negate = TRUE) %>%
+          sort()
+        idx <- which(models == "gpt-3.5-turbo")
+        models <- c(models[idx], models[-idx])
+      } else {
+        models <- c("gpt-3.5-turbo", "gpt-4", "gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314", "gpt-3.5-turbo-0301")
+      }
+
+    # } else if(service == "openai-completion"){
+    #
+    #   if(!is.null(models)) {
+    #     models <- models %>%
+    #       stringr::str_subset("^text") %>%
+    #       stringr::str_subset("davinci|curie|ada|babbage", negate = TRUE) %>%
+    #       stringr::str_subset("vision", negate = TRUE) %>%
+    #       sort()
+    #     idx <- which(models == "text-davinci-003")
+    #     models <- c(models[idx], models[-idx])
+    #   } else {
+    #     models <- c("text-davinci-003", "text-davinci-002", "text-curie-001", "text-babbage-001", "text-ada-001")
+    #   }
     }
     return(models)
   } else if (service == "replicate"){

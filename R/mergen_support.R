@@ -72,13 +72,7 @@ mergenstudio_request <- function(skeleton = NULL){
 
     # set agent
     tryCatch({
-      if(skeleton$service == "openai-chat"){
-        myAgent <- mergen::setupAgent(name="openai", type="chat", model = skeleton$model, ai_api_key = skeleton$api_key)
-      } else if(skeleton$service == "openai-completion") {
-        myAgent <- mergen::setupAgent(name="openai", type="completion", model = skeleton$model, ai_api_key = skeleton$api_key)
-      } else if(skeleton$service == "replicate") {
-        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
-      }
+      myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
     },
     error = function(x){
       response = "Request Failed: check your API configurations"
@@ -109,6 +103,12 @@ mergenstudio_request <- function(skeleton = NULL){
       }
     } else {
       response <- "Request Failed: check your API configurations"
+      new_history <- c(
+        skeleton$history,
+        list(
+          list(role = "assistant", content = response)
+        )
+      )
     }
   }
 
