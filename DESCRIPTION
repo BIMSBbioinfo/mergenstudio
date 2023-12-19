@@ -36,7 +36,8 @@ Imports:
     stringr (>= 1.5.0),
     utils,
     waiter,
-    yaml
+    yaml, 
+    svSocket
 Encoding: UTF-8
 Language: en-US
 LazyData: true
