@@ -128,13 +128,49 @@ mod_chat_server <- function(id,
       history$chat_history <- new_history
       updateTextAreaInput(session, "chat_input", value = "")
 
+
+      #save prompt as variable:
+      chat_input <- input$chat_input
+
+
+      # if adding fileheaders is set to TRUE:
+      if (settings$fileheader == TRUE){
+        filenames<-mergen::extractFilenames(input$chat_input)
+        if (!is.na(filenames)){
+          for (file in filenames){
+            final_path <- paste0(settings$directory,"/",file)
+            result <- tryCatch({
+              mergen::fileHeaderPrompt(final_path)
+              }, warning = function(w) {
+                paste0("WARNING: ",w)
+              }, error = function(e) {
+                paste0("ERROR: ",e)
+              }
+            )
+            if (grepl("^WARNING:",result) | grepl("^ERROR:",result)){
+
+              resp <- paste0("Header of file ",file," could not be added.\n```\n"
+                             ,result,"\n```\n\n",
+                             " Will proceed without addition.")
+              history$chat_history <- c(history$chat_history,
+                                        list(list(role = "assistant",
+                                                  content =resp)
+                                        ))
+            }else{
+            chat_input <- paste(chat_input,result,sep="\n")
+            }
+          }
+        }
+      }
+
+      print(chat_input)
       # get response
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
           service = settings$service,
           url = settings$api_url,
           model = settings$model,
-          prompt = input$chat_input,
+          prompt = chat_input,
           history = history$chat_history,
           # stream = settings$stream,
           selfcorrect = settings$selfcorrect
@@ -143,7 +179,6 @@ mod_chat_server <- function(id,
       waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.5, ")"))
       response <- mergenstudio_request(skeleton = skeleton)
       waiter::waiter_hide() # hide the waiter
-
       # update history with response
       history$chat_history <- response$history
       rv$code_of_last_response <- response$response
