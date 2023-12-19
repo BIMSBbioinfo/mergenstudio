@@ -163,7 +163,6 @@ mod_chat_server <- function(id,
         }
       }
 
-      print(chat_input)
       # get response
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
