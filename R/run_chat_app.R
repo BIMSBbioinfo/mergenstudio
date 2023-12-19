@@ -31,10 +31,8 @@ run_chat_app <- function(ide_colors = get_ide_theme_info(),
   shiny::shinyApp(ui, server, options = list(host = host, port = port),
                   onStart = function() {
                     cat("Doing application setup\n")
-                    svSocket::startSocketServer(port=mergenstudio_env$port)
                     onStop(function() {
                       cat("Doing application cleanup\n")
-                      svSocket::stopSocketServer(port=mergenstudio_env$port)
                     })
                   })
 

@@ -188,6 +188,7 @@ mod_chat_server <- function(id,
       # }
       updateTextAreaInput(session, "chat_input", value = "")
 
+
     }) %>%
       bindEvent(input$chat)
 
@@ -208,12 +209,9 @@ mod_chat_server <- function(id,
           final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
           final_code <- final_code$code
 
-
-
           # execute code
           setwd(settings$directory)
-          code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"output_mergen_studio.html"))
-
+          code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
           # if html file is created (code did not return any error)
           if (grepl("html",code_result[1])){
             # add result to chat history
@@ -234,16 +232,6 @@ mod_chat_server <- function(id,
 
             # append code to already generated code in chat:
             mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
-
-            # send via port
-            if ("port" %in% names(mergenstudio_env)){
-              con = socketConnection(port=mergenstudio_env$port)
-              if (exists("con")){
-                mergen_code <- 0
-                svSocket::evalServer(con,mergen_code,mergenstudio_env$code)
-                close(con)
-              }
-            }
 
           } else{
             history$chat_history <- c(history$chat_history,
