@@ -54,6 +54,15 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           selected = FALSE,
           inline = TRUE,
           width = "200px",
+        ),
+        radioButtons(
+          inputId = ns("fileheader"),
+          label = "Activate file header addition",
+          choiceNames = c("Yes","No"),
+          choiceValues = c(TRUE, FALSE),
+          selected = FALSE,
+          inline = TRUE,
+          width = "200px",
         )
       )
     ),
@@ -195,6 +204,7 @@ mod_settings_server <- function(id) {
       rv$api_url <- input$api_url
       rv$custom_prompt <- input$custom_prompt %||% getOption("mergenstudio.custom_prompt")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
+      rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
     })
 
     ## Module output ----

@@ -3,3 +3,4 @@ service: "openai-chat"
 model: "gpt-3.5-turbo"
 custom_prompt: "You are a helpful assistant."
 selfcorrect: false
+fileheader: false

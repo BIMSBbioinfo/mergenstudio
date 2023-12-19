@@ -9,7 +9,8 @@ save_user_config <- function(code_style,
                              model,
                              custom_prompt,
                              # stream,
-                             selfcorrect) {
+                             selfcorrect,
+                             fileheader) {
   if (is.null(custom_prompt)) custom_prompt <- ""
   config <-
     data.frame(
@@ -18,7 +19,8 @@ save_user_config <- function(code_style,
       model,
       custom_prompt,
       # stream,
-      selfcorrect
+      selfcorrect,
+      fileheader
     )
   user_config_path <- tools::R_user_dir("mergenstudio", which = "config")
   user_config <- file.path(user_config_path, "config.yml")
@@ -38,7 +40,8 @@ set_user_options <- function(config) {
     mergenstudio.model         = config$model,
     mergenstudio.custom_prompt = config$custom_prompt,
     # mergenstudio.stream        = config$stream,
-    mergenstudio.selfcorrect   = config$selfcorrect
+    mergenstudio.selfcorrect   = config$selfcorrect,
+    mergenstudio.selfcorrect   = config$fileheader
   )
   options(op_mergenstudio)
   invisible()
