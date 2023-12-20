@@ -26,6 +26,9 @@ run_chat_app <- function(ide_colors = get_ide_theme_info(),
 
   server <- function(input, output, session) {
     mod_app_server("app", ide_colors)
+    session$onSessionEnded(function() {
+      stopApp()
+    })
   }
 
   shiny::shinyApp(ui, server, options = list(host = host, port = port),
