@@ -27,14 +27,14 @@ addin_mergenchat_in_source <- function() {
 #' @noRd
 mergenchat_insource <- function() {
 
-  gptstudio_chat_in_source_file_ext <- character(1L)
+  mergenstudio_chat_in_source_file_ext <- character(1L)
 
   tryCatch(expr = {
     doc_path <- rstudioapi::documentPath()
-    gptstudio_chat_in_source_file_ext <<- tools::file_ext(doc_path)
+    mergenstudio_chat_in_source_file_ext <<- tools::file_ext(doc_path)
   }, error = function(e) {
     cli::cli_alert_info("Current document is not saved. Assuming .R file extension")
-    gptstudio_chat_in_source_file_ext <<- "R"
+    mergenstudio_chat_in_source_file_ext <<- "R"
   })
 
   # get selection
