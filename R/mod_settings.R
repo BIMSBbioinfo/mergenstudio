@@ -34,7 +34,9 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         ),
         textInput(
           inputId = ns("api_url"),
-          label = translator$t("API URL"),
+          label = getIconLabel(translator$t("API URL"),
+                               message="Provide an API URL. This is only needed when service is set to generic."
+                                 ),
           value = "",
           width = "200px"
         ),
@@ -48,7 +50,9 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         ),
         radioButtons(
           inputId = ns("selfcorrect"),
-          label = "Activate Self Correct",
+          label = getIconLabel("Activate Self Correct",
+                               message = "Activating Self Correct will attempt to correct code that is returned by the agent if it results in errors, by resending the prompt together with additional information about the error message."
+                              ),
           choiceNames = c("Yes", "No"),
           choiceValues = c(TRUE, FALSE),
           selected = FALSE,
@@ -57,7 +61,9 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         ),
         radioButtons(
           inputId = ns("fileheader"),
-          label = "Activate file header addition",
+          label = getIconLabel("Activate file header addition",
+                               message="Activating file header addition will attempt to add the first few lines of files mentioned in your prompt to your prompt. The directory that will be searched can be set in 'Execute options'"
+                               ),
           choiceNames = c("Yes","No"),
           choiceValues = c(TRUE, FALSE),
           selected = FALSE,
