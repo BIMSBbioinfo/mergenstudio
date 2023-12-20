@@ -3,7 +3,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mergen Studio
 
 mergen Studio is an RStudio Addin wrapper for the
 [mergen](https://github.com/BIMSBbioinfo/mergen) package.
