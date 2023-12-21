@@ -3,8 +3,9 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-mergen Studio is an RStudio Addin wrapper for the
-[mergen](https://github.com/BIMSBbioinfo/mergen) package.
+mergenstudio is an RStudio Addin wrapper for the
+[mergen](https://github.com/BIMSBbioinfo/mergen) package. 
+It enables a chatbot based on [mergen](https://github.com/BIMSBbioinfo/mergen) LLM interface in your Rstudio environment.
 
 You can find more information on mergen can be found on its website:  
 <https://bioinformatics.mdc-berlin.de/mergen/>
