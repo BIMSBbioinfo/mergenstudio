@@ -25,6 +25,7 @@ addin_mergenchat_in_source <- function() {
 #'
 #' @import cli
 #' @noRd
+#'
 mergenchat_insource <- function() {
 
   mergenstudio_chat_in_source_file_ext <- character(1L)
@@ -64,5 +65,5 @@ mergen_chat_completion <-
 
     myAgent <- mergen::setupAgent(name="openai", type="completion", ai_api_key = ai_api_key)
     response <- mergen::sendPrompt(myAgent, prompt = prompt, return.type = "text")
-    response
+    paste0(prompt,response)
   }

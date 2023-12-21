@@ -7,6 +7,7 @@ get_selection <- function() {
 
 #' @importFrom rstudioapi verifyAvailable insertText
 #' @noRd
+#'
 insert_text <- function(improved_text) {
   rstudioapi::verifyAvailable()
   rstudioapi::insertText(improved_text)
