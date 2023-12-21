@@ -3,7 +3,6 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-
 mergen Studio is an RStudio Addin wrapper for the
 [mergen](https://github.com/BIMSBbioinfo/mergen) package.
 
@@ -80,8 +79,16 @@ This will open the chat interface. Press the arrow on the top left of
 the screen to open the sidebar.
 <img src="man/figures/open_sidebar.png" align="middle" height="600" style="float:middle; height:600px;"/>
 After this, you can choose which API service to use, and change/load in
-your API key if needed. When making use of `openai` or `replicate` API
-services, all that is needed is then to select a model to chat with, and
+your API key if needed.
+
+When using Rstudio, mergen Studio also allows you to open the chat
+interface in the Viewer. To do this, press on the Addins button, and
+select `Chat`.
+<img src="man/figures/addin_click.png" align="middle" height="600" style="float:middle; height:600px;"/>
+<img src="man/figures/addin_works.png" align="middle" height="600" style="float:middle; height:600px;"/>
+
+When making use of `openai` or `replicate` API services, after setting
+your API key, all that is needed is to select a model to chat with, and
 start chatting!
 
 When setting the API service to `generic`, you are required to fill in
