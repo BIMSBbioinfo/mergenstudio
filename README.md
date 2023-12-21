@@ -1,5 +1,5 @@
 
-# mergen Studio <img src="man/figures/mergenstudio.png" align="right" height="200" style="float:right; height:200px;"/>
+# mergenstudio <img src="man/figures/mergenstudio.png" align="right" height="200" style="float:right; height:200px;"/>
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
