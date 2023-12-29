@@ -121,19 +121,17 @@ mod_chat_server <- function(id,
     observe({
 
       # update chat history with prompt
-      new_history <- c(
-        history$chat_history,
-        list(
-          list(role = "user", content = input$chat_input)
-        )
-      )
-      history$chat_history <- new_history
-      updateTextAreaInput(session, "chat_input", value = "")
+      # new_history <- c(
+      #   history$chat_history,
+      #   list(
+      #     list(role = "user", content = input$chat_input)
+      #   )
+      # )
+      # history$chat_history <- new_history
+      # updateTextAreaInput(session, "chat_input", value = "")
 
-
-      #save prompt as variable:
+      # save prompt as variable
       chat_input <- input$chat_input
-
 
       # if adding fileheaders is set to TRUE:
       if (settings$fileheader == TRUE){
@@ -151,14 +149,14 @@ mod_chat_server <- function(id,
             )
             if (grepl("^WARNING:",result) | grepl("^ERROR:",result)){
 
-              resp <- paste0("Header of file ",file," could not be added.\n```\n"
-                             ,result,"\n```\n\n",
-                             " Will proceed without addition.")
+              resp <- paste0("Header of file ",file,
+                             " could not be added.\n```\n", result,
+                             "\n```\n\n"," Will proceed without addition.")
+
               history$chat_history <- c(history$chat_history,
                                         list(list(role = "assistant",
-                                                  content =resp)
-                                        ))
-            }else{
+                                                  content = resp)))
+            } else{
             chat_input <- paste(chat_input,result,sep="\n")
             }
           }
@@ -180,6 +178,7 @@ mod_chat_server <- function(id,
       waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.5, ")"))
       response <- mergenstudio_request(skeleton = skeleton)
       waiter::waiter_hide() # hide the waiter
+
       # update history with response
       history$chat_history <- response$history
       rv$code_of_last_response <- response$response
@@ -212,6 +211,7 @@ mod_chat_server <- function(id,
           # execute code
           setwd(settings$directory)
           code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
+
           # if html file is created (code did not return any error)
           if (grepl("html",code_result[1])){
             # add result to chat history

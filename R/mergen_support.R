@@ -85,12 +85,18 @@ mergenstudio_request <- function(skeleton = NULL){
       response = "Request Failed: check your API configurations"
     })
 
+    # if service is not replicate, add history to the prompt in sendPrompt or selfcorrect
+    if(skeleton$service == "replicate"){
+      previous.msgs <- NULL
+    } else {
+      previous.msgs <- skeleton$history
+    }
 
     # get response, if setup is failed, says that it failed
     if(exists("myAgent")){
       if(skeleton$selfcorrect){
         print("selfcorrect")
-        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, attempts = 3)
+        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, attempts = 3)
         response <- response$final.response
         skeleton$history <- c(
           skeleton$history,
@@ -99,8 +105,8 @@ mergenstudio_request <- function(skeleton = NULL){
           )
         )
       } else {
-        response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, return.type = "text")
-
+        # send prompt to mergen
+        response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, return.type = "text")
       }
     } else {
       response <- "Request Failed: check your API configurations"
@@ -111,6 +117,7 @@ mergenstudio_request <- function(skeleton = NULL){
   skeleton$history <- c(
     skeleton$history,
     list(
+      list(role = "user", content = skeleton$prompt),
       list(role = "assistant", content = response)
     )
   )
