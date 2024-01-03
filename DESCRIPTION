@@ -34,12 +34,12 @@ Imports:
     shiny,
     shiny.i18n,
     shinyjs,
+    shinyWidgets,
     stringr (>= 1.5.0),
     rvest,
     utils,
     waiter,
-    yaml, 
-    svSocket
+    yaml
 Encoding: UTF-8
 Language: en-US
 LazyData: true

@@ -32,11 +32,19 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           value = "",
           width = "200px"
         ),
+        # shinyWidgets::textInputIcon(
+        #   inputId = ns("api_url"),
+        #   label = translator$t("API URL"),
+        #   icon = icon("table"),
+        #   value = "",
+        #   width = "200px"
+        # ),
         textInput(
           inputId = ns("api_url"),
+          # label = translator$t("API URL"),
           label = getIconLabel(translator$t("API URL"),
                                message="Provide an API URL. This is only needed when service is set to generic."
-                                 ),
+                               ),
           value = "",
           width = "200px"
         ),
@@ -69,16 +77,21 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           selected = FALSE,
           inline = TRUE,
           width = "200px",
-        )
+        ),
+        directoryInput(ns('directory'),
+                       label = getIconLabel("Select Directory",
+                                            message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
+                       ),
+                       value = getwd())
       )
     ),
 
-    bslib::accordion_panel(
-      title = "Execute Options",
-      icon = fontawesome::fa("sliders"),
-
-      directoryInput(ns('directory'), label = 'Select Directory', value = getwd()),
-    ),
+    # bslib::accordion_panel(
+    #   title = "Execute Options",
+    #   icon = fontawesome::fa("sliders"),
+    #
+    #   directoryInput(ns('directory'), label = 'Select Directory', value = getwd()),
+    # ),
 
     bslib::accordion_panel(
       title = "UI options",
