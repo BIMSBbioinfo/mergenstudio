@@ -61,7 +61,6 @@ function addCopyBtn() {
   });
 }
 
-
 $(document).on('shiny:inputchanged', function(event) {
   addCopyBtn();
 });

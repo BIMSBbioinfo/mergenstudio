@@ -107,7 +107,6 @@ mergenstudio_request <- function(skeleton = NULL){
     # get response, if setup is failed, says that it failed
     if(exists("myAgent")){
       if(skeleton$selfcorrect){
-        print("selfcorrect")
         response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, attempts = 3, context = skeleton$custom_context)
         response <- response$final.response
         skeleton$history <- c(
@@ -119,7 +118,6 @@ mergenstudio_request <- function(skeleton = NULL){
       } else {
         # send prompt to mergen
         response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, return.type = "text", context = skeleton$custom_context)
-        print(response)
       }
     } else {
       response <- "Request Failed: check your API configurations"

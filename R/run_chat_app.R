@@ -21,6 +21,7 @@ mergenstudio_env$port <- 8888
 run_chat_app <- function(ide_colors = get_ide_theme_info(),
                          host = getOption("shiny.host", "127.0.0.1"),
                          port = getOption("shiny.port")){
+  shinyjs::useShinyjs()
 
   ui <- mod_app_ui("app", ide_colors)
 

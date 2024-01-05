@@ -44,11 +44,10 @@ mod_chat_ui <- function(id, translator = create_translator()) {
               class = "position-absolute top-50 end-0 translate-middle",
 
               # send prompt button
-              # tags$script(js),
               actionButton(
                 inputId = ns("chat"),
                 label = icon("fas fa-paper-plane"),
-                class = "w-45 btn-primary p-1 chat-send-btn"
+                class = "w-40 btn-primary p-1 chat-send-btn"
               ) %>%
                 bslib::tooltip("Send (click or Enter)"),
 
@@ -56,7 +55,8 @@ mod_chat_ui <- function(id, translator = create_translator()) {
               actionButton(
                 inputId = ns("execute"),
                 label = icon("fas fa-play"),
-                class = "w-45 btn-primary p-1"
+                class = "w-55 btn-primary p-1",
+                style="background-color: green; border-color: green"
               ) %>%
                 bslib::tooltip("Execute Code")
             )
@@ -173,7 +173,6 @@ mod_chat_server <- function(id,
 
       # update history with response
       history$chat_history <- response$history
-      # rv$code_of_last_response <- response$response
       rv$last_response <- response$response
       # if (settings$stream) {
       #   rv$reset_streaming_message <- rv$reset_streaming_message + 1L

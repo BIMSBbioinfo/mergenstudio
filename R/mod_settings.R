@@ -5,8 +5,6 @@
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
 
-  shinyjs::useShinyjs()
-
   # api_services <- c("openai-chat", "openai-completion", "replicate")
   api_services <- c("openai", "replicate", "generic")
 
@@ -33,7 +31,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         selectizeInput(
           inputId = ns("custom_context"),
           label = getIconLabel(translator$t("Select Context"),
-                               message="Optional context to provide alongside with the prompt to help LLM model to help user in different ways."
+                               message="Optional context to provide alongside with the prompt to help LLM model to help user in different ways. If 'No Context' is selected, no context will be provided. You can also enter a custom context by typing on this box"
           ),
           choices = get_available_context(),
           width = "200px",
@@ -92,7 +90,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         ),
         textInput(
           inputId = ns("api_url"),
-          label = getIconLabel(translator$t("API URL"),
+          label = getIconLabel(translator$t("API URL (only needed for 'generic')"),
                                message="Provide an API URL. This is only needed when service is set to generic."
                                ),
           value = "",
@@ -125,10 +123,10 @@ mod_settings_ui <- function(id, translator = create_translator()) {
   )
 
   tagList(
+    shinyjs::useShinyjs(),
     br(),
     br(),
     preferences
-
   )
 }
 
@@ -146,12 +144,6 @@ mod_settings_server <- function(id) {
     rv$directory <- 0L
     # api_services <- c("openai-chat", "openai-completion", "replicate")
     api_services <- c("openai", "replicate", "generic")
-
-    # # hide api_url
-    # observe({
-    #   print("observe")
-    #   shinyjs::hide(ns('api_url'))
-    # })
 
     # choose directory
     observeEvent(
@@ -174,19 +166,20 @@ mod_settings_server <- function(id) {
       readDirectoryInput(session, ns('directory'))
     })
 
+    # hide api_url
+    observe({
+      # if api_url != generic, hide the api_url
+      if(input$service != "generic"){
+        updateTextInput(session, "api_url", value = "")
+        shinyjs::hideElement("api_url")
+      } else {
+        shinyjs::showElement("api_url")
+      }
+    }) %>%
+      bindEvent(input$service)
+
     # main observe
     observe({
-
-      # if(isolate(input$service) == "generic"){
-      #   # print("generic")
-      #   shinyjs::show(ns('api_url'), asis = TRUE)
-      # } else {
-      #   # print("hide")
-      #   shinyjs::hide(ns('api_url'), asis = TRUE)
-      # }
-      if(isolate(input$service) != "generic"){
-        updateTextInput(session, "api_url", value = "")
-      }
 
       msg <- glue::glue("Fetching models for {input$service} service...")
       showNotification(ui = msg, type = "message", duration = 3, session = session)
