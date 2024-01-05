@@ -136,7 +136,7 @@ get_ide_theme_info <- function() {
 #' @noRd
 html_dependencies <- function() {
   htmltools::htmlDependency(
-    name = "mergenstudio-assets", version = "0.4.0",
+    name = "mergenstudio-assets", version = "1.0.0",
     package = "mergenstudio",
     src = "assets",
     script = c("js/copyToClipboard.js", "js/shiftEnter.js", "js/conversation.js"),

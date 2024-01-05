@@ -240,7 +240,6 @@ mod_settings_server <- function(id) {
       rv$custom_context <- input$custom_context %||% getOption("mergenstudio.custom_context")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
       rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
-      print(rv$custom_context)
     })
 
     ## Module output ----

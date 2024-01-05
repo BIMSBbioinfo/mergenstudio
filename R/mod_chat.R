@@ -44,6 +44,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
               class = "position-absolute top-50 end-0 translate-middle",
 
               # send prompt button
+              # tags$script(js),
               actionButton(
                 inputId = ns("chat"),
                 label = icon("fas fa-paper-plane"),
@@ -55,7 +56,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
               actionButton(
                 inputId = ns("execute"),
                 label = icon("fas fa-play"),
-                class = "w-45 btn-primary p-1 chat-send-btn"
+                class = "w-45 btn-primary p-1"
               ) %>%
                 bslib::tooltip("Execute Code")
             )
@@ -119,16 +120,6 @@ mod_chat_server <- function(id,
 
     # chat event
     observe({
-
-      # update chat history with prompt
-      # new_history <- c(
-      #   history$chat_history,
-      #   list(
-      #     list(role = "user", content = input$chat_input)
-      #   )
-      # )
-      # history$chat_history <- new_history
-      # updateTextAreaInput(session, "chat_input", value = "")
 
       # save prompt as variable
       chat_input <- input$chat_input
