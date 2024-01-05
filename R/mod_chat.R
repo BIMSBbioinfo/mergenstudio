@@ -94,7 +94,7 @@ mod_chat_server <- function(id,
     rv <- reactiveValues()
     rv$reset_welcome_message <- 0L
     rv$reset_streaming_message <- 0L
-    rv$code_of_last_response <- NULL
+    rv$last_response <- NULL
 
     # UI outputs ----
 
@@ -170,6 +170,7 @@ mod_chat_server <- function(id,
           url = settings$api_url,
           model = settings$model,
           prompt = chat_input,
+          custom_context = settings$custom_context,
           history = history$chat_history,
           # stream = settings$stream,
           selfcorrect = settings$selfcorrect
@@ -181,7 +182,8 @@ mod_chat_server <- function(id,
 
       # update history with response
       history$chat_history <- response$history
-      rv$code_of_last_response <- response$response
+      # rv$code_of_last_response <- response$response
+      rv$last_response <- response$response
       # if (settings$stream) {
       #   rv$reset_streaming_message <- rv$reset_streaming_message + 1L
       # }
@@ -193,57 +195,8 @@ mod_chat_server <- function(id,
 
     # execute code event
     observe({
-      # cleaning and parsing the code from response
-      if(is.null(rv$code_of_last_response)) {
-        showNotification(ui = "You have to get a response with code first!", duration = 3, type = "message", session = session)
-      } else {
-
-        # check history
-        if(grepl("^Here are the results once the code is executed", utils::tail(history$chat_history,1)[[1]]$content)){
-          showNotification(ui = "You have to get another response to execute code again!", duration = 3, type = "message", session = session)
-        } else {
-
-          # get code
-          code_cleaned <- mergen::clean_code_blocks(rv$code_of_last_response)
-          final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
-          final_code <- final_code$code
-
-          # execute code
-          setwd(settings$directory)
-          code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
-
-          # if html file is created (code did not return any error)
-          if (grepl("html",code_result[1])){
-            # add result to chat history
-            if(length(rvest::read_html(code_result))>1){
-              history$chat_history <- c(history$chat_history,
-                                        list(list(role = "assistant",
-                                                  content = shiny::includeHTML(code_result))
-                                        ))
-            }else{
-              history$chat_history <- c(history$chat_history,
-                                        list(list(role = "assistant",
-                                                  content = "The code returns no output.")
-                                        ))
-            }
-
-            # remove html file
-            file.remove(code_result)
-
-            # append code to already generated code in chat:
-            mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
-
-          } else{
-            history$chat_history <- c(history$chat_history,
-                                      list(list(role = "assistant",
-                                                content = paste0("The code resulted in the following errors/warnings:\n```\n",
-                                                                 code_result,"\n```\n\n"))
-                                           ))
-          }
-
-          updateTextAreaInput(session, "chat_input", value = "")
-        }
-      }
+      mergenstudio_execute(rv, history, settings, session)
+      updateTextAreaInput(session, "chat_input", value = "")
     }) %>%
       bindEvent(input$execute)
 

@@ -1,8 +1,11 @@
+#' @importFrom mergen promptContext
+#' @noRd
 mergenstudio_skeleton <- function(api_key = Sys.getenv("AI_API_KEY"),
                                   service = "openai-chat",
                                   model = "gpt-3.5-turbo",
                                   url = "",
                                   prompt = "Name the top 5 packages in R.",
+                                  custom_context = "",
                                   history = list(
                                     list(
                                       role = "system",
@@ -17,6 +20,14 @@ mergenstudio_skeleton <- function(api_key = Sys.getenv("AI_API_KEY"),
       api_key <- Sys.getenv("AI_API_KEY")
   }
 
+  if(custom_context %in% get_available_context()){
+    if(custom_context == "No Context"){
+      custom_context <- ""
+    } else {
+      custom_context <- mergen::promptContext(type = custom_context)
+    }
+  }
+
   # validate skeleton
   validate_skeleton(api_key, model, prompt, history, selfcorrect)
 
@@ -26,6 +37,7 @@ mergenstudio_skeleton <- function(api_key = Sys.getenv("AI_API_KEY"),
       service = service,
       url = url,
       prompt = prompt,
+      custom_context = custom_context,
       history = history,
       model = model,
       selfcorrect = selfcorrect
@@ -63,7 +75,7 @@ validate_skeleton <- function(api_key, model, prompt, history, selfcorrect) {
   )
 }
 
-#' @importFrom mergen setupAgent selfcorrect sendPrompt
+#' @importFrom mergen setupAgent selfcorrect sendPrompt promptContext
 #' @noRd
 mergenstudio_request <- function(skeleton = NULL){
 
@@ -96,7 +108,7 @@ mergenstudio_request <- function(skeleton = NULL){
     if(exists("myAgent")){
       if(skeleton$selfcorrect){
         print("selfcorrect")
-        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, attempts = 3)
+        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, attempts = 3, context = skeleton$custom_context)
         response <- response$final.response
         skeleton$history <- c(
           skeleton$history,
@@ -106,7 +118,8 @@ mergenstudio_request <- function(skeleton = NULL){
         )
       } else {
         # send prompt to mergen
-        response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, return.type = "text")
+        response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, return.type = "text", context = skeleton$custom_context)
+        print(response)
       }
     } else {
       response <- "Request Failed: check your API configurations"
@@ -124,4 +137,59 @@ mergenstudio_request <- function(skeleton = NULL){
   skeleton$prompt <- NULL # remove the last prompt
   skeleton$response <- response
   skeleton
+}
+
+#' @importFrom mergen setupAgent selfcorrect sendPrompt promptContext
+#' @noRd
+mergenstudio_execute <- function(rv, history, settings, session){
+
+  # cleaning and parsing the code from response
+  if(is.null(rv$last_response)) {
+    showNotification(ui = "You have to get a response with code first!", duration = 3, type = "message", session = session)
+  } else {
+
+    # check history
+    if(grepl("^Here are the results once the code is executed", utils::tail(history$chat_history,1)[[1]]$content)){
+      showNotification(ui = "You have to get another response to execute code again!", duration = 3, type = "message", session = session)
+    } else {
+
+      # get code
+      code_cleaned <- mergen::clean_code_blocks(rv$last_response)
+      final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+      final_code <- final_code$code
+
+      # execute code
+      setwd(settings$directory)
+      code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
+
+      # if html file is created (code did not return any error)
+      if (grepl("html",code_result[1])){
+        # add result to chat history
+        if(length(rvest::read_html(code_result))>1){
+          history$chat_history <- c(history$chat_history,
+                                    list(list(role = "assistant",
+                                              content = shiny::includeHTML(code_result))
+                                    ))
+        }else{
+          history$chat_history <- c(history$chat_history,
+                                    list(list(role = "assistant",
+                                              content = "The code returns no output.")
+                                    ))
+        }
+
+        # remove html file
+        file.remove(code_result)
+
+        # append code to already generated code in chat:
+        mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
+
+      } else{
+        history$chat_history <- c(history$chat_history,
+                                  list(list(role = "assistant",
+                                            content = paste0("The code resulted in the following errors/warnings:\n```\n",
+                                                             code_result,"\n```\n\n"))
+                                  ))
+      }
+    }
+  }
 }

@@ -16,6 +16,64 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 
     bslib::accordion(open = TRUE,
       bslib::accordion_panel(
+        title = "Chat Options",
+        icon = fontawesome::fa("sliders"),
+
+        # selectInput(
+        #   inputId = ns("promptcontext"),
+        #   label = getIconLabel(translator$t("Select Context"),
+        #                        message="Optional context to provide alongside with the prompt to help LLM model to help user in different ways."
+        #   ),
+        #   choices = context_choices,
+        #   #selected = getOption("mergenstudio.service"),
+        #   selected = NULL,
+        #   width = "200px"
+        # ),
+
+        selectizeInput(
+          inputId = ns("custom_context"),
+          label = getIconLabel(translator$t("Select Context"),
+                               message="Optional context to provide alongside with the prompt to help LLM model to help user in different ways."
+          ),
+          choices = get_available_context(),
+          width = "200px",
+          selected = NULL,
+          options = list(create = TRUE)
+        ),
+
+
+        directoryInput(ns('directory'),
+                       label = getIconLabel("Select Directory",
+                                            message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
+                       ),
+                       value = getwd()),
+        radioButtons(
+          inputId = ns("selfcorrect"),
+          label = getIconLabel("Activate Self Correct",
+                               message = "Activating Self Correct will attempt to correct code that is returned by the agent if it results in errors, by resending the prompt together with additional information about the error message."
+          ),
+          choiceNames = c("Yes", "No"),
+          choiceValues = c(TRUE, FALSE),
+          selected = FALSE,
+          inline = TRUE,
+          width = "200px",
+        ),
+        radioButtons(
+          inputId = ns("fileheader"),
+          label = getIconLabel("Activate file header addition",
+                               message="Activating file header addition will attempt to add the first few lines of files mentioned in your prompt to your prompt. The directory that will be searched can be set in 'Execute options'"
+          ),
+          choiceNames = c("Yes","No"),
+          choiceValues = c(TRUE, FALSE),
+          selected = FALSE,
+          inline = TRUE,
+          width = "200px",
+        )
+      )
+    ),
+
+    bslib::accordion(open = FALSE,
+      bslib::accordion_panel(
         title = "API Options",
         icon = fontawesome::fa("server"),
 
@@ -32,16 +90,8 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           value = "",
           width = "200px"
         ),
-        # shinyWidgets::textInputIcon(
-        #   inputId = ns("api_url"),
-        #   label = translator$t("API URL"),
-        #   icon = icon("table"),
-        #   value = "",
-        #   width = "200px"
-        # ),
         textInput(
           inputId = ns("api_url"),
-          # label = translator$t("API URL"),
           label = getIconLabel(translator$t("API URL"),
                                message="Provide an API URL. This is only needed when service is set to generic."
                                ),
@@ -55,43 +105,9 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           width = "200px",
           selected = getOption("mergenstudio.model"),
           options = list(create = TRUE)
-        ),
-        radioButtons(
-          inputId = ns("selfcorrect"),
-          label = getIconLabel("Activate Self Correct",
-                               message = "Activating Self Correct will attempt to correct code that is returned by the agent if it results in errors, by resending the prompt together with additional information about the error message."
-                              ),
-          choiceNames = c("Yes", "No"),
-          choiceValues = c(TRUE, FALSE),
-          selected = FALSE,
-          inline = TRUE,
-          width = "200px",
-        ),
-        radioButtons(
-          inputId = ns("fileheader"),
-          label = getIconLabel("Activate file header addition",
-                               message="Activating file header addition will attempt to add the first few lines of files mentioned in your prompt to your prompt. The directory that will be searched can be set in 'Execute options'"
-                               ),
-          choiceNames = c("Yes","No"),
-          choiceValues = c(TRUE, FALSE),
-          selected = FALSE,
-          inline = TRUE,
-          width = "200px",
-        ),
-        directoryInput(ns('directory'),
-                       label = getIconLabel("Select Directory",
-                                            message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
-                       ),
-                       value = getwd())
+        )
       )
     ),
-
-    # bslib::accordion_panel(
-    #   title = "Execute Options",
-    #   icon = fontawesome::fa("sliders"),
-    #
-    #   directoryInput(ns('directory'), label = 'Select Directory', value = getwd()),
-    # ),
 
     bslib::accordion_panel(
       title = "UI options",
@@ -221,13 +237,18 @@ mod_settings_server <- function(id) {
       rv$service <- input$service %||% getOption("mergenstudio.service")
       rv$api_key <- input$api_key
       rv$api_url <- input$api_url
-      rv$custom_prompt <- input$custom_prompt %||% getOption("mergenstudio.custom_prompt")
+      rv$custom_context <- input$custom_context %||% getOption("mergenstudio.custom_context")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
       rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
+      print(rv$custom_context)
     })
 
     ## Module output ----
     rv
 
   })
+}
+
+get_available_context <- function(){
+  c("actAs", "rbionfoExp", "CoT", "simple", "No Context")
 }

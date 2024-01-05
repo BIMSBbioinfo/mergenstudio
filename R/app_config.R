@@ -7,17 +7,17 @@ save_user_config <- function(code_style,
                              language,
                              service,
                              model,
-                             custom_prompt,
+                             custom_context,
                              # stream,
                              selfcorrect,
                              fileheader) {
-  if (is.null(custom_prompt)) custom_prompt <- ""
+  if (is.null(custom_context)) custom_context <- ""
   config <-
     data.frame(
       language,
       service,
       model,
-      custom_prompt,
+      custom_context,
       # stream,
       selfcorrect,
       fileheader
@@ -38,7 +38,7 @@ set_user_options <- function(config) {
     mergenstudio.language      = config$language,
     mergenstudio.service       = config$service,
     mergenstudio.model         = config$model,
-    mergenstudio.custom_prompt = config$custom_prompt,
+    mergenstudio.custom_context = config$custom_context,
     # mergenstudio.stream        = config$stream,
     mergenstudio.selfcorrect   = config$selfcorrect,
     mergenstudio.selfcorrect   = config$fileheader

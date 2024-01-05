@@ -21,7 +21,7 @@
     mergenstudio.language      = config$language,
     mergenstudio.service       = config$service,
     mergenstudio.model         = config$model,
-    mergenstudio.custom_prompt = config$custom_prompt,
+    mergenstudio.custom_context = config$custom_context,
     # mergenstudio.stream        = config$stream,
     mergenstudio.selfcorrect   = config$selfcorrect
   )
