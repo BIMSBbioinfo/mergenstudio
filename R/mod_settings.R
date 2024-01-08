@@ -59,7 +59,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         radioButtons(
           inputId = ns("fileheader"),
           label = getIconLabel("Activate file header addition",
-                               message="Activating file header addition will attempt to add the first few lines of files mentioned in your prompt to your prompt. The directory that will be searched can be set in 'Execute options'"
+                               message="Activating file header addition will attempt to add the first few lines of files mentioned in your prompt to your prompt. The directory that will be searched can be set in 'select directory'"
           ),
           choiceNames = c("Yes","No"),
           choiceValues = c(TRUE, FALSE),
