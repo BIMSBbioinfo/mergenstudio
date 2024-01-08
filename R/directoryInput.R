@@ -179,13 +179,14 @@ directoryInput = function(inputId, label, value = NULL) {
     value = path.expand(value)
   }
 
-  version <- as.character(packageVersion("mergenstudio")[[1]])
-  dep <- htmltools::htmlDependency(
-    name = "mergenstudio-assets", version = version,
-    package = "mergenstudio",
-    src = "assets",
-    script = "js/directory_input_binding.js"
-  )
+  # version <- as.character(packageVersion("mergenstudio")[[1]])
+  # dep <- htmltools::htmlDependency(
+  #   # name = "mergenstudio-assets", version = version,
+  #   name = "mergenstudio-assets", version = "1.0.0",
+  #   package = "mergenstudio",
+  #   src = "assets",
+  #   script = "js/directory_input_binding.js"
+  # )
 
   tagList(
     shiny::div(
@@ -217,8 +218,8 @@ directoryInput = function(inputId, label, value = NULL) {
           )
         )
       )
-    ),
-    dep
+    )
+    # dep
   )
 }
 

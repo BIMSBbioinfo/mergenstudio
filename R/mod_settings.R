@@ -17,17 +17,6 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         title = "Chat Options",
         icon = fontawesome::fa("sliders"),
 
-        # selectInput(
-        #   inputId = ns("promptcontext"),
-        #   label = getIconLabel(translator$t("Select Context"),
-        #                        message="Optional context to provide alongside with the prompt to help LLM model to help user in different ways."
-        #   ),
-        #   choices = context_choices,
-        #   #selected = getOption("mergenstudio.service"),
-        #   selected = NULL,
-        #   width = "200px"
-        # ),
-
         selectizeInput(
           inputId = ns("custom_context"),
           label = getIconLabel(translator$t("Select Context"),
@@ -38,9 +27,7 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           selected = NULL,
           options = list(create = TRUE)
         ),
-
-
-        directoryInput(ns('directory'),
+        directoryInput(inputId = ns('directory'),
                        label = getIconLabel("Select Directory",
                                             message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
                        ),
@@ -155,6 +142,8 @@ mod_settings_server <- function(id) {
         if (input$directory > 0) {
           path = choose.dir(default = readDirectoryInput(session, ns('directory')),
                             caption="Choose a directory...")
+          if(!is.character(path))
+            path <- getwd()
           updateDirectoryInput(session, ns('directory'), value = path)
         } else {
           path <- getwd()
@@ -233,6 +222,7 @@ mod_settings_server <- function(id) {
       rv$custom_context <- input$custom_context %||% getOption("mergenstudio.custom_context")
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
       rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
+      rv$settings <- input$directory
     })
 
     ## Module output ----

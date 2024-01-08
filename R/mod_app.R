@@ -140,7 +140,7 @@ html_dependencies <- function() {
     name = "mergenstudio-assets", version = "1.0.0",
     package = "mergenstudio",
     src = "assets",
-    script = c("js/copyToClipboard.js", "js/shiftEnter.js", "js/conversation.js"),
+    script = c("js/copyToClipboard.js", "js/shiftEnter.js", "js/conversation.js", "js/directory_input_binding.js"),
     stylesheet = c("css/mod_app.css")
   )
 }
