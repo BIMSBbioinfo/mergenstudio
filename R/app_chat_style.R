@@ -43,6 +43,10 @@ style_chat_message <- function(message,
                            "assistant" = "justify-content-start"
   )
 
+  content <- shiny::markdown(message$content)
+  content <- gsub("<pre><code", "<details><summary>code</summary><pre><code", content)
+  content <- gsub("</code></pre>", "</code></pre></details>", content)
+
   htmltools::div(
     class = glue::glue("row m-0 p-0 {position_class}"),
     htmltools::tags$div(
@@ -55,7 +59,8 @@ style_chat_message <- function(message,
       htmltools::tags$div(
         class = glue::glue("{message$role}-message-wrapper"),
         htmltools::tagList(
-          shiny::markdown(message$content)
+          content
+          # shiny::markdown(message$content)
         )
       )
     )
