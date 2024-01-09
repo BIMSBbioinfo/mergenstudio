@@ -174,6 +174,34 @@ mod_chat_server <- function(id,
       # update history with response
       history$chat_history <- response$history
       rv$last_response <- response$response
+
+      # if auto execution is on:
+      if (settings$autoexecution==TRUE){
+        code_resp <- mergen::extractCode(mergen::clean_code_blocks(response$response))$code
+        code_result<-mergen::executeCode(code_resp,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
+
+        # if html file is created (code did not return any error)
+        if (grepl("html",code_result[1])){
+          # add result to chat history
+          if(length(rvest::read_html(code_result))>1){
+            history$chat_history <- c(history$chat_history,
+                                      list(list(role = "assistant",
+                                                content = shiny::includeHTML(code_result))
+                                      ))
+            }
+        }else{
+          history$chat_history <- c(history$chat_history,
+                                    list(list(role = "assistant",
+                                              content = paste0("The code resulted in the following errors/warnings:\n```\n",
+                                                               code_result,"\n```\n\n"))
+                                    ))
+          }
+          # remove html file
+          file.remove(code_result)
+      }
+
+
+
       # if (settings$stream) {
       #   rv$reset_streaming_message <- rv$reset_streaming_message + 1L
       # }
