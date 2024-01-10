@@ -46,7 +46,6 @@ style_chat_message <- function(message,
   content <- shiny::markdown(message$content)
   content <- gsub("<pre><code", "<details><summary>code</summary><pre><code", content)
   content <- gsub("</code></pre>", "</code></pre></details>", content)
-
   htmltools::div(
     class = glue::glue("row m-0 p-0 {position_class}"),
     htmltools::tags$div(
@@ -56,10 +55,13 @@ style_chat_message <- function(message,
         `background-color` = colors$bg_color
       ),
       shiny::icon(icon_name, lib = "font-awesome"),
+      prismDependencies,
+      prismLanguageDependencies(c("r")),
       htmltools::tags$div(
         class = glue::glue("{message$role}-message-wrapper"),
         htmltools::tagList(
-          content
+          content,
+          tags$script("Prism.highlightAll()")
           # shiny::markdown(message$content)
         )
       )
