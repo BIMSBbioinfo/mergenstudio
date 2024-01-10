@@ -154,6 +154,51 @@ mod_chat_server <- function(id,
         }
       }
 
+
+      #calculate how much of the history to send with
+      # 4 characters of text is ~1 token
+      #delete all messages which hold output of code:
+      history_to_send<-history$chat_history
+      del<-c()
+      chat_length<-length(history_to_send)
+      if (chat_length>0){
+        for (i in 1:chat_length){
+          curr_chat<-history_to_send[i][[1]]
+          if (grepl("<pre><code>##", curr_chat$content) | grepl("<p><img",curr_chat$content)){
+            del <- c(del,i)
+          }
+        }
+      }
+      if (length(del)>0){
+        history_to_send<-history_to_send[-del]
+      }
+      print ("history after deletion")
+      print(history_to_send)
+
+      #of history without output code,
+      # calculate max messages to send with
+      tokens<-4000
+      char_amnt<-tokens * 4 - nchar(chat_input)
+      msg_amnt<-length(history_to_send)
+      count<-0
+
+      if (msg_amnt!=0 & char_amnt>0){
+        while(count<char_amnt & msg_amnt>1){
+          curr_chat<-history_to_send[msg_amnt][[1]]
+          extra<-nchar(curr_chat$content)
+          if (extra+count>char_amnt){
+            count=char_amnt
+          }else{
+            count=extra+count
+            msg_amnt<-msg_amnt-1
+          }
+        }
+      }
+
+      #get last bit of history which is under the max amnt of tokens
+      history_to_send<-history_to_send[msg_amnt:length(history_to_send)]
+
+
       # get response
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
@@ -162,7 +207,7 @@ mod_chat_server <- function(id,
           model = settings$model,
           prompt = chat_input,
           custom_context = settings$custom_context,
-          history = history$chat_history,
+          history = history_to_send,
           # stream = settings$stream,
           selfcorrect = settings$selfcorrect
       )
@@ -171,8 +216,13 @@ mod_chat_server <- function(id,
       response <- mergenstudio_request(skeleton = skeleton)
       waiter::waiter_hide() # hide the waiter
 
-      # update history with response
-      history$chat_history <- response$history
+      # update history with prompt and response
+      last_prompt <- response$history[length(response$history)-1]
+      last_response <- response$history[length(response$history)]
+      history$chat_history[length(history$chat_history)+1]<- last_prompt
+      history$chat_history[length(history$chat_history)+1]<- last_response
+
+
       rv$last_response <- response$response
 
       # if auto execution is on:
