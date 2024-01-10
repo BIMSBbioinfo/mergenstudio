@@ -1,17 +1,3 @@
-#' #' @importFrom bslib tooltip
-#' #' @noRd
-#' mod_history_ui <- function(id) {
-#'   ns <- NS(id)
-#'   conversation_history <- read_conversation_history()
-#'
-#'   tagList(
-#'     tags$div(
-#'       class = "d-flex mb-1",
-#'     ),
-#'     uiOutput(ns("conversation_history"))
-#'   )
-#' }
-
 #' @importFrom purrr keep pluck
 #' @noRd
 mod_history_server <- function(id, settings) {
