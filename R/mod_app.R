@@ -18,7 +18,8 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
       title = "ChatGPT from mergenstudio",
       class = "vh-100 p-0 m-0",
       html_dependencies(),
-
+      prismDependencies,
+      prismLanguageDependencies(c("r")),
       bslib::layout_sidebar(
         class = "vh-100",
         sidebar = bslib::sidebar(
