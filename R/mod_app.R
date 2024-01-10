@@ -20,7 +20,6 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
       html_dependencies(),
       prismDependencies,
       prismLanguageDependencies(c("r")),
-      tags$script("Prism.highlightAll()"),
       bslib::layout_sidebar(
         class = "vh-100",
         sidebar = bslib::sidebar(
