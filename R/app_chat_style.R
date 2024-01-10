@@ -58,8 +58,6 @@ style_chat_message <- function(message,
         `background-color` = colors$bg_color
       ),
       shiny::icon(icon_name, lib = "font-awesome"),
-      # prismDependencies,
-      # prismLanguageDependencies(c("r")),
       htmltools::tags$div(
         class = glue::glue("{message$role}-message-wrapper"),
         htmltools::tagList(
