@@ -18,6 +18,9 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
       title = "ChatGPT from mergenstudio",
       class = "vh-100 p-0 m-0",
       html_dependencies(),
+      prismDependencies,
+      prismLanguageDependencies(c("r")),
+      tags$script("Prism.highlightAll()"),
 
       bslib::layout_sidebar(
         class = "vh-100",
@@ -139,6 +142,9 @@ html_dependencies <- function() {
     name = "mergenstudio-assets", version = "1.0.0",
     package = "mergenstudio",
     src = "assets",
+    # script = c("js/copyToClipboard.js", "js/shiftEnter.js", "js/conversation.js", "js/directory_input_binding.js",
+    #            "js/prism-r.min.js", "js/prism.min.js"),
+    # stylesheet = c("css/mod_app.css", "css/prism.min.css")
     script = c("js/copyToClipboard.js", "js/shiftEnter.js", "js/conversation.js", "js/directory_input_binding.js"),
     stylesheet = c("css/mod_app.css")
   )
