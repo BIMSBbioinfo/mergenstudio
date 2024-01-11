@@ -236,6 +236,8 @@ mod_chat_server <- function(id,
                                       list(list(role = "assistant",
                                                 content = shiny::includeHTML(code_result))
                                       ))
+            # remove html file
+            file.remove(code_result)
             }
         }else{
           history$chat_history <- c(history$chat_history,
@@ -244,8 +246,7 @@ mod_chat_server <- function(id,
                                                                code_result,"\n```\n\n"))
                                     ))
           }
-          # remove html file
-          file.remove(code_result)
+
       }
 
 
