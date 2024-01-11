@@ -4,7 +4,7 @@ Title: Mergen Studio: An RStudio Addin wrapper for the mergen package
 Version: 1.0
 Authors@R: c(
     person("Artür", "Manukyan", , "artur-man@hotmail.com", role = c("aut", "cre")),
-    person("Jacqueline", "Jansen", , "jacqueline.jansen@uni-potsdam.de", role = c("aut")),
+    person("Jacqueline", "Jansen", , "jacqueline-98@hotmail.com", role = c("aut")),
     person("Nour", "Alkhoury", , "nour.alkhoury@mdc-berlin.de", role = c("aut")),
     person("Altuna", "Akalin", , "altuna.akalin@mdc-berlin.de", role = c("aut"))
   )
