@@ -198,6 +198,7 @@ mod_chat_server <- function(id,
 
 
       # get response
+      setwd(settings$directory)
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
           service = settings$service,
@@ -226,7 +227,6 @@ mod_chat_server <- function(id,
 
       # if auto execution is on:
       if (settings$autoexecution==TRUE){
-        setwd(settings$directory)
         code_resp <- mergen::extractCode(mergen::clean_code_blocks(response$response))$code
         code_result<-mergen::executeCode(code_resp,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
 
