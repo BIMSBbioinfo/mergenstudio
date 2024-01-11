@@ -172,12 +172,10 @@ mod_chat_server <- function(id,
       if (length(del)>0){
         history_to_send<-history_to_send[-del]
       }
-      print ("history after deletion")
-      print(history_to_send)
 
       #of history without output code,
       # calculate max messages to send with
-      tokens<-4000
+      tokens<-as.numeric(settings$nr_tokens)
       char_amnt<-tokens * 4 - nchar(chat_input)
       msg_amnt<-length(history_to_send)
       count<-0
