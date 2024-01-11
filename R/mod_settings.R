@@ -160,11 +160,13 @@ mod_settings_server <- function(id) {
         if (input$directory > 0) {
           path = choose.dir(default = readDirectoryInput(session, ns('directory')),
                             caption="Choose a directory...")
-          if(!is.character(path))
+          if(!is.character(path)){
             path <- getwd()
-          updateDirectoryInput(session, ns('directory'), value = path)
+          }
+          updateDirectoryInput(session, 'directory', value = path)
         } else {
           path <- getwd()
+          updateDirectoryInput(session, 'directory', value = path)
         }
         rv$directory <- path
       }
@@ -247,7 +249,6 @@ mod_settings_server <- function(id) {
 
     ## Module output ----
     rv
-
   })
 }
 
