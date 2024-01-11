@@ -129,7 +129,7 @@ mod_chat_server <- function(id,
         filenames<-mergen::extractFilenames(input$chat_input)
         if (!is.na(filenames)){
           for (file in filenames){
-            final_path <- paste0(settings$directory,"/",file)
+            final_path <- paste0(settings$directory,file)
             result <- tryCatch({
               mergen::fileHeaderPrompt(final_path)
               }, warning = function(w) {
@@ -215,9 +215,10 @@ mod_chat_server <- function(id,
       waiter::waiter_hide() # hide the waiter
 
       # update history with prompt and response
-      last_prompt <- response$history[length(response$history)-1]
       last_response <- response$history[length(response$history)]
-      history$chat_history[length(history$chat_history)+1]<- last_prompt
+      history$chat_history[length(history$chat_history)+1]<- list(list(role = "user",
+                                                                       content = input$chat_input
+                                                                         ))
       history$chat_history[length(history$chat_history)+1]<- last_response
 
 
@@ -225,6 +226,7 @@ mod_chat_server <- function(id,
 
       # if auto execution is on:
       if (settings$autoexecution==TRUE){
+        setwd(settings$directory)
         code_resp <- mergen::extractCode(mergen::clean_code_blocks(response$response))$code
         code_result<-mergen::executeCode(code_resp,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
 
