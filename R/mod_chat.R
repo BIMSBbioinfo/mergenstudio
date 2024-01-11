@@ -196,8 +196,7 @@ mod_chat_server <- function(id,
       #get last bit of history which is under the max amnt of tokens
       history_to_send<-history_to_send[msg_amnt:length(history_to_send)]
 
-
-      # get response
+      # set directory for potential code running with selfcorrect and get response
       setwd(settings$directory)
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
@@ -215,11 +214,23 @@ mod_chat_server <- function(id,
       response <- mergenstudio_request(skeleton = skeleton)
       waiter::waiter_hide() # hide the waiter
 
-      # update history with prompt and response
-      last_response <- response$history[length(response$history)]
+      # update history with prompt, potential selfcorrect message and response
+      #prompt
       history$chat_history[length(history$chat_history)+1]<- list(list(role = "user",
                                                                        content = input$chat_input
-                                                                         ))
+      ))
+      #self correct message
+      if (settings$selfcorrect){
+        history$chat_history <- c(
+          history$chat_history,
+          list(
+            list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors...")
+          )
+        )
+      }
+
+      #last response
+      last_response <- response$history[length(response$history)]
       history$chat_history[length(history$chat_history)+1]<- last_response
 
 
