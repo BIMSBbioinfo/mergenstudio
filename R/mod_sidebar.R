@@ -18,11 +18,11 @@ mod_sidebar_ui <- function(id, translator = create_translator()) {
 
 #' @importFrom bslib nav_select
 #' @noRd
-mod_sidebar_server <- function(id) {
+mod_sidebar_server <- function(id, dir = NULL) {
   moduleServer(
     id,
     function(input, output, session) {
-      settings <- mod_settings_server("settings")
+      settings <- mod_settings_server("settings", dir = dir)
       history <- mod_history_server("history", settings)
       bslib::nav_select("panel", selected = "settings", session = session)
 

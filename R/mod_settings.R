@@ -1,6 +1,7 @@
 #' @importFrom bslib accordion accordion_panel tooltip
 #' @importFrom fontawesome fa
-#' @importFrom shinyjs useShinyjs hidden
+#' @importFrom shinyjs useShinyjs hidden disabled
+#' @importFrom shinyFiles shinyDirButton
 #' @noRd
 mod_settings_ui <- function(id, translator = create_translator()) {
   ns <- NS(id)
@@ -27,11 +28,25 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           selected = NULL,
           options = list(create = TRUE)
         ),
-        directoryInput(inputId = ns('directory'),
-                       label = getIconLabel("Select Directory",
-                                            message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
-                       ),
-                       value = getwd()),
+
+        # directoryInput(inputId = ns('directory'),
+        #                label = getIconLabel("Select Directory",
+        #                                     message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
+        #                ),
+        #                value = getwd()),
+        shinyjs::disabled(
+          textInput(inputId = ns("directorytext"),
+                    label = getIconLabel("Select Directory",
+                                         message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
+                    ),
+          )),
+        column(4,
+               shinyFiles::shinyDirButton(id = ns('directory'),
+                                          label = "...", title = "Select Directory",
+                                          class = "btn action-button btn-primary",
+                                          style = "padding:2px; font-size:90%; width: 100%; margin-bottom: 20px; margin-top: -14px; margin-left: 0px", buttonType = "default")
+                                          # style = "width: 60%; height: 50%; margin-bottom: 20px; margin-top: -14px; margin-left: 0px", buttonType = "blue")
+        ),
         radioButtons(
           inputId = ns("autoexecution"),
           label = getIconLabel("Activate Auto execution",
@@ -137,8 +152,10 @@ mod_settings_ui <- function(id, translator = create_translator()) {
 
 #' @importFrom glue glue
 #' @importFrom shinyjs show hide
+#' @importFrom shinyFiles shinyDirChoose parseDirPath
+#' @importFrom fs path_home
 #' @noRd
-mod_settings_server <- function(id) {
+mod_settings_server <- function(id, dir = NULL) {
   moduleServer(id, function(input, output, session) {
 
     ns <- session$ns
@@ -146,34 +163,48 @@ mod_settings_server <- function(id) {
     rv$selected_history <- 0L # originally 0L
     rv$modify_session_settings <- 0L
     rv$create_new_chat <- 0L
-    rv$directory <- 0L
     # api_services <- c("openai-chat", "openai-completion", "replicate")
     api_services <- c("openai", "replicate", "generic")
 
     # choose directory
-    observeEvent(
-      ignoreNULL = TRUE,
-      eventExpr = {
-        input$directory
-      },
-      handlerExpr = {
-        if (input$directory > 0) {
-          path = choose.dir(default = readDirectoryInput(session, ns('directory')),
-                            caption="Choose a directory...")
-          if(!is.character(path)){
-            path <- getwd()
-          }
-          updateDirectoryInput(session, 'directory', value = path)
-        } else {
-          path <- getwd()
-          updateDirectoryInput(session, 'directory', value = path)
-        }
-        rv$directory <- path
-      }
-    )
-    output$directory = renderText({
-      readDirectoryInput(session, ns('directory'))
+    rv$directory <- ifelse(is.null(dir), getwd(), dir)
+    volumes <- c(ifelse(is.null(dir), getwd(), dir), fs::path_home())
+    names(volumes) <- lapply(volumes, function(x){
+      names_volumes <- strsplit(x, split = "\\/")[[1]]
+      return(names_volumes[length(names_volumes)])
     })
+    if(volumes[[1]]==volumes[[2]]) volumes <- volumes[1]
+    shinyFiles::shinyDirChoose(input = input, id = "directory", session = session, roots = volumes)
+    observeEvent(input$directory, {
+      updateTextInput(session, "directorytext", value = parseDirPath(roots=volumes, selection=input$directory))
+      path <- shinyFiles::parseDirPath(roots = volumes, selection = input$directory)
+      rv$directory <- as.character(path)
+    })
+
+    # rv$directory <- 0L
+    # observeEvent(
+    #   ignoreNULL = TRUE,
+    #   eventExpr = {
+    #     input$directory
+    #   },
+    #   handlerExpr = {
+    #     if (input$directory > 0) {
+    #       path = choose.dir(default = readDirectoryInput(session, ns('directory')),
+    #                         caption="Choose a directory...")
+    #       if(!is.character(path)){
+    #         path <- getwd()
+    #       }
+    #       updateDirectoryInput(session, 'directory', value = path)
+    #     } else {
+    #       path <- getwd()
+    #       updateDirectoryInput(session, 'directory', value = path)
+    #     }
+    #     rv$directory <- path
+    #   }
+    # )
+    # output$directory = renderText({
+    #   readDirectoryInput(session, ns('directory'))
+    # })
 
     # hide api_url
     observe({
@@ -243,8 +274,9 @@ mod_settings_server <- function(id) {
       rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
       rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
       rv$autoexecution <- as.logical(input$autoexecution %||% getOption("mergenstudio.autoexecution"))
-      rv$settings <- input$directory
       rv$nr_tokens <- input$nr_tokens
+      # rv$settings <- input$directory
+      # rv$settings <- as.character(parseDirPath(volumes, input$directory)) %||% getwd()
     })
 
     ## Module output ----

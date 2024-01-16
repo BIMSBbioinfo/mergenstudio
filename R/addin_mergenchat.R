@@ -112,7 +112,8 @@ create_tmp_app_file <- function() {
     dput() %>%
     utils::capture.output()
   directory_set_line <- glue::glue(
-    "setwd({directory})"
+    # "setwd({directory})"
+    "dir <- {directory}"
   )
 
   ide_theme <- get_ide_theme_info() %>%
@@ -127,7 +128,7 @@ create_tmp_app_file <- function() {
   )
   line_server <- glue::glue(
     "server <- function(input, output, session) {
-      mergenstudio:::mod_app_server('app', ide_colors)
+      mergenstudio:::mod_app_server('app', ide_colors, dir = dir)
     }",
     .open = "{{",
     .close = "}}"
@@ -138,6 +139,7 @@ create_tmp_app_file <- function() {
 
   writeLines(
     text = c(directory_set_line, line_theme, line_ui, line_server, line_run_app),
+    # text = c(line_theme, line_ui, line_server, line_run_app),
     sep = "\n\n",
     con = script_file
   )

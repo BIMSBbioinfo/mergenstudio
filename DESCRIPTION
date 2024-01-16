@@ -34,6 +34,8 @@ Imports:
     shiny,
     shiny.i18n,
     shinyjs,
+    shinyFiles,
+    fs,
     stringr (>= 1.5.0),
     rvest,
     utils,

@@ -48,9 +48,9 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
 #' @param id id of the module
 #' @inheritParams run_chat_app
 #' @noRd
-mod_app_server <- function(id, ide_colors = get_ide_theme_info()) {
+mod_app_server <- function(id, ide_colors = get_ide_theme_info(), dir = NULL) {
   moduleServer(id, function(input, output, session) {
-    sidebar <- mod_sidebar_server("sidebar")
+    sidebar <- mod_sidebar_server("sidebar", dir = dir)
     mod_chat_server(
       id = "chat",
       ide_colors = ide_colors,

@@ -13,7 +13,7 @@ An RStudio Addin wrapper for the mergen package.
 
 Authors:
 \itemize{
-  \item Jacqueline Jansen \email{jacqueline.jansen@uni-potsdam.de}
+  \item Jacqueline Jansen \email{jacqueline-98@hotmail.com}
   \item Nour Alkhoury \email{nour.alkhoury@mdc-berlin.de}
   \item Altuna Akalin \email{altuna.akalin@mdc-berlin.de}
 }
