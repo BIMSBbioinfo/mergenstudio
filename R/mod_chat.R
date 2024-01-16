@@ -129,7 +129,7 @@ mod_chat_server <- function(id,
         filenames<-mergen::extractFilenames(input$chat_input)
         if (!is.na(filenames)){
           for (file in filenames){
-            final_path <- paste0(settings$directory,"/",file)
+            final_path <- paste0(settings$directory,file)
             result <- tryCatch({
               mergen::fileHeaderPrompt(final_path)
               }, warning = function(w) {
@@ -172,12 +172,10 @@ mod_chat_server <- function(id,
       if (length(del)>0){
         history_to_send<-history_to_send[-del]
       }
-      print ("history after deletion")
-      print(history_to_send)
 
       #of history without output code,
       # calculate max messages to send with
-      tokens<-4000
+      tokens<-as.numeric(settings$nr_tokens)
       char_amnt<-tokens * 4 - nchar(chat_input)
       msg_amnt<-length(history_to_send)
       count<-0
@@ -198,8 +196,8 @@ mod_chat_server <- function(id,
       #get last bit of history which is under the max amnt of tokens
       history_to_send<-history_to_send[msg_amnt:length(history_to_send)]
 
-
-      # get response
+      # set directory for potential code running with selfcorrect and get response
+      setwd(settings$directory)
       skeleton <- mergenstudio_skeleton(
           api_key = settings$api_key,
           service = settings$service,
@@ -216,10 +214,23 @@ mod_chat_server <- function(id,
       response <- mergenstudio_request(skeleton = skeleton)
       waiter::waiter_hide() # hide the waiter
 
-      # update history with prompt and response
-      last_prompt <- response$history[length(response$history)-1]
+      # update history with prompt, potential selfcorrect message and response
+      #prompt
+      history$chat_history[length(history$chat_history)+1]<- list(list(role = "user",
+                                                                       content = input$chat_input
+      ))
+      #self correct message
+      if (settings$selfcorrect){
+        history$chat_history <- c(
+          history$chat_history,
+          list(
+            list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors...")
+          )
+        )
+      }
+
+      #last response
       last_response <- response$history[length(response$history)]
-      history$chat_history[length(history$chat_history)+1]<- last_prompt
       history$chat_history[length(history$chat_history)+1]<- last_response
 
 
@@ -238,6 +249,8 @@ mod_chat_server <- function(id,
                                       list(list(role = "assistant",
                                                 content = shiny::includeHTML(code_result))
                                       ))
+            # remove html file
+            file.remove(code_result)
             }
         }else{
           history$chat_history <- c(history$chat_history,
@@ -246,8 +259,7 @@ mod_chat_server <- function(id,
                                                                code_result,"\n```\n\n"))
                                     ))
           }
-          # remove html file
-          file.remove(code_result)
+
       }
 
 

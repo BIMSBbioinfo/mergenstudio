@@ -101,6 +101,13 @@ mod_settings_ui <- function(id, translator = create_translator()) {
           width = "200px",
           selected = getOption("mergenstudio.model"),
           options = list(create = TRUE)
+        ),
+        selectizeInput(
+          inputId = ns("nr_tokens"),
+          label = getIconLabel(translator$t("Nr of tokens"),
+                               message="Maximum amount of tokens to send to LLM."),
+          choices = seq(3000,10000,by=1000),
+          selected = 4000
         )
       )
     ),
@@ -153,11 +160,13 @@ mod_settings_server <- function(id) {
         if (input$directory > 0) {
           path = choose.dir(default = readDirectoryInput(session, ns('directory')),
                             caption="Choose a directory...")
-          if(!is.character(path))
+          if(!is.character(path)){
             path <- getwd()
-          updateDirectoryInput(session, ns('directory'), value = path)
+          }
+          updateDirectoryInput(session, 'directory', value = path)
         } else {
           path <- getwd()
+          updateDirectoryInput(session, 'directory', value = path)
         }
         rv$directory <- path
       }
@@ -235,11 +244,11 @@ mod_settings_server <- function(id) {
       rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
       rv$autoexecution <- as.logical(input$autoexecution %||% getOption("mergenstudio.autoexecution"))
       rv$settings <- input$directory
+      rv$nr_tokens <- input$nr_tokens
     })
 
     ## Module output ----
     rv
-
   })
 }
 

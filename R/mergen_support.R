@@ -109,12 +109,6 @@ mergenstudio_request <- function(skeleton = NULL){
       if(skeleton$selfcorrect){
         response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, attempts = 3, context = skeleton$custom_context)
         response <- response$final.response
-        skeleton$history <- c(
-          skeleton$history,
-          list(
-            list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors...")
-          )
-        )
       } else {
         # send prompt to mergen
         response <- mergen::sendPrompt(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, return.type = "text", context = skeleton$custom_context)

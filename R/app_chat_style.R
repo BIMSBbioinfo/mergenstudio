@@ -48,7 +48,11 @@ style_chat_message <- function(message,
   content <- gsub("<pre><code", "<details><summary>code</summary><pre><code", content)
   content <- gsub("</code></pre>", "</code></pre></details>", content)
 
-  # final div
+  # subs needed for answers either from selfcorrect or normal for syntax highlighting
+  content <- gsub("<code class = language-r", "<code", content)
+  content <- gsub("<code class = language-R", "<code", content)
+  content <- gsub("<code", "<code class = language-R", content)
+
   htmltools::div(
     class = glue::glue("row m-0 p-0 {position_class}"),
     htmltools::tags$div(
