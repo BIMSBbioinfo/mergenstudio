@@ -32,13 +32,13 @@ request_base <- function(task, token = Sys.getenv("AI_API_KEY")) {
 #' @importFrom purrr pluck map_chr
 #' @importFrom stringr str_subset
 #' @noRd
-get_available_models <- function(service) {
+get_available_models <- function(service, token = Sys.getenv("AI_API_KEY")) {
   models <- NULL
   if (service == "openai") {
 
     # get models from GPT API if possible
     models <- tryCatch({
-      request_base("models") %>%
+      request_base("models", token = token) %>%
         httr2::req_perform() %>%
         httr2::resp_body_json() %>%
         purrr::pluck("data") %>%
@@ -57,7 +57,7 @@ get_available_models <- function(service) {
       idx <- which(models == "gpt-3.5-turbo")
       models <- c(models[idx], models[-idx])
     } else {
-      models <- c("gpt-3.5-turbo", "gpt-4", "gpt-4-0314", "gpt-4-32k", "gpt-4-32k-0314", "gpt-3.5-turbo-0301")
+      models <- c("gpt-3.5-turbo", "gpt-4")
     }
   } else if (service == "replicate"){
     models <- c("llama-2-70b-chat")

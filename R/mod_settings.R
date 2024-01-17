@@ -224,7 +224,7 @@ mod_settings_server <- function(id, dir = NULL) {
       msg <- glue::glue("Fetching models for {input$service} service...")
       showNotification(ui = msg, type = "message", duration = 3, session = session)
 
-      models <- get_available_models(input$service)
+      models <- get_available_models(input$service, token = input$api_key)
 
       if (length(models) > 0) {
         showNotification(ui = "Got models!", duration = 3, type = "message", session = session)
@@ -247,7 +247,7 @@ mod_settings_server <- function(id, dir = NULL) {
         )
       }
     }) %>%
-      bindEvent(input$service)
+      bindEvent(input$service, input$api_key)
 
     # # self correct cannot be used with completion models
     # observe({
