@@ -45,8 +45,8 @@ style_chat_message <- function(message,
 
   # hide code
   content <- shiny::markdown(message$content)
-  content <- gsub("<pre><code", "<details><summary>code</summary><pre><code", content)
-  content <- gsub("</code></pre>", "</code></pre></details>", content)
+  # content <- gsub("<pre><code", "<details><summary>code</summary><pre><code", content)
+  # content <- gsub("</code></pre>", "</code></pre></details>", content)
 
   # subs needed for answers either from selfcorrect or normal for syntax highlighting
   content <- gsub("<code class = language-r", "<code", content)
