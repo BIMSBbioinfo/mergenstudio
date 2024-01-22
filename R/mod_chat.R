@@ -238,28 +238,7 @@ mod_chat_server <- function(id,
 
       # if auto execution is on:
       if (settings$autoexecution==TRUE){
-        code_resp <- mergen::extractCode(mergen::clean_code_blocks(response$response))$code
-        code_result<-mergen::executeCode(code_resp,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
-
-        # if html file is created (code did not return any error)
-        if (grepl("html",code_result[1])){
-          # add result to chat history
-          if(length(rvest::read_html(code_result))>1){
-            history$chat_history <- c(history$chat_history,
-                                      list(list(role = "assistant",
-                                                content = shiny::includeHTML(code_result))
-                                      ))
-            # remove html file
-            file.remove(code_result)
-            }
-        }else{
-          history$chat_history <- c(history$chat_history,
-                                    list(list(role = "assistant",
-                                              content = paste0("The code resulted in the following errors/warnings:\n```\n",
-                                                               code_result,"\n```\n\n"))
-                                    ))
-          }
-
+        mergenstudio_execute(rv,history,settings,session)
       }
 
 
