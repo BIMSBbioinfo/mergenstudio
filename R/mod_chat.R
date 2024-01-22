@@ -40,7 +40,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
                 width = "100%",
                 placeholder = translator$t("Write your prompt here"),
                 value = "",
-                rows = 3,
+                rows = 4,
                 resize = "none",
                 textarea_class = "chat-prompt"
               )
@@ -74,10 +74,19 @@ mod_chat_ui <- function(id, translator = create_translator()) {
               actionButton(
                 inputId = ns("execute"),
                 label = icon("fas fa-play"),
-                class = "w-100 btn-primary p-1 mt-2",
+                class = "w-100  btn-primary p-1 mt-2",
                 style="background-color: green; border-color: green"
               ) %>%
-                bslib::tooltip("Execute Code")
+                bslib::tooltip("Execute Code"),
+
+              # execute code button
+              actionButton(
+                inputId = ns("clear_history"),
+                label = icon("fas fa-trash"),
+                class = "w-100 h-10 btn-primary p-1 mt-2",
+                style="background-color: red; border-color: red"
+              ) %>%
+                bslib::tooltip("Remove History")
             )
           )
         )
@@ -328,6 +337,16 @@ mod_chat_server <- function(id,
       updateTextAreaInput(session, "chat_input", value = "")
     }) %>%
       bindEvent(input$execute)
+
+    # remove history
+    observe({
+      if(length(history$chat_history) > 0){
+        # history$chat_history <- history$chat_history[1]
+        history$chat_history <- list()
+        updateTextAreaInput(session, "chat_input", value = "")
+      }
+    }) %>%
+      bindEvent(input$clear_history)
 
   })
 }
