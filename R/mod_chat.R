@@ -20,34 +20,53 @@ mod_chat_ui <- function(id, translator = create_translator()) {
         ),
         div(
           class = "mt-auto",
-          style = css(
-            "margin-left" = "40px",
-            "margin-right" = "40px"
-          ),
           htmltools::div(
-            class = "position-relative",
-            style = css(
-              "width" = "100%"
-            ),
+            class = "d-flex p-3",
             div(
+              class = "flex-grow-1 pe-3",
+              # text_area_input_wrapper(
+              #   inputId = ns("chat_input"),
+              #   label = NULL,
+              #   width = "100%",
+              #   placeholder = translator$t("Write your prompt here"),
+              #   value = "",
+              #   resize = "vertical",
+              #   rows = 5,
+              #   textarea_class = "chat-prompt"
+              # )
               text_area_input_wrapper(
                 inputId = ns("chat_input"),
                 label = NULL,
                 width = "100%",
                 placeholder = translator$t("Write your prompt here"),
                 value = "",
+                rows = 3,
                 resize = "none",
                 textarea_class = "chat-prompt"
               )
             ),
             div(
-              class = "position-absolute top-50 end-0 translate-middle",
+              style = htmltools::css(width = "30px"),
+              # actionButton(
+              #   inputId = ns("chat"),
+              #   label = icon("fas fa-paper-plane"),
+              #   class = "w-100 btn-primary p-1 chat-send-btn"
+              # ),
+              # actionButton(
+              #   inputId = ns("clear_history"),
+              #   label = icon("eraser"),
+              #   class = "w-100 btn-primary mt-2 p-1"
+              # ),
+              # actionButton(
+              #   inputId = ns("settings"),
+              #   label = icon("gear"),
+              #   class = "w-100 btn-primary mt-2 p-1"),
 
               # send prompt button
               actionButton(
                 inputId = ns("chat"),
                 label = icon("fas fa-paper-plane"),
-                class = "w-40 btn-primary p-1 chat-send-btn"
+                class = "w-100 btn-primary p-1 mt-2 chat-send-btn"
               ) %>%
                 bslib::tooltip("Send (click or Enter)"),
 
@@ -55,16 +74,59 @@ mod_chat_ui <- function(id, translator = create_translator()) {
               actionButton(
                 inputId = ns("execute"),
                 label = icon("fas fa-play"),
-                class = "w-55 btn-primary p-1",
+                class = "w-100 btn-primary p-1 mt-2",
                 style="background-color: green; border-color: green"
               ) %>%
                 bslib::tooltip("Execute Code")
             )
           )
         )
+        # div(
+        #   class = "mt-auto",
+        #   style = css(
+        #     "margin-left" = "40px",
+        #     "margin-right" = "40px"
+        #   ),
+        #   htmltools::div(
+        #     class = "position-relative",
+        #     style = css(
+        #       "width" = "100%"
+        #     ),
+        #     div(
+        #       text_area_input_wrapper(
+        #         inputId = ns("chat_input"),
+        #         label = NULL,
+        #         width = "100%",
+        #         placeholder = translator$t("Write your prompt here"),
+        #         value = "",
+        #         resize = "none",
+        #         textarea_class = "chat-prompt"
+        #       )
+        #     ),
+        #     div(
+        #       class = "position-absolute top-50 end-0 translate-middle",
+        #
+        #       # send prompt button
+        #       actionButton(
+        #         inputId = ns("chat"),
+        #         label = icon("fas fa-paper-plane"),
+        #         class = "w-40 btn-primary p-1 chat-send-btn"
+        #       ) %>%
+        #         bslib::tooltip("Send (click or Enter)"),
+        #
+        #       # execute code button
+        #       actionButton(
+        #         inputId = ns("execute"),
+        #         label = icon("fas fa-play"),
+        #         class = "w-55 btn-primary p-1",
+        #         style="background-color: green; border-color: green"
+        #       ) %>%
+        #         bslib::tooltip("Execute Code")
+        #     )
+        #   )
+        )
       )
     )
-  )
 }
 
 #' Chat server
