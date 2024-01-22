@@ -191,7 +191,7 @@ mod_chat_server <- function(id,
         filenames<-mergen::extractFilenames(input$chat_input)
         if (!is.na(filenames)){
           for (file in filenames){
-            final_path <- paste0(settings$directory,file)
+            final_path <- paste0(settings$directory,"/",file)
             result <- tryCatch({
               mergen::fileHeaderPrompt(final_path)
               }, warning = function(w) {
