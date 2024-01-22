@@ -272,9 +272,11 @@ mod_chat_server <- function(id,
           selfcorrect = settings$selfcorrect
       )
 
-      waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.5, ")"))
-      response <- mergenstudio_request(skeleton = skeleton)
-      waiter::waiter_hide() # hide the waiter
+      withProgress(message = "Getting response ...", value = 0, {
+        waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+        response <- mergenstudio_request(skeleton = skeleton)
+        waiter::waiter_hide() # hide the waiter
+      })
 
       # update history with prompt, potential selfcorrect message and response
       #prompt
@@ -300,10 +302,12 @@ mod_chat_server <- function(id,
 
       # if auto execution is on:
       if (settings$autoexecution==TRUE){
-        mergenstudio_execute(rv,history,settings,session)
+        withProgress(message = "Executing code ...", value = 0, {
+          waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+          mergenstudio_execute(rv,history,settings,session)
+          waiter::waiter_hide() # hide the waiter
+        })
       }
-
-
 
       # if (settings$stream) {
       #   rv$reset_streaming_message <- rv$reset_streaming_message + 1L
@@ -316,7 +320,11 @@ mod_chat_server <- function(id,
 
     # execute code event
     observe({
-      mergenstudio_execute(rv, history, settings, session)
+      withProgress(message = "Executing code ...", value = 0, {
+        waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+        mergenstudio_execute(rv, history, settings, session)
+        waiter::waiter_hide() # hide the waiter
+      })
       updateTextAreaInput(session, "chat_input", value = "")
     }) %>%
       bindEvent(input$execute)
