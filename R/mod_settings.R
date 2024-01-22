@@ -35,12 +35,12 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
         #                ),
         #                value = getwd()),
         # shinyjs::disabled(
-          textInput(inputId = ns("directorytext"),
-                    label = getIconLabel("Select Directory",
-                                         message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
-                    ),
-                    value = ifelse(is.null(dir), getwd(), dir)
-          ),
+        textInput(inputId = ns("directorytext"),
+                  label = getIconLabel("Select Directory",
+                                       message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
+                  ),
+                  value = ifelse(is.null(dir), getwd(), dir)
+        ),
         # ),
         column(4,
                shinyFiles::shinyDirButton(id = ns('directory'),
@@ -190,6 +190,14 @@ mod_settings_server <- function(id, dir = NULL) {
       updateTextInput(session, "directorytext", value = parseDirPath(roots=volumes, selection=input$directory))
       path <- shinyFiles::parseDirPath(roots = volumes, selection = input$directory)
       rv$directory <- as.character(path)
+    })
+    observeEvent(input$directorytext, {
+      if(dir.exists(input$directorytext)){
+        showNotification("Directory is set correctly!", type = "message")
+        rv$directory <- input$directorytext
+      } else {
+        showNotification("Directory doesnt exist! abort ...", type = "error")
+      }
     })
 
     # rv$directory <- 0L

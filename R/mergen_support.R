@@ -150,8 +150,11 @@ mergenstudio_execute <- function(rv, history, settings, session){
       final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
       final_code <- final_code$code
 
+      # extract install
       mergen::extractInstallPkg(final_code)
+
       # execute code
+      print(settings$directory)
       setwd(settings$directory)
       code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
 
