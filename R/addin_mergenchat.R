@@ -124,7 +124,7 @@ create_tmp_app_file <- function() {
     "ide_colors <- {ide_theme}"
   )
   line_ui <- glue::glue(
-    "ui <- mergenstudio:::mod_app_ui('app', ide_colors)"
+    "ui <- mergenstudio:::mod_app_ui('app', ide_colors, dir = dir)"
   )
   line_server <- glue::glue(
     "server <- function(input, output, session) {

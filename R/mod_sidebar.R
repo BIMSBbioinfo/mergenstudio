@@ -1,6 +1,6 @@
 #' @importFrom bslib navset_hidden nav_panel_hidden
 #' @noRd
-mod_sidebar_ui <- function(id, translator = create_translator()) {
+mod_sidebar_ui <- function(id, translator = create_translator(), dir = NULL) {
   ns <- NS(id)
   tagList(
     bslib::navset_hidden(
@@ -10,7 +10,7 @@ mod_sidebar_ui <- function(id, translator = create_translator()) {
       bslib::nav_panel_hidden(
         value = "settings",
         class = "px-0 py-2",
-        mod_settings_ui(id = ns("settings"), translator = translator)
+        mod_settings_ui(id = ns("settings"), translator = translator, dir = dir)
       )
     )
   )

@@ -3,7 +3,7 @@
 #' @importFrom shinyjs useShinyjs hidden disabled
 #' @importFrom shinyFiles shinyDirButton
 #' @noRd
-mod_settings_ui <- function(id, translator = create_translator()) {
+mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
   ns <- NS(id)
 
   # api_services <- c("openai-chat", "openai-completion", "replicate")
@@ -34,12 +34,14 @@ mod_settings_ui <- function(id, translator = create_translator()) {
         #                                     message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
         #                ),
         #                value = getwd()),
-        shinyjs::disabled(
+        # shinyjs::disabled(
           textInput(inputId = ns("directorytext"),
                     label = getIconLabel("Select Directory",
                                          message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
                     ),
-          )),
+                    value = ifelse(is.null(dir), getwd(), dir)
+          ),
+        # ),
         column(4,
                shinyFiles::shinyDirButton(id = ns('directory'),
                                           label = "...", title = "Select Directory",
@@ -175,6 +177,15 @@ mod_settings_server <- function(id, dir = NULL) {
     })
     if(volumes[[1]]==volumes[[2]]) volumes <- volumes[1]
     shinyFiles::shinyDirChoose(input = input, id = "directory", session = session, roots = volumes)
+    # observe({
+    #   print(input$directorytext)
+    #   if(input$directorytext == ""){
+    #     print("merhaba")
+    #     if(!is.null(dir)){
+    #       updateTextInput(session, "directorytext", value = parseDirPath(roots=volumes, selection=rv$directory))
+    #     }
+    #   }
+    # })
     observeEvent(input$directory, {
       updateTextInput(session, "directorytext", value = parseDirPath(roots=volumes, selection=input$directory))
       path <- shinyFiles::parseDirPath(roots = volumes, selection = input$directory)

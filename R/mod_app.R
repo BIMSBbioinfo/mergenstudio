@@ -8,7 +8,7 @@
 #' @import bslib
 #' @importFrom waiter use_waiter
 #' @noRd
-mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
+mod_app_ui <- function(id, ide_colors = get_ide_theme_info(), dir = NULL) {
   ns <- NS(id)
   translator <- create_translator(language = getOption("mergenstudio.language"))
   tagList(
@@ -28,7 +28,7 @@ mod_app_ui <- function(id, ide_colors = get_ide_theme_info()) {
           class = "p-0",
           padding = "0.5rem",
 
-          mod_sidebar_ui(ns("sidebar"), translator)
+          mod_sidebar_ui(ns("sidebar"), translator, dir = dir)
         ),
         div(
           class = "row justify-content-center h-100",
