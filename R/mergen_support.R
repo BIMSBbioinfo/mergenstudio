@@ -155,33 +155,75 @@ mergenstudio_execute <- function(rv, history, settings, session,code=NULL){
     setwd(settings$directory)
     code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
 
-    # if html file is created (code did not return any error)
-    if (grepl("html",code_result[1])){
-      # add result to chat history
-      if(length(rvest::read_html(code_result))>1){
-        history$chat_history <- c(history$chat_history,
-                                  list(list(role = "assistant",
-                                            content = shiny::includeHTML(code_result))
-                                  ))
-      }else{
-        history$chat_history <- c(history$chat_history,
-                                  list(list(role = "assistant",
-                                            content = "The code returns no output.")
-                                  ))
+    # if code comes from execute button event
+    # find the appropriate spot to squeeze into the history
+    # if exact same code is found multiple times in the conversation
+    # it will squeeze the output in on all positions
+
+    final_code <- paste0("R\n", final_code, "```\n\n")
+    pos<-0
+    if (is.null(code)){
+      #then it comes from auto execution so should append to the bottom.
+      pos<-length(history$chat_history)
+    }else{
+      for (i in 1:length(history$chat_history)){
+        if (grepl(final_code,history$chat_history[[i]]$content,fixed=TRUE)){
+          print(final_code)
+          print(history$chat_history[[i]]$content)
+          pos<-i
+          }
       }
+    }
+
+    print (pos)
+
+    if (pos!=0){
+      if (grepl("html",code_result[1])){
+        # add result to chat history
+        if(length(rvest::read_html(code_result))>1){
+          message<-list(list(role = "assistant",
+                             content = shiny::includeHTML(code_result)))
+        }else{
+          message<-list(list(role = "assistant",
+                             content = "The code returns no output."))
+        }
+
+        # append code to already generated code in chat:
+        mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
+
+      } else{
+        message<-list(list(role = "assistant",
+                           content = paste0("The code resulted in the
+                                            following errors/warnings:\n```\n",
+                                           code_result,"\n```\n\n")))
+      }
+      # append to history at the right position
+      if (pos == length(history$chat_history)){
+          history$chat_history <- c(history$chat_history,message)
+      }else{
+        # <p><img or <pre><code>## or message indicates there was a previous run of that code
+        # so we overwrite that position with our new run
+        if (grepl("<p><img",history$chat_history[[pos+1]]$content) |
+            grepl("<pre><code>##",history$chat_history[[pos+1]]$content) |
+            grepl ("The code resulted in the following errors/warnings:",history$chat_history[[pos+1]]$content) |
+            grepl("The code returns no output.",history$chat_history[[pos+1]]$content)){
+          if ((pos+1)==length(history$chat_history)){
+            history$chat_history <- c(history$chat_history[1:pos],message)
+          }else{
+          history$chat_history <- c(history$chat_history[1:pos],message,
+                                    history$chat_history[(pos+2):length(history$chat_history)])
+          }
+        }else{
+        history$chat_history <- c(history$chat_history[1:pos],message,
+                                  history$chat_history[(pos+1):length(history$chat_history)])
+        }
+      }
+
+    }
+    if (file.exists(code_result)){
       # remove html file
       file.remove(code_result)
-
-      # append code to already generated code in chat:
-      mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
-
-    } else{
-      history$chat_history <- c(history$chat_history,
-                                list(list(role = "assistant",
-                                          content = paste0("The code resulted in the following errors/warnings:\n```\n",
-                                                           code_result,"\n```\n\n"))
-                                ))
-      }
+    }
 }
 
 
