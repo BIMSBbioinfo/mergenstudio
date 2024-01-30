@@ -69,17 +69,7 @@ mod_chat_ui <- function(id, translator = create_translator()) {
                 class = "w-100 btn-primary p-1 mt-2 chat-send-btn"
               ) %>%
                 bslib::tooltip("Send (click or Enter)"),
-
-              # execute code button
-              actionButton(
-                inputId = ns("execute"),
-                label = icon("fas fa-play"),
-                class = "w-100  btn-primary p-1 mt-2",
-                style="background-color: green; border-color: green"
-              ) %>%
-                bslib::tooltip("Execute Code"),
-
-              # execute code button
+              # clear history button
               actionButton(
                 inputId = ns("clear_history"),
                 label = icon("fas fa-trash"),
@@ -187,10 +177,16 @@ mod_chat_server <- function(id,
     }) %>%
       bindEvent(history$create_new_chat)
 
+    # execution event
+    observe({
+      waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+      mergenstudio_execute(rv, history, settings, session,code=input$code)
+      waiter::waiter_hide()
+    }) %>%
+      bindEvent(input$code) #input$code comes from copyToClipboard.js click event
 
     # chat event
     observe({
-
       # save prompt as variable
       chat_input <- input$chat_input
 
@@ -324,15 +320,6 @@ mod_chat_server <- function(id,
     }) %>%
       bindEvent(input$chat)
 
-    # execute code event
-    observe({
-        waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
-        mergenstudio_execute(rv, history, settings, session)
-        waiter::waiter_hide() # hide the waiter
-
-      updateTextAreaInput(session, "chat_input", value = "")
-    }) %>%
-      bindEvent(input$execute)
 
     # remove history
     observe({

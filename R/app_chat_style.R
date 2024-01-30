@@ -45,13 +45,22 @@ style_chat_message <- function(message,
 
   # hide code
   content <- shiny::markdown(message$content)
-  # content <- gsub("<pre><code", "<details><summary>code</summary><pre><code", content)
-  # content <- gsub("</code></pre>", "</code></pre></details>", content)
+
+  # if the content is output from code, we dont want the
+  # copy and execute buttons, so we add the class to it that
+  # it already has these so copyToClipboard.js does not add these here.
+  # all output has only <code> tags with no class assigned.
+  # all repsonses from the LLM do have a class.
+  if (!grepl("<code class",content)){
+    content<-gsub("<pre", '<pre class="hasCopyButton"',content)
+  }
 
   # subs needed for answers either from selfcorrect or normal for syntax highlighting
   content <- gsub("<code class = language-r", "<code", content)
   content <- gsub("<code class = language-R", "<code", content)
   content <- gsub("<code", "<code class = language-R", content)
+
+
 
   htmltools::div(
     class = glue::glue("row m-0 p-0 {position_class}"),

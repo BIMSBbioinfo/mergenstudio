@@ -26,6 +26,34 @@ $(document).on('click', '.btn-clipboard', function(event) {
   }, 1000);
 });
 
+
+
+
+$(document).on('click', '.btn-exec', function(event) {
+
+  // get the parent div of the parent div and next pre tag
+  const parentDiv2 = $(this).closest('div').parent();
+  const preTag2 = parentDiv2.next('pre');
+
+  // find code inside pre tag
+  const codeTag2 = preTag2.find('code');
+  const code2 = codeTag2.text();
+
+  Shiny.setInputValue("app-chat-code", code2)
+
+  // update clipboard button text
+  const codeButton = $(this);
+  const originalContent = codeButton.html();
+  codeButton.html('Running code!');
+
+  // reset clipboard button text after 1 second
+  setTimeout(function() {
+    codeButton.html(originalContent);
+  }, 1000);
+});
+
+
+
 // gpt-created
 function addCopyBtn() {
   // Get all the pre tags in the document that don't already have a copy button
@@ -52,6 +80,9 @@ function addCopyBtn() {
         <button type="button" class="btn action-button btn-secondary btn-sm btn-clipboard shiny-bound-input ml-auto">
             <i class="fas fa-copy"></i> Copy
         </button>
+        <button type="button" class="btn action-button btn-secondary btn-sm btn-exec shiny-bound-input ml-auto">
+        <i></i> Execute
+        </button>
     </div>
     </div>
     `);
@@ -59,6 +90,7 @@ function addCopyBtn() {
     // Insert the div with the copy button and language text before the pre tag
     $(this).before(div);
   });
+
 }
 
 $(document).on('shiny:inputchanged', function(event) {
