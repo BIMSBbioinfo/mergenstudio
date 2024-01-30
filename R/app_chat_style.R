@@ -55,12 +55,19 @@ style_chat_message <- function(message,
     content<-gsub("<pre", '<pre class="hasCopyButton"',content)
   }
 
+  # if output is given via LLM
+  if (grepl("<pre><code>\\[1]",content) |
+      grepl('<pre><code class="language-r">\\[1]',content) |
+      grepl('<pre><code class="language-R">\\[1]',content)){
+    content <- gsub('<pre><code class="language-r">\\[', '<pre class="hasCopyButton"><code>\\[', content)
+    content <- gsub('<pre><code class="language-R">\\[', '<pre class="hasCopyButton"><code>\\[', content)
+    content <- gsub("<pre><code>\\[", '<pre class="hasCopyButton"><code>\\[', content)
+  }
+
   # subs needed for answers either from selfcorrect or normal for syntax highlighting
   content <- gsub("<code class = language-r", "<code", content)
   content <- gsub("<code class = language-R", "<code", content)
   content <- gsub("<code", "<code class = language-R", content)
-
-
 
   htmltools::div(
     class = glue::glue("row m-0 p-0 {position_class}"),
