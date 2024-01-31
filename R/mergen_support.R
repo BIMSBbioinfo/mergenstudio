@@ -159,8 +159,11 @@ mergenstudio_execute <- function(rv, history, settings, session,code=NULL){
     # find the appropriate spot to squeeze into the history
     # if exact same code is found multiple times in the conversation
     # it will squeeze the output in on all positions
+    # adding thea``` to final code so that grepl finds the exact code
+    # block and doesnt match blocks with similar expressions in it.
 
-    final_code <- paste0("R\n", final_code, "```\n\n")
+    final_code <- paste0(final_code, "```")
+
     pos<-0
     if (is.null(code)){
       #then it comes from auto execution so should append to the bottom.

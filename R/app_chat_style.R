@@ -51,7 +51,7 @@ style_chat_message <- function(message,
   # it already has these so copyToClipboard.js does not add these here.
   # all output has only <code> tags with no class assigned.
   # all repsonses from the LLM do have a class.
-  if (!grepl("<code class",content)){
+  if (grepl("<pre><code>##",content) | grepl("<p><img",content)){
     content<-gsub("<pre", '<pre class="hasCopyButton"',content)
   }
 

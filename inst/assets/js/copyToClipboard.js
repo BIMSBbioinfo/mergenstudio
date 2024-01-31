@@ -39,7 +39,7 @@ $(document).on('click', '.btn-exec', function(event) {
   const codeTag2 = preTag2.find('code');
   const code2 = codeTag2.text();
 
-  Shiny.setInputValue("app-chat-code", code2)
+  Shiny.setInputValue("app-chat-code", code2,{priority: "event"});
 
   // update clipboard button text
   const codeButton = $(this);
