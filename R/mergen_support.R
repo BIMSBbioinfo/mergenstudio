@@ -135,8 +135,6 @@ mergenstudio_request <- function(skeleton = NULL){
 #' @noRd
 mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NULL){
 
-  print(rep)
-  print(code)
   if (is.null(rep)){
     # cleaning and parsing the code from response
     if(is.null(rv$last_response)) {
@@ -185,9 +183,8 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
     }
 
     if (pos==0){
-      print("cant find location")
-      print(rep)
-      print(curr_mess)
+      message("cant find location will append to bottom")
+      pos <- length(history$chat_history)
     }
 
     if (pos!=0){
