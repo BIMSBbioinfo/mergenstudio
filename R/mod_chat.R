@@ -178,12 +178,19 @@ mod_chat_server <- function(id,
       bindEvent(history$create_new_chat)
 
     # execution event
-    observe({
-      waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
-      mergenstudio_execute(rv, history, settings, session,code=input$code)
-      waiter::waiter_hide()
-    }) %>%
-      bindEvent(input$code) #input$code comes from copyToClipboard.js click event
+    observeEvent(
+      {
+        #events from execution click
+        input$code
+        input$response
+      },
+      {
+        waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+        mergenstudio_execute(rv, history, settings, session,code=input$code,rep=input$response)
+        waiter::waiter_hide()
+      }
+    )
+
 
     # chat event
     observe({
