@@ -133,20 +133,30 @@ mergenstudio_request <- function(skeleton = NULL){
 
 #' @importFrom mergen setupAgent selfcorrect sendPrompt promptContext
 #' @noRd
-mergenstudio_execute <- function(rv, history, settings, session,code=NULL){
+mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NULL){
 
-  if (is.null(code)){
-  # cleaning and parsing the code from response
-  if(is.null(rv$last_response)) {
-      showNotification(ui = "You have to get a response with code first!", duration = 3, type = "message", session = session)
-    } else {
-        # get code
-        code_cleaned <- mergen::clean_code_blocks(rv$last_response)
-        final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
-        final_code <- final_code$code
-      }
+  print(rep)
+  print(code)
+  if (is.null(rep)){
+    # cleaning and parsing the code from response
+    if(is.null(rv$last_response)) {
+        showNotification(ui = "You have to get a response with code first!", duration = 3, type = "message", session = session)
+      } else {
+          # get code
+          code_cleaned <- mergen::clean_code_blocks(rv$last_response)
+          final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+          final_code <- final_code$code
+        }
+  } else if(!is.null(rep) & !is.null(code)) {
+      #subs needed for matching rep to history
+      rep<-gsub("language-r\n","",rep)
+      rep<-gsub(" Copy\n","",rep)
+      rep<-gsub("\n\n\n","\n```\n\n",rep)
+      rep<-gsub("`","",rep)
+      rep<-gsub("\n","",rep)
+      final_code<-paste(code, collapse = "\n")
   }else{
-      final_code <- code
+      final_code<-""
     }
     # extract install
     mergen::extractInstallPkg(final_code)
@@ -155,30 +165,30 @@ mergenstudio_execute <- function(rv, history, settings, session,code=NULL){
     setwd(settings$directory)
     code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
 
-    # if code comes from execute button event
-    # find the appropriate spot to squeeze into the history
-    # if exact same code is found multiple times in the conversation
-    # it will squeeze the output in on all positions
-    # adding thea``` to final code so that grepl finds the exact code
-    # block and doesnt match blocks with similar expressions in it.
-
-    final_code <- paste0(final_code, "```")
-
+    # search for correct position with help of the whole response rep
     pos<-0
     if (is.null(code)){
       #then it comes from auto execution so should append to the bottom.
       pos<-length(history$chat_history)
     }else{
       for (i in 1:length(history$chat_history)){
-        if (grepl(final_code,history$chat_history[[i]]$content,fixed=TRUE)){
-          print(final_code)
-          print(history$chat_history[[i]]$content)
+        curr_mess<-history$chat_history[[i]]$content
+        curr_mess<-gsub("```R","",curr_mess)
+        curr_mess<-gsub("`","",curr_mess)
+        curr_mess<-gsub("\n","",curr_mess)
+        curr_mess<-gsub("\\{r\\}","",curr_mess)
+        curr_mess<-gsub("\\{R\\}","",curr_mess)
+        if (grepl(rep,curr_mess,fixed=TRUE)){
           pos<-i
           }
       }
     }
 
-    print (pos)
+    if (pos==0){
+      print("cant find location")
+      print(rep)
+      print(curr_mess)
+    }
 
     if (pos!=0){
       if (grepl("html",code_result[1])){
@@ -186,23 +196,22 @@ mergenstudio_execute <- function(rv, history, settings, session,code=NULL){
         if(length(rvest::read_html(code_result))>1){
           message<-list(list(role = "assistant",
                              content = shiny::includeHTML(code_result)))
+          #remove file
+          file.remove(code_result)
+
         }else{
           message<-list(list(role = "assistant",
                              content = "The code returns no output."))
         }
-
-        # append code to already generated code in chat:
-        mergenstudio_env$code <- paste(mergenstudio_env$code,final_code,sep="\n")
-
       } else{
         message<-list(list(role = "assistant",
                            content = paste0("The code resulted in the
-                                            following errors/warnings:\n```\n",
-                                           code_result,"\n```\n\n")))
+                                            following errors/warnings:\n```\n##",
+                                            code_result,"\n```\n\n")))
       }
       # append to history at the right position
       if (pos == length(history$chat_history)){
-          history$chat_history <- c(history$chat_history,message)
+          history$chat_history <- c(history$chat_history[1:pos],message)
       }else{
         # <p><img or <pre><code>## or message indicates there was a previous run of that code
         # so we overwrite that position with our new run
@@ -213,19 +222,15 @@ mergenstudio_execute <- function(rv, history, settings, session,code=NULL){
           if ((pos+1)==length(history$chat_history)){
             history$chat_history <- c(history$chat_history[1:pos],message)
           }else{
-          history$chat_history <- c(history$chat_history[1:pos],message,
-                                    history$chat_history[(pos+2):length(history$chat_history)])
+            history$chat_history <- c(history$chat_history[1:pos],message,
+                                      history$chat_history[(pos+2):length(history$chat_history)])
           }
         }else{
-        history$chat_history <- c(history$chat_history[1:pos],message,
-                                  history$chat_history[(pos+1):length(history$chat_history)])
+          history$chat_history <- c(history$chat_history[1:pos],message,
+                                    history$chat_history[(pos+1):length(history$chat_history)])
         }
       }
 
-    }
-    if (file.exists(code_result)){
-      # remove html file
-      file.remove(code_result)
     }
 }
 
