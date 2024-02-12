@@ -51,7 +51,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           ),
           choiceNames = c("Yes", "No"),
           choiceValues = c(TRUE, FALSE),
-          selected = FALSE,
+          selected = getOption("mergenstudio.autoexecution"),
           inline = TRUE,
           width = "200px",
         ),
@@ -64,7 +64,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           ),
           choiceNames = c("Yes", "No"),
           choiceValues = c(TRUE, FALSE),
-          selected = FALSE,
+          selected = getOption("mergenstudio.selfcorrect"),
           inline = TRUE,
           width = "200px",
         ),
@@ -77,7 +77,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           ),
           choiceNames = c("Yes","No"),
           choiceValues = c(TRUE, FALSE),
-          selected = FALSE,
+          selected = getOption("mergenstudio.fileheader"),
           inline = TRUE,
           width = "200px",
         )
@@ -112,7 +112,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           label = getIconLabel(translator$t("API URL (only needed for 'generic')"),
                                message="Provide an API URL. This is only needed when service is set to generic."
                                ),
-          value = "",
+          value = getOption("mergenstudio.api_url"),
           width = "200px"
         ),
 
@@ -132,7 +132,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           label = getIconLabel(translator$t("Nr of tokens"),
                                message="Maximum amount of tokens to send to LLM."),
           choices = seq(3000,10000,by=1000),
-          selected = 4000
+          selected = getOption("mergenstudio.nr_tokens")
         )
       )
     ),
@@ -276,7 +276,8 @@ mod_settings_server <- function(id, dir = NULL) {
         selfcorrect = input$selfcorrect,
         fileheader = input$fileheader,
         autoexecution = input$autoexecution,
-        nr_tokens = input$nr_tokens
+        nr_tokens = input$nr_tokens,
+        language = input$language
       )
 
       rv$modify_session_settings <- rv$modify_session_settings + 1L

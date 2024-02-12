@@ -8,7 +8,8 @@ save_user_config <- function(model,
                              selfcorrect,
                              fileheader,
                              autoexecution,
-                             nr_tokens) {
+                             nr_tokens,
+                             language) {
   if (is.null(custom_context)) custom_context <- ""
   config <-
     data.frame(
@@ -19,7 +20,8 @@ save_user_config <- function(model,
       selfcorrect,
       fileheader,
       autoexecution,
-      nr_tokens
+      nr_tokens,
+      language
     )
   user_config_path <- tools::R_user_dir("mergenstudio", which = "config")
   user_config <- file.path(user_config_path, "config.yml")
@@ -39,11 +41,12 @@ set_user_options <- function(config) {
     mergenstudio.model          = config$model,
     mergenstudio.service        = config$service,
     mergenstudio.api_url        = config$api_url,
-    mergenstudio.custom_context        = config$custom_context,
+    mergenstudio.custom_context = config$custom_context,
     mergenstudio.selfcorrect    = config$selfcorrect,
     mergenstudio.fileheader     = config$fileheader,
-    mergenstudio.autoexecution        = config$autoexecution,
-    mergenstudio.nr_tokens        = config$nr_tokens
+    mergenstudio.autoexecution  = config$autoexecution,
+    mergenstudio.nr_tokens      = config$nr_tokens,
+    mergenstudio.language       = config$language
   )
   options(op_mergenstudio)
   invisible()

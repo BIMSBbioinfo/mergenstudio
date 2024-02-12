@@ -8,7 +8,7 @@
     config <- yaml::read_yaml(system.file("rstudio/config.yml",
                                           package = "mergenstudio"))
   }
-
+print(user_config)
   op <- options()
 
   op_mergenstudio <- list(
@@ -22,7 +22,8 @@
     mergenstudio.selfcorrect    = config$selfcorrect,
     mergenstudio.fileheader     = config$fileheader,
     mergenstudio.autoexecution  = config$autoexecution,
-    mergenstudio.nr_tokens      = config$nr_tokens
+    mergenstudio.nr_tokens      = config$nr_tokens,
+    mergenstudio.language       = config$language
   )
   toset <- !(names(op_mergenstudio) %in% names(op))
   if (any(toset)) options(op_mergenstudio[toset])

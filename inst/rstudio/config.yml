@@ -1,7 +1,9 @@
-language: "en"
-service: "openai-chat"
 model: "gpt-3.5-turbo"
-custom_prompt: "You are a helpful assistant."
+service: "openai"
+api_url: ""
+custom_context: actAs
 selfcorrect: false
 fileheader: false
-custom_context: actAs
+autoexecution: false
+nr_tokens: 4000
+language: "en"
