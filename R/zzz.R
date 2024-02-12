@@ -1,3 +1,5 @@
+#' @importFrom tools R_user_dir
+#' @importFrom yaml read_yaml
 .onLoad <- function(lib, pkg) {
   user_config <-
     file.path(tools::R_user_dir("mergenstudio", which = "config"), "config.yml")
@@ -8,7 +10,7 @@
     config <- yaml::read_yaml(system.file("rstudio/config.yml",
                                           package = "mergenstudio"))
   }
-print(user_config)
+
   op <- options()
 
   op_mergenstudio <- list(

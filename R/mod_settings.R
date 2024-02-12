@@ -357,6 +357,7 @@ mod_settings_server <- function(id, dir = NULL) {
       print(input$selfcorrect)
       print(input$autoexecution)
       print(input$nr_tokens)
+      print("")
 
     })
     ## Module output ----
