@@ -171,13 +171,13 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
   ) %>%
     bslib::tooltip("Save as default")
 
-  btn_save_in_session <- actionButton(
-    inputId = ns("save_session"),
-    label = fontawesome::fa("bookmark"),
-    # class = "mb-3"
-    class = "me-2"
-  ) %>%
-    bslib::tooltip("Save for this session")
+  # btn_save_in_session <- actionButton(
+  #   inputId = ns("save_session"),
+  #   label = fontawesome::fa("bookmark"),
+  #   # class = "mb-3"
+  #   class = "me-2"
+  # ) %>%
+  #   bslib::tooltip("Save for this session")
 
   # tag lists, html elements
   tagList(
@@ -185,7 +185,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
     tags$div(
       class = "d-flex mb-1",
       btn_to_history,
-      btn_save_in_session,
+      # btn_save_in_session,
       btn_save_as_default
     ),
     br(),
@@ -349,15 +349,15 @@ mod_settings_server <- function(id, dir = NULL) {
       rv$autoexecution <- as.logical(input$autoexecution)
       rv$nr_tokens <- input$nr_tokens
 
-      print("input options")
-      print(input$model)
-      print(input$service)
-      print(input$api_url)
-      print(input$custom_context)
-      print(input$selfcorrect)
-      print(input$autoexecution)
-      print(input$nr_tokens)
-      print("")
+      # print("input options")
+      # print(input$model)
+      # print(input$service)
+      # print(input$api_url)
+      # print(input$custom_context)
+      # print(input$selfcorrect)
+      # print(input$autoexecution)
+      # print(input$nr_tokens)
+      # print("")
 
     })
     ## Module output ----
