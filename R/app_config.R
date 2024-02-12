@@ -1,26 +1,25 @@
 #' @importFrom tools R_user_dir
 #' @importFrom yaml write_yaml
 #' @noRd
-save_user_config <- function(code_style,
-                             skill,
-                             task,
-                             language,
+save_user_config <- function(model,
                              service,
-                             model,
+                             api_url,
                              custom_context,
-                             # stream,
                              selfcorrect,
-                             fileheader) {
+                             fileheader,
+                             autoexecution,
+                             nr_tokens) {
   if (is.null(custom_context)) custom_context <- ""
   config <-
     data.frame(
-      language,
-      service,
       model,
+      service,
+      api_url,
       custom_context,
-      # stream,
       selfcorrect,
-      fileheader
+      fileheader,
+      autoexecution,
+      nr_tokens
     )
   user_config_path <- tools::R_user_dir("mergenstudio", which = "config")
   user_config <- file.path(user_config_path, "config.yml")
@@ -35,13 +34,14 @@ set_user_options <- function(config) {
   op <- options()
 
   op_mergenstudio <- list(
-    mergenstudio.language      = config$language,
-    mergenstudio.service       = config$service,
-    mergenstudio.model         = config$model,
-    mergenstudio.custom_context = config$custom_context,
-    # mergenstudio.stream        = config$stream,
-    mergenstudio.selfcorrect   = config$selfcorrect,
-    mergenstudio.selfcorrect   = config$fileheader
+    mergenstudio.model          = config$model,
+    mergenstudio.service        = config$service,
+    mergenstudio.api_url        = config$api_url,
+    mergenstudio.custom_context        = config$custom_context,
+    mergenstudio.selfcorrect    = config$selfcorrect,
+    mergenstudio.fileheader     = config$fileheader,
+    mergenstudio.autoexecution        = config$autoexecution,
+    mergenstudio.nr_tokens        = config$nr_tokens
   )
   options(op_mergenstudio)
   invisible()

@@ -271,11 +271,47 @@ mod_settings_server <- function(id, dir = NULL) {
     }) %>%
       bindEvent(input$service)
 
-    # go back to history
+    ## go back to history ####
     observe({
       rv$selected_history <- rv$selected_history + 1L
     }) %>%
       bindEvent(input$to_history)
+
+    ## save_default ####
+    observe({
+      showModal(modalDialog(
+        tags$p("These settings will persist for all your future chat sessions."),
+        tags$p("After changing the settings a new chat will be created."),
+
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(ns("confirm_default"), "Ok")
+        )
+      ))
+    }) %>%
+      bindEvent(input$save_default)
+
+    observe({
+      if (!isTruthy(input$confirm_default)) return()
+
+      # save config
+      save_user_config(
+        model = input$model,
+        service = input$service,
+        api_url = input$api_url,
+        custom_context = input$custom_context,
+        selfcorrect = input$selfcorrect,
+        fileheader = input$fileheader,
+        autoexecution = input$autoexecution,
+        nr_tokens = input$nr_tokens
+      )
+
+      rv$modify_session_settings <- rv$modify_session_settings + 1L
+
+      removeModal(session)
+
+      showNotification("Defaults updated", duration = 3, type = "message", session = session)
+    }) %>% bindEvent(input$confirm_default)
 
     # main observe
     observe({
@@ -308,22 +344,6 @@ mod_settings_server <- function(id, dir = NULL) {
     }) %>%
       bindEvent(input$service, input$api_key)
 
-    # # self correct cannot be used with completion models
-    # observe({
-    #   if(input$service == "openai-completion" && input$selfcorrect == TRUE){
-    #     showNotification(ui = "selfcorrect cannot be used with type completion. Can only be used with type chat", duration = 3, type = "error", session = session)
-    #     updateRadioButtons(
-    #       session = session,
-    #       inputId = "selfcorrect",
-    #       choiceNames = c("Yes", "No"),
-    #       choiceValues = c(TRUE, FALSE),
-    #       selected = FALSE,
-    #     )
-    #   }
-    # }) %>%
-    #   bindEvent(input$service, input$selfcorrect)
-
-
     observe({
       rv$model <- input$model %||% getOption("mergenstudio.model")
       rv$service <- input$service %||% getOption("mergenstudio.service")
@@ -334,8 +354,6 @@ mod_settings_server <- function(id, dir = NULL) {
       rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
       rv$autoexecution <- as.logical(input$autoexecution %||% getOption("mergenstudio.autoexecution"))
       rv$nr_tokens <- input$nr_tokens
-      # rv$settings <- input$directory
-      # rv$settings <- as.character(parseDirPath(volumes, input$directory)) %||% getwd()
     })
 
     ## Module output ----
