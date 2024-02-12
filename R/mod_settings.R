@@ -6,9 +6,6 @@
 mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
   ns <- NS(id)
 
-  # api_services <- c("openai-chat", "openai-completion", "replicate")
-  api_services <- c("openai", "replicate", "generic")
-
   preferences <- bslib::accordion(
     open = FALSE,
     multiple = FALSE,
@@ -18,6 +15,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
         title = "Chat Options",
         icon = fontawesome::fa("sliders"),
 
+        ## custom context ####
         selectizeInput(
           inputId = ns("custom_context"),
           label = getIconLabel(translator$t("Select Context"),
@@ -25,23 +23,18 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           ),
           choices = get_available_context(),
           width = "200px",
-          selected = NULL,
+          selected = getOption("mergenstudio.custom_context"),
           options = list(create = TRUE)
         ),
 
-        # directoryInput(inputId = ns('directory'),
-        #                label = getIconLabel("Select Directory",
-        #                                     message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
-        #                ),
-        #                value = getwd()),
-        # shinyjs::disabled(
+        ## directory selection ####
         textInput(inputId = ns("directorytext"),
                   label = getIconLabel("Select Directory",
                                        message="Selecting the working directory for code execution. Once the execute code button is clicked, this directory will be used for reading and saving files."
                   ),
                   value = ifelse(is.null(dir), getwd(), dir)
         ),
-        # ),
+
         column(4,
                shinyFiles::shinyDirButton(id = ns('directory'),
                                           label = "...", title = "Select Directory",
@@ -49,6 +42,8 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
                                           style = "padding:2px; font-size:90%; width: 100%; margin-bottom: 20px; margin-top: -14px; margin-left: 0px", buttonType = "default")
                                           # style = "width: 60%; height: 50%; margin-bottom: 20px; margin-top: -14px; margin-left: 0px", buttonType = "blue")
         ),
+
+        ## auto execution ####
         radioButtons(
           inputId = ns("autoexecution"),
           label = getIconLabel("Activate Auto execution",
@@ -60,6 +55,8 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           inline = TRUE,
           width = "200px",
         ),
+
+        ## selfcorrect ####
         radioButtons(
           inputId = ns("selfcorrect"),
           label = getIconLabel("Activate Self Correct",
@@ -71,6 +68,8 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           inline = TRUE,
           width = "200px",
         ),
+
+        ## fileheader ####
         radioButtons(
           inputId = ns("fileheader"),
           label = getIconLabel("Activate file header addition",
@@ -90,19 +89,24 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
         title = "API Options",
         icon = fontawesome::fa("server"),
 
+        ## service ####
         selectInput(
           inputId = ns("service"),
           label = translator$t("Select API Service"),
-          choices = api_services,
+          choices = get_api_services(),
           selected = getOption("mergenstudio.service"),
           width = "200px"
         ),
+
+        ## api_key ####
         textInput(
           inputId = ns("api_key"),
           label = translator$t("API Key"),
           value = "",
           width = "200px"
         ),
+
+        ## api_url ####
         textInput(
           inputId = ns("api_url"),
           label = getIconLabel(translator$t("API URL (only needed for 'generic')"),
@@ -111,6 +115,8 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           value = "",
           width = "200px"
         ),
+
+        ## model ####
         selectizeInput(
           inputId = ns("model"),
           label = translator$t("Chat Model"),
@@ -119,6 +125,8 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
           selected = getOption("mergenstudio.model"),
           options = list(create = TRUE)
         ),
+
+        ## nr_tokens ####
         selectizeInput(
           inputId = ns("nr_tokens"),
           label = getIconLabel(translator$t("Nr of tokens"),
@@ -199,10 +207,8 @@ mod_settings_server <- function(id, dir = NULL) {
     rv$selected_history <- 0L # originally 0L
     rv$modify_session_settings <- 0L
     rv$create_new_chat <- 0L
-    # api_services <- c("openai-chat", "openai-completion", "replicate")
-    api_services <- c("openai", "replicate", "generic")
 
-    # choose directory
+    ## choose directory ####
     rv$directory <- ifelse(is.null(dir), getwd(), dir)
     volumes <- c(ifelse(is.null(dir), getwd(), dir), fs::path_home())
     names(volumes) <- lapply(volumes, function(x){
@@ -211,15 +217,7 @@ mod_settings_server <- function(id, dir = NULL) {
     })
     if(volumes[[1]]==volumes[[2]]) volumes <- volumes[1]
     shinyFiles::shinyDirChoose(input = input, id = "directory", session = session, roots = volumes)
-    # observe({
-    #   print(input$directorytext)
-    #   if(input$directorytext == ""){
-    #     print("merhaba")
-    #     if(!is.null(dir)){
-    #       updateTextInput(session, "directorytext", value = parseDirPath(roots=volumes, selection=rv$directory))
-    #     }
-    #   }
-    # })
+
     observeEvent(input$directory, {
       updateTextInput(session, "directorytext", value = parseDirPath(roots=volumes, selection=input$directory))
       path <- shinyFiles::parseDirPath(roots = volumes, selection = input$directory)
@@ -234,32 +232,7 @@ mod_settings_server <- function(id, dir = NULL) {
       }
     })
 
-    # rv$directory <- 0L
-    # observeEvent(
-    #   ignoreNULL = TRUE,
-    #   eventExpr = {
-    #     input$directory
-    #   },
-    #   handlerExpr = {
-    #     if (input$directory > 0) {
-    #       path = choose.dir(default = readDirectoryInput(session, ns('directory')),
-    #                         caption="Choose a directory...")
-    #       if(!is.character(path)){
-    #         path <- getwd()
-    #       }
-    #       updateDirectoryInput(session, 'directory', value = path)
-    #     } else {
-    #       path <- getwd()
-    #       updateDirectoryInput(session, 'directory', value = path)
-    #     }
-    #     rv$directory <- path
-    #   }
-    # )
-    # output$directory = renderText({
-    #   readDirectoryInput(session, ns('directory'))
-    # })
-
-    # hide api_url
+    ## hide api_url ####
     observe({
       # if api_url != generic, hide the api_url
       if(input$service != "generic"){
@@ -345,17 +318,46 @@ mod_settings_server <- function(id, dir = NULL) {
       bindEvent(input$service, input$api_key)
 
     observe({
-      rv$model <- input$model %||% getOption("mergenstudio.model")
-      rv$service <- input$service %||% getOption("mergenstudio.service")
+      # rv$model <- input$model %||% getOption("mergenstudio.model")
+      # rv$service <- input$service %||% getOption("mergenstudio.service")
+      # rv$api_key <- input$api_key
+      # rv$api_url <- input$api_url %||% getOption("mergenstudio.api_url")
+      # rv$custom_context <- input$custom_context %||% getOption("mergenstudio.custom_context")
+      # rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
+      # rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
+      # rv$autoexecution <- as.logical(input$autoexecution %||% getOption("mergenstudio.autoexecution"))
+      # rv$nr_tokens <- input$nr_tokens %||% getOption("mergenstudio.nr_tokens")
+      #
+      # print("default options")
+      # print(getOption("mergenstudio.model"))
+      # print(getOption("mergenstudio.service"))
+      # print(getOption("mergenstudio.api_url"))
+      # print(getOption("mergenstudio.custom_context"))
+      # print(getOption("mergenstudio.selfcorrect"))
+      # print(getOption("mergenstudio.fileheader"))
+      # print(getOption("mergenstudio.autoexecution"))
+      # print(getOption("mergenstudio.nr_tokens"))
+
+      rv$model <- input$model
+      rv$service <- input$service
       rv$api_key <- input$api_key
       rv$api_url <- input$api_url
-      rv$custom_context <- input$custom_context %||% getOption("mergenstudio.custom_context")
-      rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
-      rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
-      rv$autoexecution <- as.logical(input$autoexecution %||% getOption("mergenstudio.autoexecution"))
+      rv$custom_context <- input$custom_context
+      rv$selfcorrect <- as.logical(input$selfcorrect)
+      rv$fileheader <- as.logical(input$fileheader)
+      rv$autoexecution <- as.logical(input$autoexecution)
       rv$nr_tokens <- input$nr_tokens
-    })
 
+      print("input options")
+      print(input$model)
+      print(input$service)
+      print(input$api_url)
+      print(input$custom_context)
+      print(input$selfcorrect)
+      print(input$autoexecution)
+      print(input$nr_tokens)
+
+    })
     ## Module output ----
     rv
   })
@@ -363,4 +365,8 @@ mod_settings_server <- function(id, dir = NULL) {
 
 get_available_context <- function(){
   c("actAs", "rbionfoExp", "CoT", "simple", "No Context")
+}
+
+get_api_services <- function(){
+  c("openai", "replicate", "generic")
 }

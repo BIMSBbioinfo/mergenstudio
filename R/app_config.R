@@ -26,6 +26,8 @@ save_user_config <- function(model,
   if (!dir.exists(user_config_path)) {
     dir.create(user_config_path, recursive = TRUE)
   }
+  print(user_config)
+  print(config)
   yaml::write_yaml(config, user_config)
   set_user_options(config)
 }
