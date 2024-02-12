@@ -318,9 +318,7 @@ mod_chat_server <- function(id,
           waiter::waiter_hide()
       }
 
-      # if (settings$stream) {
-      #   rv$reset_streaming_message <- rv$reset_streaming_message + 1L
-      # }
+      # update text area
       updateTextAreaInput(session, "chat_input", value = "")
 
 

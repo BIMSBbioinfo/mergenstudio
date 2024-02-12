@@ -18,10 +18,9 @@ mod_history_ui <- function(id) {
 
   btn_settings <-  actionButton(
     inputId = ns("settings"),
-    # label = fontawesome::fa("gear")
     label = fontawesome::fa("arrow-right-long")
   ) %>%
-    bslib::tooltip("Settings")
+    bslib::tooltip("back to settings")
 
   tagList(
     tags$div(
