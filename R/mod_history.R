@@ -1,3 +1,39 @@
+mod_history_ui <- function(id) {
+  ns <- NS(id)
+  conversation_history <- read_conversation_history()
+
+  btn_new_chat <- actionButton(
+    inputId = ns("new_chat"),
+    label = "New chat",
+    icon = shiny::icon("plus"),
+    class = "flex-grow-1 me-2"
+  )
+
+  btn_delete_all <- actionButton(
+    inputId = ns("delete_all"),
+    label = fontawesome::fa("trash"),
+    class = "me-2"
+  ) %>%
+    bslib::tooltip("Delete all chats")
+
+  btn_settings <-  actionButton(
+    inputId = ns("settings"),
+    # label = fontawesome::fa("gear")
+    label = fontawesome::fa("arrow-right-long")
+  ) %>%
+    bslib::tooltip("Settings")
+
+  tagList(
+    tags$div(
+      class = "d-flex mb-1",
+      btn_new_chat,
+      btn_delete_all,
+      btn_settings,
+    ),
+    uiOutput(ns("conversation_history"))
+  )
+}
+
 #' @importFrom purrr keep pluck
 #' @noRd
 mod_history_server <- function(id, settings) {

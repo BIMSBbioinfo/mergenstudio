@@ -144,8 +144,42 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
     )
   )
 
+  # buttons
+  btn_to_history <- actionButton(
+    inputId = ns("to_history"),
+    label = fontawesome::fa("arrow-left-long"),
+    # class = "mb-3"
+    # class = "flex-grow-1 me-2"
+    class = "me-2"
+    # class = "flex-grow-1"
+  ) %>%
+    bslib::tooltip("Go to conversations")
+
+  btn_save_as_default <- actionButton(
+    inputId = ns("save_default"),
+    label = fontawesome::fa("floppy-disk"),
+    # class = "mb-3"
+    # class = "me-2"
+  ) %>%
+    bslib::tooltip("Save as default")
+
+  btn_save_in_session <- actionButton(
+    inputId = ns("save_session"),
+    label = fontawesome::fa("bookmark"),
+    # class = "mb-3"
+    class = "me-2"
+  ) %>%
+    bslib::tooltip("Save for this session")
+
+  # tag lists, html elements
   tagList(
     shinyjs::useShinyjs(),
+    tags$div(
+      class = "d-flex mb-1",
+      btn_to_history,
+      btn_save_in_session,
+      btn_save_as_default
+    ),
     br(),
     br(),
     preferences
@@ -236,6 +270,12 @@ mod_settings_server <- function(id, dir = NULL) {
       }
     }) %>%
       bindEvent(input$service)
+
+    # go back to history
+    observe({
+      rv$selected_history <- rv$selected_history + 1L
+    }) %>%
+      bindEvent(input$to_history)
 
     # main observe
     observe({
