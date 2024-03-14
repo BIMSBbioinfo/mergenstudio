@@ -107,7 +107,7 @@ mergenstudio_request <- function(skeleton = NULL){
     # get response, if setup is failed, says that it failed
     if(exists("myAgent")){
       if(skeleton$selfcorrect){
-        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, previous.msgs = previous.msgs, attempts = 3, context = skeleton$custom_context)
+        response <- mergen::selfcorrect(myAgent, prompt = skeleton$prompt, history = previous.msgs, attempts = 3, context = skeleton$custom_context)
         response <- response$final.response
       } else {
         # send prompt to mergen
