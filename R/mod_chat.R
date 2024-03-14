@@ -284,7 +284,7 @@ mod_chat_server <- function(id,
       )
 
 
-        waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+        waiter::waiter_show(html = tagList(waiter::spin_ring(),"Recieving answer...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
         response <- mergenstudio_request(skeleton = skeleton)
         waiter::waiter_hide() # hide the waiter
 
@@ -296,18 +296,28 @@ mod_chat_server <- function(id,
       ))
       #self correct message
       if (settings$selfcorrect){
+
+        #last response
+        last_response <- response$history[length(response$history)]
+        history$chat_history[length(history$chat_history)+1]<- last_response
+
+        waiter::waiter_show(html = tagList(waiter::spin_ring(),"Self-correct activated...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
+        Sys.sleep(1)
+        waiter::waiter_hide()
+
+
+        # messsage selfcorrect is getting activated
         history$chat_history <- c(
           history$chat_history,
           list(
             list(role = "assistant", content = "Self Correct is activated: trying to correct potential errors...")
           )
         )
+      }else{
+        #last response
+        last_response <- response$history[length(response$history)]
+        history$chat_history[length(history$chat_history)+1]<- last_response
       }
-
-      #last response
-      last_response <- response$history[length(response$history)]
-      history$chat_history[length(history$chat_history)+1]<- last_response
-
 
       rv$last_response <- response$response
 
@@ -336,5 +346,53 @@ mod_chat_server <- function(id,
     }) %>%
       bindEvent(input$clear_history)
 
+
+
+    #observe a chat event again for selfcorrect purposes
+    observeEvent(input$chat,
+     {
+       if (settings$selfcorrect &
+           history$chat_history[length(history$chat_history)][[1]]$role=="assistant"){
+
+         # save response:
+         resp_before_correct<- history$chat_history[(length(history$chat_history)-1)][[1]]$content
+         print(resp_before_correct)
+
+         # build skeleton
+         skeleton <- mergenstudio_skeleton(
+         api_key = settings$api_key,
+         service = settings$service,
+         url = settings$api_url,
+         model = settings$model,
+         prompt = input$chat_input,
+         custom_context = settings$custom_context,
+         history = list(list()),
+         # stream = settings$stream,
+         selfcorrect = settings$selfcorrect
+       )
+
+      # send to recieve response
+         waiter::waiter_show(html = tagList(waiter::spin_ring(),"Correcting potential errors...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
+         response <- mergenstudio_request(skeleton, resp=resp_before_correct)$response
+         waiter::waiter_hide()
+
+         # update history
+         if (response == resp_before_correct){
+           history$chat_history <- c(history$chat_history[1:(length(history$chat_history)-1)],
+                                     list(list(role='assistant',
+                                               content='No errors found')))
+         }else{
+           history$chat_history <- c(history$chat_history,
+                                   list(list(role='assistant',
+                                             content='The corrected answer is:')),
+                                   list(list(role='assistant',
+                                             content=response))
+                                    )
+         }
+       }
+     })
   })
+
+
+
 }
