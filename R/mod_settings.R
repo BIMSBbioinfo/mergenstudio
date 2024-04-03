@@ -102,7 +102,7 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
         textInput(
           inputId = ns("api_key"),
           label = translator$t("API Key"),
-          value = "",
+          value = getOption("mergenstudio.api_key"),
           width = "200px"
         ),
 
@@ -272,6 +272,7 @@ mod_settings_server <- function(id, dir = NULL) {
         model = input$model,
         service = input$service,
         api_url = input$api_url,
+        api_key = input$api_key,
         custom_context = input$custom_context,
         selfcorrect = input$selfcorrect,
         fileheader = input$fileheader,
@@ -319,26 +320,6 @@ mod_settings_server <- function(id, dir = NULL) {
       bindEvent(input$service, input$api_key)
 
     observe({
-      # rv$model <- input$model %||% getOption("mergenstudio.model")
-      # rv$service <- input$service %||% getOption("mergenstudio.service")
-      # rv$api_key <- input$api_key
-      # rv$api_url <- input$api_url %||% getOption("mergenstudio.api_url")
-      # rv$custom_context <- input$custom_context %||% getOption("mergenstudio.custom_context")
-      # rv$selfcorrect <- as.logical(input$selfcorrect %||% getOption("mergenstudio.selfcorrect"))
-      # rv$fileheader <- as.logical(input$fileheader %||% getOption("mergenstudio.fileheader"))
-      # rv$autoexecution <- as.logical(input$autoexecution %||% getOption("mergenstudio.autoexecution"))
-      # rv$nr_tokens <- input$nr_tokens %||% getOption("mergenstudio.nr_tokens")
-      #
-      # print("default options")
-      # print(getOption("mergenstudio.model"))
-      # print(getOption("mergenstudio.service"))
-      # print(getOption("mergenstudio.api_url"))
-      # print(getOption("mergenstudio.custom_context"))
-      # print(getOption("mergenstudio.selfcorrect"))
-      # print(getOption("mergenstudio.fileheader"))
-      # print(getOption("mergenstudio.autoexecution"))
-      # print(getOption("mergenstudio.nr_tokens"))
-
       rv$model <- input$model
       rv$service <- input$service
       rv$api_key <- input$api_key
@@ -348,17 +329,6 @@ mod_settings_server <- function(id, dir = NULL) {
       rv$fileheader <- as.logical(input$fileheader)
       rv$autoexecution <- as.logical(input$autoexecution)
       rv$nr_tokens <- input$nr_tokens
-
-      # print("input options")
-      # print(input$model)
-      # print(input$service)
-      # print(input$api_url)
-      # print(input$custom_context)
-      # print(input$selfcorrect)
-      # print(input$autoexecution)
-      # print(input$nr_tokens)
-      # print("")
-
     })
     ## Module output ----
     rv

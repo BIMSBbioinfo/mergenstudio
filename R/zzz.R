@@ -7,12 +7,10 @@
   if (file.exists(user_config)) {
     config <- yaml::read_yaml(user_config)
   } else {
-    config <- yaml::read_yaml(system.file("rstudio/config.yml",
-                                          package = "mergenstudio"))
+    config <- yaml::read_yaml(system.file("rstudio/config.yml", package = "mergenstudio"))
   }
 
   op <- options()
-
   op_mergenstudio <- list(
     mergenstudio.valid_api      = FALSE,
     mergenstudio.max_tokens     = 500,
@@ -20,6 +18,7 @@
     mergenstudio.model          = config$model,
     mergenstudio.service        = config$service,
     mergenstudio.api_url        = config$api_url,
+    mergenstudio.api_key        = ifelse(config$api_key == "", Sys.getenv("AI_API_KEY"), config$api_key),
     mergenstudio.custom_context = config$custom_context,
     mergenstudio.selfcorrect    = config$selfcorrect,
     mergenstudio.fileheader     = config$fileheader,
