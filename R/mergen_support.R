@@ -139,7 +139,6 @@ mergenstudio_request <- function(skeleton = NULL,resp=NULL){
 #' @importFrom mergen setupAgent selfcorrect sendPrompt promptContext
 #' @noRd
 mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NULL){
-
   if (is.null(rep)){
     # cleaning and parsing the code from response
     if(is.null(rv$last_response)) {
@@ -157,16 +156,24 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
       rep<-gsub("\n\n\n","\n```\n\n",rep)
       rep<-gsub("`","",rep)
       rep<-gsub("\n","",rep)
-      final_code<-paste(code, collapse = "\n")
+      final_code <- code
   }else{
-      final_code<-""
-    }
+    code_cleaned <- mergen::clean_code_blocks(rv$last_response)
+    final_code <- mergen::extractCode(code_cleaned,delimiter = "```")
+    final_code <- final_code$code
+  }
+
+
+
+
     # extract install
     mergen::extractInstallPkg(final_code)
 
     # execute code
     setwd(settings$directory)
-    code_result<-mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))
+
+    #check what is going on
+    code_result<-suppressWarnings(suppressMessages(mergen::executeCode(final_code,output="html",output.file=paste0(getwd(),"/","output_mergen_studio.html"))))
 
     # search for correct position with help of the whole response rep
     pos<-0
@@ -198,8 +205,6 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
         if(length(rvest::read_html(code_result))>1){
           message<-list(list(role = "assistant",
                              content = shiny::includeHTML(code_result)))
-          #remove file
-          file.remove(code_result)
 
         }else{
           message<-list(list(role = "assistant",
@@ -211,6 +216,12 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
                                             following errors/warnings:\n```\n##",
                                             code_result,"\n```\n\n")))
       }
+
+
+      if (file.exists('output_mergen_studio.html')){
+        file.remove('output_mergen_studio.html')
+      }
+
       # append to history at the right position
       if (pos == length(history$chat_history)){
           history$chat_history <- c(history$chat_history[1:pos],message)
