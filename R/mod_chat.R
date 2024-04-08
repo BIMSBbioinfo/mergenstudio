@@ -77,6 +77,19 @@ mod_chat_ui <- function(id, translator = create_translator()) {
                 style="background-color: red; border-color: red"
               ) %>%
                 bslib::tooltip("Remove History")
+            ),
+            #codejs and responsejs are textareas which are hidden,
+            #which can only be manipulated by CopyToClipboard.js and will change
+            # in value once an execution click event is observed.
+            textAreaInput(
+              inputId=ns("codejs"),
+              label = NULL,
+              value=""
+            ),
+            textAreaInput(
+              inputId=ns("responsejs"),
+              label = NULL,
+              value=""
             )
           )
         )
@@ -157,10 +170,14 @@ mod_chat_server <- function(id,
     rv$reset_streaming_message <- 0L
     rv$last_response <- NULL
 
+    hide("responsejs")
+    hide("codejs")
+
     # UI outputs ----
 
     output$welcome <- renderWelcomeMessage({
       welcomeMessage(ide_colors)
+
     }) %>%
       bindEvent(rv$reset_welcome_message)
 
@@ -178,22 +195,27 @@ mod_chat_server <- function(id,
       bindEvent(history$create_new_chat)
 
     # execution event
-    observeEvent(
+    observe(
       {
-        #events from execution click
-        input$code
-        input$response
-      },
-      {
-        waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
-        mergenstudio_execute(rv, history, settings, session,code=input$code,rep=input$response)
-        waiter::waiter_hide()
+        print (input$codejs)
+        print (input$responsejs)
+        {
+        if (input$responsejs != ""){
+          waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+          mergenstudio_execute(rv, history, settings, session,code=input$codejs,rep=input$responsejs)
+          waiter::waiter_hide()
+          }
+        }
       }
-    )
+    )%>%bindEvent(input$codejs)
 
 
     # chat event
     observe({
+
+      print (input$responsejs)
+      print(input$codejs)
+
       # save prompt as variable
       chat_input <- input$chat_input
 
@@ -356,7 +378,6 @@ mod_chat_server <- function(id,
 
          # save response:
          resp_before_correct<- history$chat_history[(length(history$chat_history)-1)][[1]]$content
-         print(resp_before_correct)
 
          # build skeleton
          skeleton <- mergenstudio_skeleton(

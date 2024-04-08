@@ -36,7 +36,7 @@ $(document).on('click', '.btn-exec', function(event) {
   const textinside = closestAssistantDiv[0].innerText.trim();
 
   // set the value for Shiny input
-  Shiny.setInputValue("app-chat-response", textinside, { priority: "event" });
+  Shiny.setInputValue("app-chat-responsejs", textinside, { priority: "event" });
 
   // Search for pre tags with a copy button within the closest assistant div
   // copy button indicates that it is actual code and not some output
@@ -50,7 +50,7 @@ $(document).on('click', '.btn-exec', function(event) {
   }).get();
 
   // set the value for Shiny input
-  Shiny.setInputValue("app-chat-code", code, { priority: "event" });
+  Shiny.setInputValue("app-chat-codejs", code, { priority: "event" });
 
   // update clipboard button text
   const codeButton = $(this);
