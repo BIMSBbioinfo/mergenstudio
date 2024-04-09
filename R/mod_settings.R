@@ -229,6 +229,7 @@ mod_settings_server <- function(id, dir = NULL) {
         rv$directory <- input$directorytext
       } else {
         showNotification("Directory doesnt exist! abort ...", type = "error")
+        rv$directory <- getwd()
       }
     })
 
