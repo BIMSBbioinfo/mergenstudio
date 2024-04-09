@@ -194,27 +194,21 @@ mod_chat_server <- function(id,
     }) %>%
       bindEvent(history$create_new_chat)
 
-    # execution event
+    # execution event: when button is clicked. Input controlled by JavaScript
+    # in CopyToClipboard.js
     observe(
       {
-        print (input$codejs)
-        print (input$responsejs)
-        {
         if (input$responsejs != ""){
-          waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+          waiter::waiter_show(html =  tagList(waiter::spin_ring(),"Running code and appending result...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
           mergenstudio_execute(rv, history, settings, session,code=input$codejs,rep=input$responsejs)
           waiter::waiter_hide()
           }
-        }
-      }
-    )%>%bindEvent(input$codejs)
+        }) %>%
+      bindEvent(input$codejs)
 
 
     # chat event
     observe({
-
-      print (input$responsejs)
-      print(input$codejs)
 
       # save prompt as variable
       chat_input <- input$chat_input
@@ -399,10 +393,9 @@ mod_chat_server <- function(id,
 
          # update history
          if (response == resp_before_correct){
-           history$chat_history <- c(history$chat_history[1:(length(history$chat_history)-1)],
-                                     list(list(role='assistant',
-                                               content='No errors found')))
-         }else{
+           showNotification(ui = "No errors found. Selfcorrect not activated", duration = 4, type = "message", session = session)
+           history$chat_history <- c(history$chat_history[1:(length(history$chat_history)-1)])
+         } else {
            history$chat_history <- c(history$chat_history,
                                    list(list(role='assistant',
                                              content='The corrected answer is:')),
