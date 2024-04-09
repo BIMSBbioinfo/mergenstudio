@@ -90,7 +90,7 @@ mergenstudio_request <- function(skeleton = NULL,resp=NULL){
         myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, url = skeleton$url,
                                       ai_api_key = skeleton$api_key)
       } else {
-        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key)
+        myAgent <- mergen::setupAgent(name=skeleton$service, model = skeleton$model, ai_api_key = skeleton$api_key, type="chat")
       }
     },
     error = function(x){
@@ -105,6 +105,7 @@ mergenstudio_request <- function(skeleton = NULL,resp=NULL){
     }
 
     # get response, if setup is failed, says that it failed
+    # if resp is already given it means we need to go into self-correction mode with runCodeInResponse.
     if(exists("myAgent")){
       if(skeleton$selfcorrect){
         if (is.null(resp)){
@@ -195,7 +196,7 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
     }
 
     if (pos==0){
-      message("cant find location will append to bottom")
+      showNotification(ui = "cant find location for result. Will append result to the bottom!", duration = 4, type = "message", session = session)
       pos <- length(history$chat_history)
     }
 
