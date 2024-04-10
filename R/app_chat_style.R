@@ -84,7 +84,6 @@ style_chat_message <- function(message,
         htmltools::tagList(
           content,
           tags$script("Prism.highlightAll()")
-          # shiny::markdown(message$content)
         )
       )
     )
