@@ -9,8 +9,6 @@ window.onload = function() {
     var callback = function(mutationsList, observer) {
         for(var mutation of mutationsList) {
             if (mutation.type === 'childList') {
-              //console.log('its a childList!')
-              console.log(mutation.addedNodes)
                 // Check if any added nodes are paragraphs
                 mutation.addedNodes.forEach(function(node) {
                   if (node.className == 'row m-0 p-0 justify-content-end' ||
