@@ -230,14 +230,14 @@ mod_chat_server <- function(id,
             if (grepl("^WARNING:",result) | grepl("^ERROR:",result)){
 
               resp <- paste0("Header of file ",file,
-                             " could not be added.\n```\n", result,
-                             "\n```\n\n"," Will proceed without addition.")
+                             " could not be added. Are you in the correct directory?
+                             Will proceed without addition.")
 
-              history$chat_history <- c(history$chat_history,
-                                        list(list(role = "assistant",
-                                                  content = resp)))
+              showNotification(ui = resp, duration = 4, type = "message", session = session)
+
             } else{
             chat_input <- paste(chat_input,result,sep="\n")
+            showNotification(ui = paste("Header of file ", file, "added."), duration = 3, type = "message", session = session)
             }
           }
         }
@@ -339,7 +339,7 @@ mod_chat_server <- function(id,
 
       # if auto execution is on:
       if (settings$autoexecution==TRUE){
-          waiter::waiter_show(html = waiter::spin_ring(), color = paste0("rgba(128,128,128,", 0.15, ")"))
+          waiter::waiter_show(html = tagList(waiter::spin_ring(), "Running code and appending results...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
           mergenstudio_execute(rv,history,settings,session)
           waiter::waiter_hide()
       }
