@@ -403,6 +403,15 @@ mod_chat_server <- function(id,
                                              content=response))
                                     )
          }
+
+         # if auto execution is on:
+         if (settings$autoexecution==TRUE){
+           waiter::waiter_show(html = tagList(waiter::spin_ring(), "Running code and appending results...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
+           mergenstudio_execute(rv,history,settings,session)
+           waiter::waiter_hide()
+         }
+
+
        }
      })
   })
