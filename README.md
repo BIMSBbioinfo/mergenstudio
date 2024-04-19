@@ -182,5 +182,5 @@ directory that will used to search for your files can be set under
 on how file header addition works:
 
 <video height="800" width="800" controls>
-<source src="man/figures/adding file headers.mp4" type="video/mp4">
+<source src="man/figures/adding file headers.mp4.mov" type="video/mp4">
 </video>
