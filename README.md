@@ -103,6 +103,16 @@ of your API service of choice.
 <img src="man/figures/open_API_service.png" align="middle" height="600" style="float:middle; height:600px;"/>
 <img src="man/figures/generic_service.png" align="middle" height="600" style="float:middle; height:600px;"/>
 
+## Saving default settings
+
+In the video below, we show you how to open a chat via mergenstudio, and
+save some default settings which will persist for subsequent chat
+sessions.
+
+<video height="800" width="800" controls>
+<source src="man/figures/Saving API key.mp4" type="video/mp4">
+</video>
+
 ## code execution
 
 Once you have started chatting with your LLM of choice, any code that
@@ -118,6 +128,13 @@ button, turn on the option `Activate auto execution` from the
 `Chat options` panel.
 
 <img src="man/figures/auto_execution.png" align="middle" height="600" style="float:middle; height:600px;"/>
+
+Below you can find a video tutorial on how mergenstudio can be used to
+read in data from a file, and run code on it.
+
+<video height="800" width="800" controls>
+<source src="man/figures/autoex.mp4" type="video/mp4">
+</video>
 
 ## Advanced settings
 
@@ -146,7 +163,14 @@ in languages other then R.
 Activating Self Correct will attempt to correct code that is returned by
 the agent if it results in errors, by resending the prompt together with
 additional information about the error message. To make use of this
-feature, you can change the setting to `Yes`.
+feature, you can change the setting to `Yes`. Activating self-correct
+can also be done after an error message is received. Below you can find
+a video on how mergenstudio can be used to perform complex data analysis
+tasks and also can be used to correct for errors in the code.
+
+<video height="800" width="800" controls>
+<source src="man/figures/heatmaps.mp4" type="video/mp4">
+</video>
 
 ### Activate file header addition
 
@@ -154,6 +178,9 @@ Activating file header addition will attempt to add the first few lines
 of files mentioned in your prompt (if there are any) to your prompt. To
 make use of this feature, you can change the setting to `Yes`. The
 directory that will used to search for your files can be set under
-`Chat options` `Select directory`
+`Chat options` `Select directory`. Below you can find a video tutorial
+on how file header addition works:
 
-<img src="man/figures/directory.png" align="middle" height="600" style="float:middle; height:600px;"/>
+<video height="800" width="800" controls>
+<source src="man/figures/adding file headers.mp4" type="video/mp4">
+</video>
