@@ -140,7 +140,6 @@ in languages other then R.
 
 <img src="man/figures/context.png" align="middle" height="600" style="float:middle; height:600px;"/>
 <img src="man/figures/typing_own_context.png" align="middle" height="600" style="float:middle; height:600px;"/>
-<img src="man/figures/own_context_added.png" align="middle" height="600" style="float:middle; height:600px;"/>
 
 ### Activate self correct
 
