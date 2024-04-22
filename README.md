@@ -109,9 +109,8 @@ In the video below, we show you how to open a chat via mergenstudio, and
 save some default settings which will persist for subsequent chat
 sessions.
 
-<video height="800" width="800" controls>
-<source src="man/figures/Saving API key.mp4" type="video/mp4">
-</video>
+[![Watch the
+video](https://img.youtube.com/vi/--5NL9NUp6c/hqdefault.jpg)](https://www.youtube.com/watch?v=--5NL9NUp6c)
 
 ## code execution
 
@@ -132,9 +131,8 @@ button, turn on the option `Activate auto execution` from the
 Below you can find a video tutorial on how mergenstudio can be used to
 read in data from a file, and run code on it.
 
-<video height="800" width="800" controls>
-<source src="man/figures/autoex.mp4" type="video/mp4">
-</video>
+[![Watch the
+video](https://img.youtube.com/vi/AngJxS6ZWSc/hqdefault.jpg)](https://www.youtube.com/watch?v=AngJxS6ZWSc)
 
 ## Advanced settings
 
