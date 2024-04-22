@@ -92,9 +92,8 @@ on the website of your API service of choice.
 
 In the video below, we show you how to open a chat via mergenstudio, and save some default settings which will persist for subsequent chat sessions. 
 
-<video height="800" width="800" controls>
-  <source src="man/figures/Saving API key.mp4" type="video/mp4">
-</video>
+
+[![Watch the video](https://img.youtube.com/vi/--5NL9NUp6c/hqdefault.jpg)](https://www.youtube.com/watch?v=--5NL9NUp6c)
 
 
 ## code execution
@@ -113,10 +112,7 @@ from the `Chat options` panel.
 
 Below you can find a video tutorial on how mergenstudio can be used to read in data from a file, and run code on it. 
 
-<video height="800" width="800" controls>
-  <source src="man/figures/autoex.mp4" type="video/mp4">
-</video>
-
+[![Watch the video](https://img.youtube.com/vi/AngJxS6ZWSc/hqdefault.jpg)](https://www.youtube.com/watch?v=AngJxS6ZWSc)
 
   
 ## Advanced settings
@@ -146,17 +142,13 @@ Activating Self Correct will attempt to correct code that is returned by the age
 by resending the prompt together with additional information about the error message. To make use of this feature,
 you can change the setting to `Yes`. Activating self-correct can also be done after an error message is received. Below you can find a video on how mergenstudio can be used to perform complex data analysis tasks and also can be used to correct for errors in the code.
 
-<video height="800" width="800" controls>
-  <source src="man/figures/heatmaps.mp4" type="video/mp4">
-</video>
+[![Watch the video](https://img.youtube.com/vi/W-8KTS4XnJk/hqdefault.jpg)](https://www.youtube.com/watch?v=W-8KTS4XnJk)
 
 ### Activate file header addition
 Activating file header addition will attempt to add the first few lines of files mentioned in your prompt (if there are any) to your prompt. To make use of this feature,
 you can change the setting to `Yes`. The directory that will used to search for your files can be set under `Chat options`
 `Select directory`. Below you can find a video tutorial on how file header addition works:
  
-<video height="800" width="800" controls>
-  <source src="man/figures/adding file headers.mov" type="video/mp4">
-</video>
+[![Watch the video](https://img.youtube.com/vi/z7DrSjso89E/hqdefault.jpg)](https://www.youtube.com/watch?v=z7DrSjso89E)
 
 

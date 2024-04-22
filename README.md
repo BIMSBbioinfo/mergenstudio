@@ -168,9 +168,8 @@ can also be done after an error message is received. Below you can find
 a video on how mergenstudio can be used to perform complex data analysis
 tasks and also can be used to correct for errors in the code.
 
-<video height="800" width="800" controls>
-<source src="man/figures/heatmaps.mp4" type="video/mp4">
-</video>
+[![Watch the
+video](https://img.youtube.com/vi/W-8KTS4XnJk/hqdefault.jpg)](https://www.youtube.com/watch?v=W-8KTS4XnJk)
 
 ### Activate file header addition
 
@@ -181,6 +180,5 @@ directory that will used to search for your files can be set under
 `Chat options` `Select directory`. Below you can find a video tutorial
 on how file header addition works:
 
-<video height="800" width="800" controls>
-<source src="man/figures/adding file headers.mov" type="video/mp4">
-</video>
+[![Watch the
+video](https://img.youtube.com/vi/z7DrSjso89E/hqdefault.jpg)](https://www.youtube.com/watch?v=z7DrSjso89E)
