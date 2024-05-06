@@ -169,7 +169,9 @@ mod_settings_ui <- function(id, translator = create_translator(), dir = NULL) {
     # class = "mb-3"
     # class = "me-2"
   ) %>%
-    bslib::tooltip("Save as default")
+    bslib::tooltip("Save settings as default")
+
+
 
   # btn_save_in_session <- actionButton(
   #   inputId = ns("save_session"),
@@ -265,6 +267,7 @@ mod_settings_server <- function(id, dir = NULL) {
     }) %>%
       bindEvent(input$save_default)
 
+
     observe({
       if (!isTruthy(input$confirm_default)) return()
 
@@ -288,6 +291,9 @@ mod_settings_server <- function(id, dir = NULL) {
 
       showNotification("Defaults updated", duration = 3, type = "message", session = session)
     }) %>% bindEvent(input$confirm_default)
+
+
+
 
     # main observe
     observe({

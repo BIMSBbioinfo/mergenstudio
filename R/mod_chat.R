@@ -76,7 +76,14 @@ mod_chat_ui <- function(id, translator = create_translator()) {
                 class = "w-100 h-10 btn-primary p-1 mt-2",
                 style="background-color: red; border-color: red"
               ) %>%
-                bslib::tooltip("Remove History")
+                bslib::tooltip("Remove History"),
+              actionButton(
+                inputId = ns("save_conversation"),
+                label = fontawesome::fa("comments"),
+                class='w-100 h-10 btn-primary p-1 mt-2',
+                style="border-color: white; background-color: white;"
+              ) %>%
+                bslib::tooltip("Save conversation")
             ),
             #codejs and responsejs are textareas which are hidden,
             #which can only be manipulated by CopyToClipboard.js and will change
@@ -172,6 +179,7 @@ mod_chat_server <- function(id,
 
     hide("responsejs")
     hide("codejs")
+
 
     # UI outputs ----
 
@@ -361,6 +369,40 @@ mod_chat_server <- function(id,
       }
     }) %>%
       bindEvent(input$clear_history)
+
+
+
+    observe({
+      showModal(modalDialog(
+        tags$p("You are about to save this chat conversation"),
+        tags$p("You can find your saved conversation in your current directory under conversation.Rmd and conversation.html"),
+
+        footer = tagList(
+          modalButton("Cancel"),
+          actionButton(ns("confirm_save"), "Ok")
+        )
+        ))
+
+    }) %>%
+      bindEvent(input$save_conversation)
+
+    observe({
+      filename <- "conversation.Rmd"
+      counter <- 1
+      while (file.exists(filename)){
+        filename <- paste0("conversation_", counter,".Rmd")
+        counter <- counter + 1
+      }
+      unlisted <- paste(unlist(unlist(history$chat_history)),collapse=" \n\n ")
+      unlisted <- gsub ("user", "__user__",unlisted)
+      unlisted <- gsub ("assistant", "__assistant__",unlisted)
+
+      writeLines(unlisted, filename)
+      suppressWarnings(rmarkdown::render(filename))
+      removeModal(session)
+
+    }) %>%
+      bindEvent(input$confirm_save)
 
 
 
