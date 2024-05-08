@@ -224,7 +224,8 @@ mod_chat_server <- function(id,
       # if adding fileheaders is set to TRUE:
       if (settings$fileheader == TRUE){
         filenames<-mergen::extractFilenames(input$chat_input)
-        if (!is.na(filenames)){
+        if (!is.na(filenames[1])){
+          filenames<-unique(filenames)
           for (file in filenames){
             final_path <- paste0(settings$directory,"/",file)
             result <- tryCatch({
