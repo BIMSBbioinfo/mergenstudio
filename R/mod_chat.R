@@ -245,7 +245,8 @@ mod_chat_server <- function(id,
               showNotification(ui = resp, duration = 4, type = "message", session = session)
 
             } else{
-            chat_input <- paste(chat_input,result,sep="\n")
+            chat_input <- paste(chat_input,"<fileinfo>", result, "<\fileinfo>",sep="\n")
+            print(chat_input)
             showNotification(ui = paste("Header of file ", file, "added."), duration = 3, type = "message", session = session)
             }
           }
