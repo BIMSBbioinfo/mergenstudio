@@ -219,7 +219,7 @@ mod_chat_server <- function(id,
     observe({
 
       # save prompt as variable
-      chat_input <- input$chat_input
+      chat_input <- paste0("<query>",input$chat_input,"<\\query>")
 
       # if adding fileheaders is set to TRUE:
       if (settings$fileheader == TRUE){
@@ -246,13 +246,11 @@ mod_chat_server <- function(id,
 
             } else{
             chat_input <- paste(chat_input,"<fileinfo>", result, "<\fileinfo>",sep="\n")
-            print(chat_input)
             showNotification(ui = paste("Header of file ", file, "added."), duration = 3, type = "message", session = session)
             }
           }
         }
       }
-
 
       #calculate how much of the history to send with
       # 4 characters of text is ~1 token
