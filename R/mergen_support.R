@@ -137,6 +137,38 @@ mergenstudio_request <- function(skeleton = NULL,resp=NULL){
   skeleton
 }
 
+
+
+#' @noRd
+evaluate_error <- function(codestring) {
+  split_str <- strsplit(codestring, split = '\n')[[1]]
+  for (i in 1:length(split_str)) {
+    result <- tryCatch(
+      {
+        eval(str2expression(split_str[i]))
+        NULL  # Return NULL if no error or warning occurs
+      },
+      error = function(e) {
+        res <- paste(e, 'error occured on line:', split_str[i], 'line number', i, sep = " ")
+        print(res)
+        return(res)  # Return the error message
+      },
+      warning = function(w) {
+        res <- paste(w, 'warning occured on line:', split_str[i], 'line number', i, sep = " ")
+        print(res)
+        return(res)  # Return the warning message
+      }
+    )
+
+    if (!is.null(result)) {
+      return(result)  # Return from the main function if an error or warning occurs
+    }
+  }
+  return(invisible(NULL))  # Return NULL invisibly if no error or warning occurs
+}
+
+
+
 #' @importFrom mergen setupAgent selfcorrect sendPrompt promptContext
 #' @noRd
 mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NULL){
@@ -165,10 +197,14 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
   }
 
 
-
+  #if code gets back in multiple blocks.
+  if (length(final_code)>1){
+    final_code <- paste(final_code,sep="\n")
+  }
 
     # extract install
     mergen::extractInstallPkg(final_code)
+
 
     # execute code
     setwd(settings$directory)
@@ -212,10 +248,12 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
                              content = "The code returns no output."))
         }
       } else{
-        message<-list(list(role = "assistant",
+        res<-evaluate_error(final_code)
+        message<-list(list(role = "user",
                            content = paste0("The code resulted in the
                                             following errors/warnings:\n```\n##",
-                                            code_result,"\n```\n\n")))
+                                            code_result,"\n```\n\n","```\n##",res,"\n```\n\n")))
+
       }
 
 
