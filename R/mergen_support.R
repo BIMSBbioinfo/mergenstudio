@@ -150,12 +150,10 @@ evaluate_error <- function(codestring) {
       },
       error = function(e) {
         res <- paste(e, 'error occured on line:', split_str[i], 'line number', i, sep = " ")
-        print(res)
         return(res)  # Return the error message
       },
       warning = function(w) {
         res <- paste(w, 'warning occured on line:', split_str[i], 'line number', i, sep = " ")
-        print(res)
         return(res)  # Return the warning message
       }
     )
