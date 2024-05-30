@@ -210,8 +210,15 @@ mod_chat_server <- function(id,
           waiter::waiter_show(html =  tagList(waiter::spin_ring(),"Running code and appending result...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
           fileVal <- check_data(input$codejs)
           mergenstudio_execute(rv, history, settings, session,code=input$codejs,rep=input$responsejs)
-          #history$chat_history[length(history$chat_history)+1]<- list(list(role = "user",
-           #                                                                content = as.character(fileVal)))
+
+          if (is.list(fileVal) && !is_empty(fileVal)){
+            empty_obs <- which(fileVal[[1]] == TRUE)
+            history$chat_history[length(history$chat_history)+1]<- list(list(role = "user",
+                                                                            content = paste("the following objects which
+                                                                                            were created are empty: ", names(empty_obs))))
+          }
+
+
 
           waiter::waiter_hide()
           }

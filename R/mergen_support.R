@@ -203,7 +203,6 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
   #if code gets back in multiple blocks.
   if (length(final_code)>1){
     final_code <- paste(final_code,collapse="\n")
-    print(final_code)
   }
 
     # extract install

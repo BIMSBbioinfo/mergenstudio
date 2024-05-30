@@ -33,8 +33,6 @@ check_data <- function(r_code) {
   }
 
 
-  # List to store results
-  results <- c()
 
   # check for those lines that have a reading function in them if
   # they create an 'empty' object
@@ -65,15 +63,19 @@ check_data <- function(r_code) {
     }
   }
 
+  # List to store results
+  results <- list()
+
+
   # if there was a problem with reading in the file, return that error
   if (methods::is(rs,'warning') || methods::is(rs,'error')){
-    return (rs)
+    return (NULL)
   } else{ # if there is an empty object created due to file reading return a message
     for (var in ls(env)) {
       obj <- get(var, envir = env)
       rs<- is_empty(obj)
       if (rs){
-        results <- c(results,var)
+        results[[var]] <- rs
       }
     }
     return(results)
