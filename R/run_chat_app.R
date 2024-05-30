@@ -1,7 +1,3 @@
-mergenstudio_env <- new.env()
-mergenstudio_env$code <- ""
-mergenstudio_env$port <- 8888
-
 #' Run the Mergen Chat app
 #'
 #' This functions starts the mergen chat as a regular shiny application. The same app could be called using the RStudio Add-in and the \code{mergenchat()} function.

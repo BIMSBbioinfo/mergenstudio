@@ -141,19 +141,24 @@ mergenstudio_request <- function(skeleton = NULL,resp=NULL){
 
 #' @noRd
 evaluate_error <- function(codestring) {
-  split_str <- strsplit(codestring, split = '\n')[[1]]
-  for (i in 1:length(split_str)) {
+  # Parse the code string into an expression
+  parsed_code <- parse(text = codestring)
+
+  # Deparse the parsed expression into individual elements
+  code_elements <- sapply(parsed_code, deparse)
+
+  for (i in 1:length(code_elements)) {
     result <- tryCatch(
       {
-        eval(str2expression(split_str[i]))
+        eval(str2expression(code_elements[[i]]))
         NULL  # Return NULL if no error or warning occurs
       },
       error = function(e) {
-        res <- paste(e, 'error occured on line:', split_str[i], 'line number', i, sep = " ")
+        res <- paste(e, 'error occured on line:', code_elements[i], 'line number', i, sep = " ")
         return(res)  # Return the error message
       },
       warning = function(w) {
-        res <- paste(w, 'warning occured on line:', split_str[i], 'line number', i, sep = " ")
+        res <- paste(w, 'warning occured on line:', code_elements[i], 'line number', i, sep = " ")
         return(res)  # Return the warning message
       }
     )
@@ -197,7 +202,8 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
 
   #if code gets back in multiple blocks.
   if (length(final_code)>1){
-    final_code <- paste(final_code,sep="\n")
+    final_code <- paste(final_code,collapse="\n")
+    print(final_code)
   }
 
     # extract install

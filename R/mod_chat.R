@@ -208,7 +208,11 @@ mod_chat_server <- function(id,
       {
         if (input$responsejs != ""){
           waiter::waiter_show(html =  tagList(waiter::spin_ring(),"Running code and appending result...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
+          fileVal <- check_data(input$codejs)
           mergenstudio_execute(rv, history, settings, session,code=input$codejs,rep=input$responsejs)
+          #history$chat_history[length(history$chat_history)+1]<- list(list(role = "user",
+           #                                                                content = as.character(fileVal)))
+
           waiter::waiter_hide()
           }
         }) %>%
