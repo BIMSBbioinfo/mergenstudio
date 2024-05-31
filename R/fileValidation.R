@@ -68,7 +68,7 @@ check_data <- function(r_code) {
 
 
   # if there was a problem with reading in the file, return that error
-  if (methods::is(rs,'warning') || methods::is(rs,'error')){
+  if (exists("rs") && (methods::is(rs,'warning') || methods::is(rs,'error'))){
     return (NULL)
   } else{ # if there is an empty object created due to file reading return a message
     for (var in ls(env)) {
