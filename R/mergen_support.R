@@ -156,10 +156,6 @@ evaluate_error <- function(codestring) {
       error = function(e) {
         res <- paste(e, 'error occured on line:', code_elements[i], 'line number', i, sep = " ")
         return(res)  # Return the error message
-      },
-      warning = function(w) {
-        res <- paste(w, 'warning occured on line:', code_elements[i], 'line number', i, sep = " ")
-        return(res)  # Return the warning message
       }
     )
 
@@ -255,7 +251,7 @@ mergenstudio_execute <- function(rv, history, settings, session,rep=NULL,code=NU
         message<-list(list(role = "user",
                            content = paste0("The code resulted in the
                                             following errors/warnings:\n```\n##",
-                                            code_result,"\n```\n\n","```\n##",res,"\n```\n\n")))
+                                            res,"\n```\n\n")))
 
       }
 
