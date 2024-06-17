@@ -231,6 +231,7 @@ mod_chat_server <- function(id,
 
       # save prompt as variable
       chat_input <- paste0("<query>",input$chat_input,"</query>")
+      fileheaders<-NULL
 
       # if adding fileheaders is set to TRUE:
       if (settings$fileheader == TRUE){
@@ -256,11 +257,16 @@ mod_chat_server <- function(id,
               showNotification(ui = resp, duration = 4, type = "message", session = session)
 
             } else{
-            chat_input <- paste(chat_input,"<fileinfo>", result, "</fileinfo>",sep="\n")
+            fileheaders<- paste(fileheaders,result,sep='\n')
+            #chat_input <- paste(chat_input,"<fileinfo>", result, "</fileinfo>",sep="\n")
             showNotification(ui = paste("Header of file ", file, "added."), duration = 3, type = "message", session = session)
             }
           }
         }
+      }
+
+      if (!is.null(fileheaders)){
+        chat_input<-paste(chat_input,'<fileinfo>',fileheaders,"</fileinfo>",sep='\n')
       }
 
       #calculate how much of the history to send with
