@@ -9,11 +9,11 @@
 An RStudio Addin wrapper for the mergen package.
 }
 \author{
-\strong{Maintainer}: Artür Manukyan \email{artur-man@hotmail.com}
+\strong{Maintainer}: Jacqueline Jansen \email{jacqueline-98@hotmail.com}
 
 Authors:
 \itemize{
-  \item Jacqueline Jansen \email{jacqueline-98@hotmail.com}
+  \item Artür Manukyan \email{artur-man@hotmail.com}
   \item Nour Alkhoury \email{nour.alkhoury@mdc-berlin.de}
   \item Altuna Akalin \email{altuna.akalin@mdc-berlin.de}
 }
