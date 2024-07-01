@@ -325,7 +325,7 @@ mod_chat_server <- function(id,
       )
 
 
-        waiter::waiter_show(html = tagList(waiter::spin_ring(),"Recieving answer...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
+        waiter::waiter_show(html = tagList(waiter::spin_ring(),"Receiving response...."), color = paste0("rgba(128,128,128,", 0.15, ")"))
         response <- mergenstudio_request(skeleton = skeleton)
         waiter::waiter_hide() # hide the waiter
 
