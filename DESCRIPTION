@@ -1,6 +1,6 @@
 Type: Package
 Package: mergenstudio
-Title: Mergen Studio: An 'RStudio' Addin Wrapper for the 'Mergen' Package
+Title: 'Mergen' Studio: An 'RStudio' Addin Wrapper for the 'Mergen' Package
 Version: 1.0
 Authors@R: c(
     person("Jacqueline", "Jansen", , "jacqueline-98@hotmail.com", role = c("aut","cre")),
