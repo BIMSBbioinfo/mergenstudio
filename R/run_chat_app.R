@@ -11,7 +11,7 @@
 #' @return This function has no return value.
 #'
 #' @examples
-#' \dontrun{
+#' if(interactive()){
 #' run_chat_app()
 #' }
 run_chat_app <- function(ide_colors = get_ide_theme_info(),

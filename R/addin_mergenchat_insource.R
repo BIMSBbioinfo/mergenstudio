@@ -10,8 +10,8 @@
 #' @return This function has no return value.
 #'
 #' @examples
-#' \dontrun{
-#' addin_mergenchat_in_source()
+#' if(interactive()) {
+#'   addin_mergenchat_in_source()
 #' }
 addin_mergenchat_in_source <- function() {
   cli::cli_process_start("Sending query to ChatGPT")

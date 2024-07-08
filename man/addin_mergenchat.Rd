@@ -19,7 +19,7 @@ Run the Mergen Chat Shiny App as a background job and show it in the viewer pane
 }
 \examples{
 # Call the function as an RStudio addin
-\dontrun{
+if(interactive()){
 addin_mergenchat()
 }
 }

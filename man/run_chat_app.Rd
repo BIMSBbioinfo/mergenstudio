@@ -32,7 +32,7 @@ This function has no return value.
 This functions starts the mergen chat as a regular shiny application. The same app could be called using the RStudio Add-in and the \code{mergenchat()} function.
 }
 \examples{
-\dontrun{
+if(interactive()){
 run_chat_app()
 }
 }

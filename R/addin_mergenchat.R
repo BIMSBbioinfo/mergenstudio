@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' # Call the function as an RStudio addin
-#' \dontrun{
+#' if(interactive()){
 #' addin_mergenchat()
 #' }
 addin_mergenchat <- function(host = getOption("shiny.host", "127.0.0.1")) {
