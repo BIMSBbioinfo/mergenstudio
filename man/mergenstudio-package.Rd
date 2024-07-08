@@ -6,7 +6,7 @@
 \alias{mergenstudio-package}
 \title{mergenstudio: 'Mergen' Studio: An 'RStudio' Addin Wrapper for the 'Mergen' Package}
 \description{
-An 'RStudio' Addin wrapper for the 'mergen' package.
+An 'RStudio' Addin wrapper for the 'mergen' package. This package employes artificial intelligence to convert data analysis questions into executable code, explanations, and algorithms, and making it easier to use LLM APIs in your development environment by providing a chat-like interface.
 }
 \author{
 \strong{Maintainer}: Jacqueline Jansen \email{jacqueline-98@hotmail.com}
