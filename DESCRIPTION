@@ -9,7 +9,7 @@ Authors@R: c(
     person("Altuna", "Akalin", , "altuna.akalin@mdc-berlin.de", role = c("aut"))
   )
 Maintainer: Jacqueline Jansen <jacqueline-98@hotmail.com>
-Description: An 'RStudio' Addin wrapper for the 'mergen' package. This package employes artificial intelligence to convert data analysis questions into executable code, explanations, and algorithms. This packages makes it easier to use LLM APIs in your development environment by providing a chat-like interface. 
+Description: An 'RStudio' Addin wrapper for the 'mergen' package. This package employs artificial intelligence to convert data analysis questions into executable code, explanations, and algorithms. This package makes it easier to use Large Language Models in your development environment by providing a chat-like interface, while also allowing you to inspect and execute the returned code.
 License: MIT + file LICENSE
 Depends:
     R (>= 4.0)
@@ -47,7 +47,7 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
