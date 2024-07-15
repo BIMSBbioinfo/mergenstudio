@@ -1,6 +1,6 @@
 Type: Package
 Package: mergenstudio
-Title: 'Mergen' Studio: An 'RStudio' Addin Wrapper for the 'Mergen' Package
+Title: A visual chatbot interface for AI-driven data analysis using the 'Mergen' package.
 Version: 1.0
 Authors@R: c(
     person("Jacqueline", "Jansen", , "jacqueline-98@hotmail.com", role = c("aut","cre")),
@@ -10,6 +10,8 @@ Authors@R: c(
   )
 Maintainer: Jacqueline Jansen <jacqueline-98@hotmail.com>
 Description: An 'RStudio' Addin wrapper for the 'mergen' package. This package employs artificial intelligence to convert data analysis questions into executable code, explanations, and algorithms. This package makes it easier to use Large Language Models in your development environment by providing a chat-like interface, while also allowing you to inspect and execute the returned code.
+URL: https://github.com/BIMSBbioinfo/mergenstudio
+BugReports: https://github.com/BIMSBbioinfo/mergenstudio/issues
 License: MIT + file LICENSE
 Depends:
     R (>= 4.0)

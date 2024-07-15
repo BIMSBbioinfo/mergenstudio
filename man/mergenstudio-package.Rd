@@ -4,9 +4,17 @@
 \name{mergenstudio-package}
 \alias{mergenstudio}
 \alias{mergenstudio-package}
-\title{mergenstudio: 'Mergen' Studio: An 'RStudio' Addin Wrapper for the 'Mergen' Package}
+\title{mergenstudio: A visual chatbot interface for AI-driven data analysis using the 'Mergen' package.}
 \description{
 An 'RStudio' Addin wrapper for the 'mergen' package. This package employs artificial intelligence to convert data analysis questions into executable code, explanations, and algorithms. This package makes it easier to use Large Language Models in your development environment by providing a chat-like interface, while also allowing you to inspect and execute the returned code.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/BIMSBbioinfo/mergenstudio}
+  \item Report bugs at \url{https://github.com/BIMSBbioinfo/mergenstudio/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Jacqueline Jansen \email{jacqueline-98@hotmail.com}
