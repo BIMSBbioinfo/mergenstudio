@@ -10,8 +10,14 @@ You can find more information on mergen can be found on its website:
 <https://bioinformatics.mdc-berlin.de/mergen/>
 
 ## Installation
+The easiest way to install mergen is via `install.packages`
 
-Install from the GitHub repository using devtools (with R version 4.0.0
+``` r
+install.packages("mergenstudio")
+```
+
+#### Development version
+The development version can be installed from GitHub. Install from the GitHub repository using devtools (with R version 4.0.0
 or higher):
 
 ``` r
