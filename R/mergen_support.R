@@ -142,7 +142,14 @@ mergenstudio_request <- function(skeleton = NULL,resp=NULL){
 #' @noRd
 evaluate_error <- function(codestring) {
   # Parse the code string into an expression
-  parsed_code <- parse(text = codestring)
+  parsed_code <- tryCatch(
+    {parse(text = codestring)},
+    error = function(e){
+      return(e)
+    },
+    warning = function(w){
+      return(w)
+    })
 
   # Deparse the parsed expression into individual elements
   code_elements <- sapply(parsed_code, deparse)

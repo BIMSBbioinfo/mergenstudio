@@ -37,7 +37,14 @@ check_data <- function(r_code) {
   # check for those lines that have a reading function in them if
   # they create an 'empty' object
   # Parse the code string into an expression
-  parsed_code <- parse(text = r_code)
+  parsed_code <- tryCatch(
+    {parse(text = r_code)},
+    error= function(e){
+      return(e)
+    },
+    warning = function(w){
+      return (w)
+    })
 
   # Deparse the parsed expression into individual elements
   code_elements <- sapply(parsed_code, deparse)
@@ -45,7 +52,7 @@ check_data <- function(r_code) {
 
   for (line in code_elements){
 
-    # if we fine a line with file extension or a reading function
+    # if we find a line with file extension or a reading function
     # in it, we run those lines
     file_read<-any(sapply(reading_functions, grepl, line))
     file_ex<-any(sapply(file_extensions,grepl,line))
